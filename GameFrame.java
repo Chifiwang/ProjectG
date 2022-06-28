@@ -1,8 +1,4 @@
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-
-import java.awt.Color;
-import java.awt.event.*;
 
 public class GameFrame {
     Debugg debugg = new Debugg();
@@ -12,6 +8,8 @@ public class GameFrame {
         frame.add(new Board());
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setSize(800, 450);
         frame.setVisible(true);
     }
