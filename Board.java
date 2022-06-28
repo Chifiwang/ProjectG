@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class Board extends JPanel implements ActionListener{
-
+    Map mapGlobal = new Map();
     Debugg debugg = new Debugg();
     Player player;
     Image img;
@@ -11,12 +11,13 @@ public class Board extends JPanel implements ActionListener{
 
     /* this is where most of the bg and stuff are init'd */
     public Board() {
-        player = new Player();
+        Map map = new Map(mapGlobal.map_test);
+        player = new Player(map);
 
         addKeyListener(new AL());
         setFocusable(true);
 
-        ImageIcon background = new ImageIcon("Assets/test.jpg");
+        ImageIcon background = new ImageIcon("Assets/test.png");
         img = background.getImage();
 
         t = new Timer(5, this);

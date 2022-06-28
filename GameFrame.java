@@ -10,7 +10,7 @@ public class GameFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // frame.pack();
         frame.setLocationRelativeTo(null);
-        frame.setSize(800, 450);
+        frame.setSize(900, 500);
         frame.setVisible(true);
     }
 }
