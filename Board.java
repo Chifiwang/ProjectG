@@ -39,6 +39,7 @@ public class Board extends JPanel implements ActionListener{
             b.move();
         }
         player.move();
+        map.redraw(map.map);
         repaint();
         
     }
@@ -59,19 +60,33 @@ public class Board extends JPanel implements ActionListener{
     private class AL extends KeyAdapter {
 
         public void keyPressed(KeyEvent e) {
-            
-            for(BasicBlock b : basicBlocks) {
-                b.keyPressed(e);
+        	char key = e.getKeyChar();
+        	if (key == 's' || key == 'd') {
+	            for(int i = 0; i < basicBlocks.size(); i++) {
+	            	basicBlocks.get(i).keyPressed(e);
+	            }
+            }
+        	else if (key == 'w' || key == 'a') {
+	            for(int i = basicBlocks.size() - 1; i >= 0; i--) {
+	                basicBlocks.get(i).keyPressed(e);
+	            }
             }
             player.keyPressed(e);
             // debugg.printMap(map.map);
         }
 
         public void keyReleased(KeyEvent e) {
-            
-            for(BasicBlock b : basicBlocks) {
-                b.keyReleased(e);
-            }
+//        	char key = e.getKeyChar();
+//        	if (key == 's' || key == 'd') {
+	            for(BasicBlock b : basicBlocks) {
+	                b.keyReleased(e);
+	            }
+//            }
+//        	else if (key == 'w' || key == 'a') {
+//	            for(int i = basicBlocks.size() - 1; i >= 0; i--) {
+//	                basicBlocks.get(i).keyReleased(e);
+//	            }
+//            }
             player.keyReleased(e);
         }
     }

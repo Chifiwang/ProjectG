@@ -26,7 +26,7 @@ public class Debugg {
     }
 
     public void printMap(char[] map) {
-        for(int i = 0; i < 54; i++) {
+        for(int i = 0; i < map.length; i++) {
             System.out.print("\'" + map[i] + "\'");
             if (i % 9 == 8) System.out.println();
         }

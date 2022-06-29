@@ -34,28 +34,36 @@ public class Player/*  implements event */{
             timeStart = System.currentTimeMillis();
             switch (isMove) {
                 case 1:
-                    map.map[map.playerCoords - map.MAP_TEST_COORD_GET[0]] = 'p';
-                    map.map[map.playerCoords] = ' ';
-                    map.playerCoords -= map.MAP_TEST_COORD_GET[0];
-                    y -= scaleFactor;
+//                    map.map[map.playerCoords - map.MAP_TEST_COORD_GET[0]] = 'p';
+//                    map.map[map.playerCoords] = ' ';
+                	if (y - scaleFactor >= 0) {
+	                    map.playerCoords -= map.MAP_TEST_COORD_GET[0];
+	                    y -= scaleFactor;
+                	}
                     break;
                 case 2: 
-                    map.map[map.playerCoords - 1] = 'p';
-                    map.map[map.playerCoords] = ' ';
-                    map.playerCoords--;
-                    x -= scaleFactor;
+//                    map.map[map.playerCoords - 1] = 'p';
+//                    map.map[map.playerCoords] = ' ';
+                	if (x - scaleFactor >= 0) {
+	                    map.playerCoords--;
+	                    x -= scaleFactor;
+                	}
                     break;
                 case 3:
-                    map.map[map.playerCoords + map.MAP_TEST_COORD_GET[0]] = 'p';
-                    map.map[map.playerCoords] = ' ';
-                    map.playerCoords += map.MAP_TEST_COORD_GET[0];
-                    y += scaleFactor;
+//                    map.map[map.playerCoords + map.MAP_TEST_COORD_GET[0]] = 'p';
+//                    map.map[map.playerCoords] = ' ';
+                	if (y + scaleFactor < map.MAP_TEST_COORD_GET[1]*scaleFactor) {
+	                    map.playerCoords += map.MAP_TEST_COORD_GET[0];
+	                    y += scaleFactor;
+                	}
                     break;
                 case 4:
-                    map.map[map.playerCoords + 1] = 'p';
-                    map.map[map.playerCoords] = ' ';
-                    map.playerCoords++;
-                    x += scaleFactor;
+//                    map.map[map.playerCoords + 1] = 'p';
+//                    map.map[map.playerCoords] = ' ';
+                	if (x + scaleFactor < map.MAP_TEST_COORD_GET[0]*scaleFactor) {
+	                    map.playerCoords++;
+	                    x += scaleFactor;
+                	}
                     break;
             }
             // debugg.printMap(map.map);

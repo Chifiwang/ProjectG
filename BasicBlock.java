@@ -25,33 +25,38 @@ public class BasicBlock {
     }
 
     public void move() {
+    	if (isDead) return;
         if (dt >= timeDelay) {
             timeStart = System.currentTimeMillis();
             switch (isMove) {
                 case 1:
-                    map.map[map.basicCoords.get(i) - map.MAP_TEST_COORD_GET[0]] = 'u';
-                    map.map[map.basicCoords.get(i)] = ' ';
+//                    map.map[map.basicCoords.get(i) - map.MAP_TEST_COORD_GET[0]] = 'u';
+//                    map.map[map.basicCoords.get(i)] = ' ';
                     map.basicCoords.set(i, map.basicCoords.get(i) - map.MAP_TEST_COORD_GET[0]);
                     y -= scaleFactor;
                     break;
                 case 2: 
-                    map.map[map.basicCoords.get(i) - 1] = 'u';
-                    map.map[map.basicCoords.get(i)] = ' ';
+//                    map.map[map.basicCoords.get(i) - 1] = 'u';
+//                    map.map[map.basicCoords.get(i)] = ' ';
                     map.basicCoords.set(i, map.basicCoords.get(i) - 1);
                     x -= scaleFactor;
                     break;
                 case 3:
-                    map.map[map.basicCoords.get(i) + map.MAP_TEST_COORD_GET[0]] = 'u';
-                    map.map[map.basicCoords.get(i)] = ' ';
+//                    map.map[map.basicCoords.get(i) + map.MAP_TEST_COORD_GET[0]] = 'u';
+//                    map.map[map.basicCoords.get(i)] = ' ';
                     map.basicCoords.set(i, map.basicCoords.get(i) + map.MAP_TEST_COORD_GET[0]);
                     y += scaleFactor;
                     break;
                 case 4:
-                    map.map[map.basicCoords.get(i) + 1] = 'u';
-                    map.map[map.basicCoords.get(i)] = ' ';
+//                    map.map[map.basicCoords.get(i) + 1] = 'u';
+//                    map.map[map.basicCoords.get(i)] = ' ';
                     map.basicCoords.set(i, map.basicCoords.get(i) + 1);
                     x += scaleFactor;
                     break;
+            }
+            if (x < 0 || x >= (map.MAP_TEST_COORD_GET[0])*scaleFactor || y < 0 || y >= (map.MAP_TEST_COORD_GET[1])*scaleFactor) {
+            	isDead = true;
+            	map.basicCoords.set(i, -1);
             }
             debugg.print(isMove);
             debugg.printMap(map.map);
@@ -69,7 +74,7 @@ public class BasicBlock {
     /* reads key presses */
 
     public void keyPressed(KeyEvent e) {
-        
+        if (isDead) return;
         char key = e.getKeyChar();
         // debugg.print( map.map[map.basicCoords.get(i) - 1]);
         switch(key) {
@@ -102,9 +107,15 @@ public class BasicBlock {
                     isMove = -1;
                 } break;
         }
-
+        if (x < 0 || x >= (map.MAP_TEST_COORD_GET[0])*scaleFactor || y < 0 || y >= (map.MAP_TEST_COORD_GET[1])*scaleFactor) {
+        	isDead = true;
+        	map.basicCoords.set(i, -1);
+        }
+        
+        //bedug
+        debugg.print(isMove);
     }
 
     /* reads key releases */
-    public void keyReleased(KeyEvent e) { dt = 0; }
+    public void keyReleased(KeyEvent e) { isMove = -1; }
 }
