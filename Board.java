@@ -9,11 +9,12 @@ public class Board extends JPanel implements ActionListener{
     Debugg debugg = new Debugg();
     Player player;
     Image img;
+    Map map;
     Timer t;
 
     /* this is where most of the bg and stuff are init'd */
     public Board() {
-        Map map = new Map(mapGlobal.map_test);
+        this.map = new Map(mapGlobal.map_test);
         player = new Player(map);
 
         for (int i = 0; i < map.basicCoords.size(); i++) {
@@ -34,6 +35,9 @@ public class Board extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         // player.jump();
+        for (BasicBlock b : basicBlocks) {
+            b.move();
+        }
         player.move();
         repaint();
         
@@ -60,6 +64,7 @@ public class Board extends JPanel implements ActionListener{
                 b.keyPressed(e);
             }
             player.keyPressed(e);
+            // debugg.printMap(map.map);
         }
 
         public void keyReleased(KeyEvent e) {
