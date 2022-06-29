@@ -1,10 +1,15 @@
+import java.util.ArrayList;
+
+
 public class Map {
     public int playerCoords;
     public Map() { }
     public char[] map;
+    ArrayList<Integer> basicCoords = new ArrayList<Integer>();
 
     public Map(char[] Loadedmap) {
         getPlayerCoords(Loadedmap);
+        getBBlockCoords(Loadedmap);
         map = Loadedmap;
         
     }
@@ -12,9 +17,9 @@ public class Map {
     final public int[] MAP_TEST_COORD_GET = {9, 5};
     public char[] map_test = 
         {
+            ' ', ' ', ' ', ' ', 'u', ' ', ' ', ' ', ' ', 
             ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-            ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-            ' ', ' ', ' ', ' ', 'p', ' ', ' ', ' ', ' ', 
+            ' ', ' ', ' ', ' ', 'p', 'u', ' ', ' ', ' ', 
             ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
             ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
             ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '
@@ -26,7 +31,11 @@ public class Map {
         }
     }
     
-    
+    public void getBBlockCoords(char[] map) {
+        for(int i = 0; i < map.length; i++) {
+            if( map[i] == 'u') {this.basicCoords.add(i);}
+        }
+    }
 
 
 }
