@@ -19,10 +19,9 @@ public class Map {
         {
             ' ', ' ', ' ', ' ', 'u', ' ', ' ', ' ', ' ', 
             ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-            ' ', ' ', ' ', ' ', 'p', 'u', ' ', ' ', ' ', 
+            'u', ' ', ' ', ' ', 'p', ' ', ' ', ' ', 'u', 
             ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-            ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 
-            ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '
+            ' ', ' ', ' ', ' ', 'u', ' ', ' ', ' ', ' '
         };
 
     public void getPlayerCoords(char[] map) {
@@ -37,5 +36,13 @@ public class Map {
         }
     }
 
-
+    public void redraw(char[] map) {
+    	for (int i = 0; i < map.length; i++) {
+    		if (i == playerCoords) map[i] = 'p';
+    		else if (basicCoords.contains(i)) map[i] = 'u';
+    		else map[i] = ' ';
+//    		if (map[i] == 'p') this.playerCoords = i;
+//    		if (map[i] == 'u') this.basicCoords.set(i);
+    	}
+    }
 }

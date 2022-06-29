@@ -9,11 +9,12 @@ public class Board extends JPanel implements ActionListener{
     Debugg debugg = new Debugg();
     Player player;
     Image img;
+    Map map;
     Timer t;
 
     /* this is where most of the bg and stuff are init'd */
     public Board() {
-        Map map = new Map(mapGlobal.map_test);
+        this.map = new Map(mapGlobal.map_test);
         player = new Player(map);
 
         for (int i = 0; i < map.basicCoords.size(); i++) {
@@ -34,7 +35,11 @@ public class Board extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         // player.jump();
+        for (BasicBlock b : basicBlocks) {
+            b.move();
+        }
         player.move();
+        map.redraw(map.map);
         repaint();
         
     }
@@ -55,18 +60,33 @@ public class Board extends JPanel implements ActionListener{
     private class AL extends KeyAdapter {
 
         public void keyPressed(KeyEvent e) {
-            
-            for(BasicBlock b : basicBlocks) {
-                b.keyPressed(e);
+        	char key = e.getKeyChar();
+        	if (key == 's' || key == 'd') {
+	            for(int i = 0; i < basicBlocks.size(); i++) {
+	            	basicBlocks.get(i).keyPressed(e);
+	            }
+            }
+        	else if (key == 'w' || key == 'a') {
+	            for(int i = basicBlocks.size() - 1; i >= 0; i--) {
+	                basicBlocks.get(i).keyPressed(e);
+	            }
             }
             player.keyPressed(e);
+            // debugg.printMap(map.map);
         }
 
         public void keyReleased(KeyEvent e) {
-            
-            for(BasicBlock b : basicBlocks) {
-                b.keyReleased(e);
-            }
+//        	char key = e.getKeyChar();
+//        	if (key == 's' || key == 'd') {
+	            for(BasicBlock b : basicBlocks) {
+	                b.keyReleased(e);
+	            }
+//            }
+//        	else if (key == 'w' || key == 'a') {
+//	            for(int i = basicBlocks.size() - 1; i >= 0; i--) {
+//	                basicBlocks.get(i).keyReleased(e);
+//	            }
+//            }
             player.keyReleased(e);
         }
     }

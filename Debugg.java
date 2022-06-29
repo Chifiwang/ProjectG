@@ -24,4 +24,12 @@ public class Debugg {
     public void print(boolean b) {
         System.out.println(b);
     }
+
+    public void printMap(char[] map) {
+        for(int i = 0; i < map.length; i++) {
+            System.out.print("\'" + map[i] + "\'");
+            if (i % 9 == 8) System.out.println();
+        }
+        System.out.println("");
+    }
 }
