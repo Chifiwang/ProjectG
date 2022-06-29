@@ -1,8 +1,10 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class Board extends JPanel implements ActionListener{
+    ArrayList<BasicBlock> basicBlocks = new ArrayList<BasicBlock>();
     Map mapGlobal = new Map();
     Debugg debugg = new Debugg();
     Player player;
@@ -13,6 +15,10 @@ public class Board extends JPanel implements ActionListener{
     public Board() {
         Map map = new Map(mapGlobal.map_test);
         player = new Player(map);
+
+        for (int i = 0; i < map.basicCoords.size(); i++) {
+            basicBlocks.add(new BasicBlock(map, i));
+        }
 
         addKeyListener(new AL());
         setFocusable(true);
@@ -40,16 +46,27 @@ public class Board extends JPanel implements ActionListener{
 
             g2D.drawImage(img, 0, 0, null);
             g2D.drawImage(player.getImage(), player.getX(), player.getY(), null);
+            for(BasicBlock b : basicBlocks) {
+                g2D.drawImage(b.getImage(), b.getX(), b.getY(), null);
+            }
     }
 
     /* Calls the key listener methods defined in the player class */
     private class AL extends KeyAdapter {
 
         public void keyPressed(KeyEvent e) {
+            
+            for(BasicBlock b : basicBlocks) {
+                b.keyPressed(e);
+            }
             player.keyPressed(e);
         }
 
         public void keyReleased(KeyEvent e) {
+            
+            for(BasicBlock b : basicBlocks) {
+                b.keyReleased(e);
+            }
             player.keyReleased(e);
         }
     }

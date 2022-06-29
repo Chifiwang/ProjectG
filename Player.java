@@ -54,24 +54,28 @@ public class Player/*  implements event */{
                     if (y > 0) {
                         map.map[map.playerCoords - map.MAP_TEST_COORD_GET[0]] = 'p';
                         map.map[map.playerCoords] = ' ';
+                        map.playerCoords -= map.MAP_TEST_COORD_GET[0];
                         y -= scaleFactor;
                     } break;
                 case 'a': 
                     if (x > 0) {
                         map.map[map.playerCoords - 1] = 'p';
                         map.map[map.playerCoords] = ' ';
+                        map.playerCoords--;
                         x -= scaleFactor;
                     } break;
                 case 's':
                     if (y < (map.MAP_TEST_COORD_GET[1]-1)*scaleFactor) {
                         map.map[map.playerCoords + map.MAP_TEST_COORD_GET[0]] = 'p';
                         map.map[map.playerCoords] = ' ';
+                        map.playerCoords += map.MAP_TEST_COORD_GET[0];
                         y += scaleFactor;
                     } break;
                 case 'd':
                     if (x < (map.MAP_TEST_COORD_GET[0]-1)*scaleFactor) {
                         map.map[map.playerCoords + 1] = 'p';
                         map.map[map.playerCoords] = ' ';
+                        map.playerCoords++;
                         x += scaleFactor;
                     } break;
             }
