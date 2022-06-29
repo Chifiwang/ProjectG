@@ -41,8 +41,6 @@ public class Map {
     		if (i == playerCoords) map[i] = 'p';
     		else if (basicCoords.contains(i)) map[i] = 'u';
     		else map[i] = ' ';
-//    		if (map[i] == 'p') this.playerCoords = i;
-//    		if (map[i] == 'u') this.basicCoords.set(i);
     	}
     }
 }

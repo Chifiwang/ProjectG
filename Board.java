@@ -7,6 +7,7 @@ public class Board extends JPanel implements ActionListener{
     ArrayList<BasicBlock> basicBlocks = new ArrayList<BasicBlock>();
     Map mapGlobal = new Map();
     Debugg debugg = new Debugg();
+    static long timeStart, timeDelay = 300, dt = 300;
     Player player;
     Image img;
     Map map;
@@ -35,12 +36,19 @@ public class Board extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         // player.jump();
+        if (dt >= timeDelay) {
+            timeStart = System.currentTimeMillis();
+        }
+        player.move();
         for (BasicBlock b : basicBlocks) {
             b.move();
         }
-        player.move();
+        
+
         map.redraw(map.map);
         repaint();
+
+        dt = System.currentTimeMillis() - timeStart;
         
     }
     /* paints the graphics that are displayed on the screen */
@@ -54,6 +62,8 @@ public class Board extends JPanel implements ActionListener{
             for(BasicBlock b : basicBlocks) {
                 g2D.drawImage(b.getImage(), b.getX(), b.getY(), null);
             }
+            
+
     }
 
     /* Calls the key listener methods defined in the player class */

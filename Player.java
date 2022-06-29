@@ -16,8 +16,8 @@ public class Player/*  implements event */{
 
     int scaleFactor = 100;
     int x, y;
-    int timeDelay = 300;
-    long timeStart, dt = 0;
+    // int timeDelay = 300;
+    // long timeStart, dt = 0;
     int isMove = -1;
     Image pIcon;
     Map map;
@@ -30,8 +30,8 @@ public class Player/*  implements event */{
     }
 
     public void move() {
-        if (dt >= timeDelay) {
-            timeStart = System.currentTimeMillis();
+        if (Board.dt >= Board.timeDelay) {
+            // timeStart = System.currentTimeMillis();
             switch (isMove) {
                 case 1:
 //                    map.map[map.playerCoords - map.MAP_TEST_COORD_GET[0]] = 'p';
@@ -69,7 +69,7 @@ public class Player/*  implements event */{
             // debugg.printMap(map.map);
         }
 
-        dt = System.currentTimeMillis() - timeStart;
+        // dt = System.currentTimeMillis() - timeStart;
     }
     
     public int posX() {return (map.playerCoords % map.MAP_TEST_COORD_GET[0])*scaleFactor;}
