@@ -25,10 +25,11 @@ public class Debugg {
         System.out.println(b);
     }
 
-    public void printMap(char[] map) {
+    public void printMap(char[][] map) {
         for(int i = 0; i < map.length; i++) {
-            System.out.print("\'" + map[i] + "\'");
-            if (i % 9 == 8) System.out.println();
+            for(int j = 0; j < map[1].length; j++)
+                System.out.print("\'" + map[i][j] + "\'");
+            System.out.println();
         }
         System.out.println("");
     }
