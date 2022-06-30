@@ -1,23 +1,14 @@
 import javax.swing.ImageIcon;
 import java.awt.Image;
-import java.awt.event.*;
 
-public class Player/*  implements event */{
-/*     private class CException extends Exception {
-        public CException(String s) {
-            super(s);
-        }
-    } */
+public class Player {
 
 
     ImageIcon pDefault = new ImageIcon("Assets/player_default.png");
-    ImageIcon pJump = new ImageIcon("Assets/player_jump.jpg");
     Debugg debugg = new Debugg();
 
-    int scaleFactor = 100;
-    int x, y;
-    // int timeDelay = 300;
-    // long timeStart, dt = 0;
+    int col = 4, row = 2;
+
     int isMove = -1;
     Image pIcon;
     Map map;
@@ -25,97 +16,72 @@ public class Player/*  implements event */{
     public Player(Map map) {
         pIcon = pDefault.getImage();
         this.map = map;
-        x = posX();
-        y = posY();
     }
 
     public void move() {
-        if (Board.dt >= Board.timeDelay) {
-            // timeStart = System.currentTimeMillis();
-            switch (isMove) {
-                case 1:
-//                    map.map[map.playerCoords - map.MAP_TEST_COORD_GET[0]] = 'p';
-//                    map.map[map.playerCoords] = ' ';
-                	if (y - scaleFactor >= 0) {
-	                    map.playerCoords -= map.MAP_TEST_COORD_GET[0];
-	                    y -= scaleFactor;
-                	}
-                    break;
-                case 2: 
-//                    map.map[map.playerCoords - 1] = 'p';
-//                    map.map[map.playerCoords] = ' ';
-                	if (x - scaleFactor >= 0) {
-	                    map.playerCoords--;
-	                    x -= scaleFactor;
-                	}
-                    break;
-                case 3:
-//                    map.map[map.playerCoords + map.MAP_TEST_COORD_GET[0]] = 'p';
-//                    map.map[map.playerCoords] = ' ';
-                	if (y + scaleFactor < map.MAP_TEST_COORD_GET[1]*scaleFactor) {
-	                    map.playerCoords += map.MAP_TEST_COORD_GET[0];
-	                    y += scaleFactor;
-                	}
-                    break;
-                case 4:
-//                    map.map[map.playerCoords + 1] = 'p';
-//                    map.map[map.playerCoords] = ' ';
-                	if (x + scaleFactor < map.MAP_TEST_COORD_GET[0]*scaleFactor) {
-	                    map.playerCoords++;
-	                    x += scaleFactor;
-                	}
-                    break;
-            }
-            // debugg.printMap(map.map);
-        }
+        char __cache__ = ' ';
 
-        // dt = System.currentTimeMillis() - timeStart;
+        for (int r = Map.r, c = Map.c; r > -1 && r < map.bounds01[0] && 
+        c > -1 && c < map.bounds01[1]; r -= Map.dr[Map.direct], c -= Map.dc[Map.direct]) {
+            if (map.map[r][c] == 'p') {
+                debugg.print("arrive???");
+                map.map[r][c] = ' ';
+                col = c + Map.dc[Map.direct];
+                row = r + Map.dr[Map.direct];
+                break;
+            }
+            debugg.print(c - Map.dc[Map.direct] + " " + c);
+            // switch (map.map[r - Map.dr[Map.direct]][c - Map.dc[Map.direct]]) {
+            //     case 'u': __cache__ = 'u'; break;
+            //     default: __cache__ = ' '; break;
+            // }
+
+            map.map[r][c] = map.map[r - Map.dr[Map.direct]][c - Map.dc[Map.direct]];
+            debugg.print("map.map[r][c]: " +map.map[r][c]);
+            
+        }
     }
     
-    public int posX() {return (map.playerCoords % map.MAP_TEST_COORD_GET[0])*scaleFactor;}
-    public int posY() {return (map.playerCoords / map.MAP_TEST_COORD_GET[0])*scaleFactor;}
-    public int getX() {return x;}
-    public int getY() {return y;}
     public Image getImage() {return pIcon;}
 
-    /* reads key presses */
-
-    public void keyPressed(KeyEvent e) {
-        
-        char key = e.getKeyChar();
-        switch(key) {
-            case 'w': 
-                if (y > 0) {
-                    isMove = 1;
-                } else {
-                    isMove = -1;
-                } break;
-            case 'a': 
-                if (x > 0) {
-                    isMove = 2;
-                } else {
-                    isMove = -1;
-                } break;
-            case 's':
-                if (y < (map.MAP_TEST_COORD_GET[1]-1)*scaleFactor) {
-                    isMove = 3;
-                } else {
-                    isMove = -1;
-                } break;
-            case 'd':
-                if (x < (map.MAP_TEST_COORD_GET[0]-1)*scaleFactor) {
-                    isMove = 4;
-                } else {
-                    isMove = -1;
-                } break;
-        }
-            // debugg.print(dt + " " + timeStart);
-            // return key;
-
-            
-        // return ' ';
+    public boolean canMove(int direct, int r, int c) {
+        return r + Map.dr[direct] > -1 && r + Map.dr[direct] < map.bounds01[0] &&
+               c + Map.dc[direct] > -1 && c + Map.dc[direct] < map.bounds01[1] ;
     }
 
-    /* reads key releases */
-    public void keyReleased(KeyEvent e) { isMove = -1; }
+    public boolean canMoveObj(int direct) {
+        boolean isValid = true;
+        debugg.print("canMoveObj");
+        
+        for(int r =  row, c = col; r > -1 && r < map.bounds01[0] && 
+            c > -1 && c < map.bounds01[1]; r += Map.dr[direct], c += Map.dc[direct]) {
+
+            if (map.map[r][c] == ' ') { 
+                Map.r = r;
+                Map.c = c;
+                break; 
+            } 
+
+            else if (map.map[r][c] == 'p') {
+                isValid = (canMove(direct, r, c)) ? isValid : false;
+
+                int[] __data_cache__ = {r, c, 'p'};
+                Map.coords.add(__data_cache__);
+            }
+
+            else if (map.map[r][c] != ' ') {
+                isValid = (Block.canMoveObj(direct, map.map[r][c])) ? isValid : false;
+
+                int[] __data_cache__ = {r, c, map.map[r][c]};
+                Map.coords.add(__data_cache__);
+            }
+            
+            Map.r = r;
+            Map.c = c;
+           
+        }
+        debugg.print("r and c:" + Map.r + " " + Map.c);
+        return isValid;
+    }
+        
 }
