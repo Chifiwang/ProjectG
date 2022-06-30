@@ -1,59 +1,68 @@
-import java.util.ArrayList;
-
-
 public class Map {
-    static int[] dc = {0, -1, 0, 1, 0}, dr = {-1, 0, 1, 0, 0};
+
+    static int[] dc = {0, -1, 0, 1, 0};
+    static int[] dr = {-1, 0, 1, 0, 0};
     static int r = 2, c = 4;
-    static ArrayList<int[]> coords = new ArrayList<int[]>();
     static int direct = 4;
 
     public char[][] map;
 
     public Map() { }
 
+    /* loads the active map into an instantiated Map for future use */
     public Map(char[][] Loadedmap) {
         map = Loadedmap;
         
     }
 
-    // public void redraw(char[][] map, boolean isValid) {
-    //     if (isValid) {
-    //         for (int r = 0; r < map.length; r++) {
-    //             for (int c = 0; c < (map[r].length); c++) {
-    //                 map[r][c] = ' ';
-    //             }
-    //         }
+    
+    /** 
+     * finds the player coordinates for player initialization.
+     * 
+     * @param map provides the map that the player is being loaded into
+     * 
+     * @return int[] returns {row, column} data
+     */
+    public int[] loadPlayer(char[][] map) {
+        int[] pCoords = new int[2];
 
-    //         for (int[] coord : coords) {
-    //             if (coord[0] +  dr[direct] > -1 && coord[0] +  dr[direct] < bounds01[0] &&
-    //                 coord[1] + dc[direct] > -1 && coord[1] + dc[direct] < bounds01[1])
-    //             map[coord[0] +  dr[direct]][coord[1] + dc[direct]] = (char) coord[2]; 
-    //         }
-    //     }
-    // }
+        for(int r = 0; r < map.length; r++) {
+            for(int c = 0; c < map[1].length; c++)
 
-    // public ArrayList<Block> initMap() {
-    //     ArrayList<Block> blocks = new ArrayList<Block>();
+                if (map[r][c] == 'p'){
 
-    //     for (int r = 0; r < map.length; r++) {
-    //         for (int c = 0; c < (map[r].length); c++) {
-    //             if(map[r][c] != ' ' || map[r][c] != 'p') {
-    //                 blocks.add(new Block(map[r][c]));
-    //             }
-    //         }
-    //     }
+                    pCoords[0] = r;
+                    pCoords[1] = c;
+                }         
+        }
+
+        return pCoords;
+    }
 
 
-    //     return blocks;
-    // }
+    /* these are the internal maps */
 
-    final public int[] bounds01 = {5, 9};
-    final public char[][] map01 = 
+
+    final public char[][] map00 = 
         {
             {' ', ' ', ' ', ' ', 'u', ' ', ' ', ' ', ' '}, 
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
-            {'u', ' ', ' ', ' ', 'p', 'u', ' ', ' ', 'u'}, 
+            {'u', ' ', ' ', 'u', 'x', 'u', 'u', 'p', 'u'}, 
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
             {' ', ' ', ' ', ' ', 'u', ' ', ' ', ' ', ' '}
         };
+
+    final public char[][] map01 = 
+        {
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
+            {' ', ' ', ' ', ' ', 'p', ' ', 'u', ' ', ' '}, 
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
+        };
+
+    /* map select array */
+    final public char[][][] levelSelect = {
+        map00, map01
+    };
 }

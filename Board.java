@@ -1,17 +1,16 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 public class Board extends JPanel implements ActionListener{
-    // ArrayList<BasicBlock> basicBlocks = new ArrayList<BasicBlock>();
+
     Map mapGlobal = new Map();
     Debugg debugg = new Debugg();
 
     Player player;
     Block block;
 
-    long timeStart, timeDelay = 300, dt = 300;
+    long timeStart, timeDelay = 200, dt = 200;
     boolean isValid = false;
     int scalingFactor = 100;
 
@@ -19,15 +18,10 @@ public class Board extends JPanel implements ActionListener{
     Map map;
     Timer t;
 
-    /* this is where most of the bg and stuff are init'd */
     public Board() {
-        this.map = new Map(mapGlobal.map01);
-        player = new Player(map);
+        this.map = new Map(mapGlobal.levelSelect[0]);
+        player = new Player(map, map.loadPlayer(map.map));
         block = new Block();
-
-        // for (int i = 0; i < map.basicCoords.size(); i++) {
-        //     Blocks.add(new Block(map, type));
-        // }
 
         addKeyListener(new AL());
         setFocusable(true);
@@ -39,13 +33,23 @@ public class Board extends JPanel implements ActionListener{
         t.start();
     }
 
-    /* Player loop thing. I think that this is the main loop for interacting with things */
+    
+    /** 
+     * does nothing lmao
+     * 
+     * @param e a yes code...
+     */
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) { }
 
-        
-    }
-    /* paints the graphics that are displayed on the screen */
+    
+    
+    /** 
+     * loops through the internal map and paints sprites according to block type.
+     * paints the graphics that are displayed on the screen 
+     * 
+     * @param g
+     */
     public void paint(Graphics g) {
 
         super.paint(g);
@@ -55,38 +59,57 @@ public class Board extends JPanel implements ActionListener{
 
             for (int r = 0; r < map.map.length; r++) {
                 for (int c = 0; c < map.map[r].length; c++) {
+
                     switch(map.map[r][c]) {
                         case 'p':
-                            g2D.drawImage(player.getImage(), c*scalingFactor, r*scalingFactor, null);
+                            g2D.drawImage(player.getImage(), c*scalingFactor, 
+                                          r*scalingFactor, null);
                             break;
-                        case ' ': break;
+
+                        case ' ': 
+                            break;
+
                         default:
-                            g2D.drawImage(block.getImage(map.map[r][c]), c*scalingFactor, r*scalingFactor, null);
+                            g2D.drawImage(block.getImage(map.map[r][c]), c*scalingFactor, 
+                                          r*scalingFactor, null);
+                            break;
                     }
                 }
             }
     }
 
-    /* Calls the key listener methods defined in the player class */
+    /* calls different validation methods from player.java and block.java */
     private class AL extends KeyAdapter {
+
+        /** 
+         * on event, call the {@cod player.canMoveObj(dircet);} method with the appropriate
+         * encoded direction values, up = 0, left = 1, down = 2, right = 3, none = 4.
+         * 
+         * the method then calls the move function if the move is valid.
+         * 
+         * @param e keyboard event
+         */
         public void keyPressed(KeyEvent e) {
-            debugg.print("arrived");
+
             char key = e.getKeyChar();
+
             switch(key) {
                 case 'w':
                     isValid = player.canMoveObj(Map.direct = 0);
                     break;
+
                 case 'a': 
-                    
                     isValid = player.canMoveObj(Map.direct = 1);    
                     break;
+
                 case 's':
                     isValid = player.canMoveObj(Map.direct = 2);
                     break;
+
                 case 'd':
-                    debugg.print("d arrived");
                     isValid = player.canMoveObj(Map.direct = 3);
                     break;
+
                 default:
                     Map.direct = 4;
                     isValid = false;
@@ -94,14 +117,13 @@ public class Board extends JPanel implements ActionListener{
             }
             debugg.printMap(map.map);
 
-            if (dt >= timeDelay) {
+            if (dt >= timeDelay) { // jank time gate, needs revamping.
                 timeStart = System.currentTimeMillis();
             }
             
             if(isValid && dt >= timeDelay) {
                 player.move();
             }
-    
     
             repaint();
     
