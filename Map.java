@@ -4,14 +4,17 @@ public class Map {
     static int[] dr = {-1, 0, 1, 0, 0};
     static int r = 2, c = 4;
     static int direct = 4;
+    static int __mvntCache__ = 4;
 
     public char[][] map;
+    public boolean[][] map_move;
 
     public Map() { }
 
     /* loads the active map into an instantiated Map for future use */
-    public Map(char[][] Loadedmap) {
-        map = Loadedmap;
+    public Map(char[][] loadedmap, boolean[][] loadedMove) {
+        map = loadedmap;
+        map_move = loadedMove;
         
     }
 
@@ -52,6 +55,8 @@ public class Map {
             {' ', ' ', ' ', ' ', 'u', ' ', ' ', ' ', ' '}
         };
 
+    final public boolean[][] map00_move = new boolean[5][9];
+
     final public char[][] map01 = 
         {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
@@ -61,8 +66,14 @@ public class Map {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         };
 
+    final public boolean[][] map01_move = new boolean[5][9];
+
     /* map select array */
     final public char[][][] levelSelect = {
         map00, map01
+    };
+
+    final public boolean[][][] moveSelect = {
+        map00_move, map01_move
     };
 }

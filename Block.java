@@ -5,7 +5,7 @@ public class Block {
 
     ImageIcon bBasic = new ImageIcon("Assets\\basicBlock_default.png");
     ImageIcon bImmovable = new ImageIcon("Assets\\Immovable.default.png");
-    Debugg debugg = new Debugg();
+    Debug debug = new Debug();
     
     public Block() { }
 

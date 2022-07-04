@@ -1,7 +1,7 @@
 import javax.swing.JFrame;
 
 public class GameFrame {
-    Debugg debugg = new Debugg();
+    Debug debug = new Debug();
 
     GameFrame() {
         JFrame frame = new JFrame("ProjectG");

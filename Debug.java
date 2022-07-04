@@ -5,7 +5,11 @@
  */
 
 
-public class Debugg {
+public class Debug {
+
+    private long __chache__ = 0;
+
+
     public void print(String s) {
         System.out.println(s);
     }
@@ -32,5 +36,13 @@ public class Debugg {
             System.out.println();
         }
         System.out.println("");
+    }
+
+    public void logTime(long s) {
+        __chache__ = s;
+    }
+
+    public long timeDifference(long s) {
+        return s - __chache__;
     }
 }

@@ -4,7 +4,7 @@
 
 
 public class Main {
-    static Debugg debugg = new Debugg();
+    static Debug debug = new Debug();
     static boolean isPlay = true;
     public static void main(String[] args) {
 
