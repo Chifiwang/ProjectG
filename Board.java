@@ -5,21 +5,29 @@ import java.awt.event.*;
 public class Board extends JPanel implements ActionListener{
 
     Map mapGlobal = new Map();
-    Debugg debugg = new Debugg();
+    Debug debug = new Debug();
 
     Player player;
     Block block;
 
-    long timeStart, timeDelay = 200, dt = 200;
+    boolean isAnimate = false;
+    boolean moveFlag = false;
     boolean isValid = false;
+
     int scalingFactor = 100;
+    int numFrames = 10;
+    int frameNum = 0;
+
+    long timeDelay = 200;
+    long timeStart; 
+    long dt = 200;
 
     Image img;
     Map map;
     Timer t;
 
     public Board() {
-        this.map = new Map(mapGlobal.levelSelect[0]);
+        this.map = new Map(mapGlobal.levelSelect[0], mapGlobal.moveSelect[0]);
         player = new Player(map, map.loadPlayer(map.map));
         block = new Block();
 
@@ -40,7 +48,35 @@ public class Board extends JPanel implements ActionListener{
      * @param e a yes code...
      */
     @Override
-    public void actionPerformed(ActionEvent e) { }
+    public void actionPerformed(ActionEvent e) { 
+        if (dt > timeDelay && moveFlag)
+            timeStart = System.currentTimeMillis();
+
+        // debugg.print(isAnimate);
+
+        if(moveFlag && player.canMoveObj(Map.direct) && dt > timeDelay && !isAnimate) {
+            
+            player.move();
+            // moveFlag = false;
+            isAnimate = true;
+        }
+        debug.print(Map.__mvntCache__);
+        // else if(!isAnimate && Map.__mvntCache__ != 4 && dt > timeDelay) {
+        //     Map.direct = Map.__mvntCache__;
+        //     Map.__mvntCache__ = 4;
+        //     if (player.canMoveObj(Map.direct))
+        //         player.move();
+        // }
+
+        if (isAnimate && dt > timeDelay / (2*numFrames))
+            repaint();
+        // if (dt > timeDelay && moveFlag)
+        //     timeStart = System.currentTimeMillis();
+
+        dt = System.currentTimeMillis() - timeStart;
+        
+        
+    }
 
     
     
@@ -53,86 +89,132 @@ public class Board extends JPanel implements ActionListener{
     public void paint(Graphics g) {
 
         super.paint(g);
-            Graphics2D g2D = (Graphics2D) g;
+        Graphics2D g2D = (Graphics2D) g;
 
-            g2D.drawImage(img, 0, 0, null);
+        g2D.drawImage(img, 0, 0, null);
 
-            for (int r = 0; r < map.map.length; r++) {
-                for (int c = 0; c < map.map[r].length; c++) {
+        for (int r = 0; r < map.map.length; r++) {
+            for (int c = 0; c < map.map[r].length; c++) {
 
-                    switch(map.map[r][c]) {
-                        case 'p':
-                            g2D.drawImage(player.getImage(), c*scalingFactor, 
-                                          r*scalingFactor, null);
-                            break;
+                switch(map.map[r][c]) {
+                    case 'p':
+                        if (map.map_move[r][c] == true)
+                            animate(player.getImage(), c*scalingFactor, r*scalingFactor, g2D);
+                        else
+                            g2D.drawImage(player.getImage(), c*scalingFactor, r*scalingFactor, null);
+                        break;
 
-                        case ' ': 
-                            break;
+                    case ' ': 
+                        break;
 
-                        default:
-                            g2D.drawImage(block.getImage(map.map[r][c]), c*scalingFactor, 
-                                          r*scalingFactor, null);
-                            break;
-                    }
+                    default:
+                        if (map.map_move[r][c] == true)
+                            animate(block.getImage(map.map[r][c]), c*scalingFactor, r*scalingFactor, g2D);
+                        else
+                            g2D.drawImage(block.getImage(map.map[r][c]), c*scalingFactor, r*scalingFactor, null);
+                        break;
                 }
             }
+        }
+        if(isAnimate)
+            frameNum++;
+        
+    }
+
+    public void animate(Image img, int c, int r, Graphics2D graphics) {
+        c -= (scalingFactor - frameNum * (scalingFactor/numFrames)) * Map.dc[Map.direct];
+        debug.print(c);
+        r -= (scalingFactor - frameNum * (scalingFactor/numFrames)) * Map.dr[Map.direct];
+        debug.print(( frameNum));
+
+
+        graphics.drawImage(img, c, r, null);
+
+        if (frameNum >= numFrames) {
+            map.map_move = new boolean[5][9];
+            isAnimate = false;
+            frameNum = 0;
+            // player.move();
+        }
     }
 
     /* calls different validation methods from player.java and block.java */
     private class AL extends KeyAdapter {
 
         /** 
-         * on event, call the {@cod player.canMoveObj(dircet);} method with the appropriate
+         * on event, call the {@code player.canMoveObj(dircet);} method with the appropriate
          * encoded direction values, up = 0, left = 1, down = 2, right = 3, none = 4.
          * 
          * the method then calls the move function if the move is valid.
          * 
          * @param e keyboard event
          */
-        public void keyPressed(KeyEvent e) {
+        public void keyTyped(KeyEvent e) {
 
             char key = e.getKeyChar();
+            moveFlag = true;
 
             switch(key) {
                 case 'w':
-                    isValid = player.canMoveObj(Map.direct = 0);
+                    Map.direct = 0;
+                    if(isAnimate)
+                        Map.__mvntCache__ = 0;
                     break;
 
                 case 'a': 
-                    isValid = player.canMoveObj(Map.direct = 1);    
+                    Map.direct = 1;    
+                    if(isAnimate)
+                        Map.__mvntCache__ = 1;
                     break;
 
                 case 's':
-                    isValid = player.canMoveObj(Map.direct = 2);
+                    Map.direct = 2;
+                    if(isAnimate)
+                        Map.__mvntCache__ = 2;
                     break;
 
                 case 'd':
-                    isValid = player.canMoveObj(Map.direct = 3);
+                    Map.direct = 3;
+                    if(isAnimate)
+                        Map.__mvntCache__ = 3;
                     break;
 
                 default:
                     Map.direct = 4;
-                    isValid = false;
                     break;
             }
-            debugg.printMap(map.map);
-
-            if (dt >= timeDelay) { // jank time gate, needs revamping.
-                timeStart = System.currentTimeMillis();
-            }
-            
-            if(isValid && dt >= timeDelay) {
-                player.move();
-            }
-    
-            repaint();
-    
-            dt = System.currentTimeMillis() - timeStart;
         }
 
         public void keyReleased(KeyEvent e) {
-            Map.direct = 4;
-            isValid = false;
+            char key = e.getKeyChar();
+            int newDirect;
+
+            switch(key) {
+                case 'w':
+                    newDirect = 0;
+                    break;
+
+                case 'a': 
+                    newDirect = 1;    
+                    break;
+
+                case 's':
+                    newDirect = 2;
+                    break;
+
+                case 'd':
+                    newDirect = 3;
+                    break;
+
+                default:
+                    newDirect = -1;
+                    break;
+            }
+            if (newDirect == Map.direct) {
+                Map.direct = 4;
+                moveFlag = false;
+                dt = 0;
+            }
         }
     }
 }

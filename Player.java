@@ -4,7 +4,7 @@ import java.awt.Image;
 public class Player {
 
     ImageIcon pDefault = new ImageIcon("Assets\\player_default.png");
-    Debugg debugg = new Debugg();
+    Debug debug = new Debug();
 
     int row, col;
 
@@ -16,6 +16,7 @@ public class Player {
         this.map = map;
         this.row = coords[0];
         this.col = coords[1];
+        debug.print(this.col*100 + " " + this.row*100);
     }
 
     /** 
@@ -25,6 +26,7 @@ public class Player {
      * and overwrite the data from the last action to the current action, 
      * starting at the logged pointer.
      */
+
     public void move() {
         
         for (int r = Map.r, c = Map.c; r > -1 && r < map.map.length && c > -1 && 
@@ -39,6 +41,7 @@ public class Player {
             }
 
             map.map[r][c] = map.map[r - Map.dr[Map.direct]][c - Map.dc[Map.direct]];
+            map.map_move[r][c] = true;
         }
     }
     
@@ -84,15 +87,20 @@ public class Player {
 
             else if (map.map[r][c] == 'p') {
                 isValid = (canMove(direct, r, c)) ? isValid : false;
+                // map.map_move[r][c] = true;
             }
 
             else if (map.map[r][c] != ' ') {
                 isValid = (Block.canMoveObj(direct, map.map[r][c])) ? isValid : false;
+                // map.map_move[r][c] = true;
             }
             
             Map.r = r;
             Map.c = c;
         }
+
+        // map.map_move = (isValid) ? map.map_move : new boolean[5][9];
+
         return isValid;
     }
 
