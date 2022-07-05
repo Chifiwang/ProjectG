@@ -5,6 +5,7 @@ public class Block {
 
     ImageIcon bBasic = new ImageIcon("Assets\\basicBlock_default.png");
     ImageIcon bImmovable = new ImageIcon("Assets\\Immovable.default.png");
+    ImageIcon bDead = new ImageIcon("Assets\\dead.png");
     Debug debug = new Debug();
     
     public Block() { }
@@ -30,6 +31,8 @@ public class Block {
             case 'x':
                 isValid = canMoveImmovable(direct);
                 break;
+            case 'd':
+                isValid = canMoveDead(direct);
             
         }
 
@@ -57,6 +60,10 @@ public class Block {
     private static boolean canMoveImmovable(int direct) {
         return false;
     }
+
+    private static boolean canMoveDead(int direct) {
+        return true;
+    }
     
     /** 
      * uses type data to correctly assign assets to the correct blocks
@@ -71,6 +78,8 @@ public class Block {
                 return bBasic.getImage();
             case 'x':
                 return bImmovable.getImage();
+            case 'd':
+                return bDead.getImage();
             default:
                 return null;
         }

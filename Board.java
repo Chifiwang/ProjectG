@@ -22,7 +22,8 @@ public class Board extends JPanel implements ActionListener{
     long timeStart; 
     long dt = 200;
 
-    Image img;
+    Image board;
+    Image bg;
     Map map;
     Timer t;
 
@@ -33,9 +34,12 @@ public class Board extends JPanel implements ActionListener{
 
         addKeyListener(new AL());
         setFocusable(true);
+        requestFocus();
 
-        ImageIcon background = new ImageIcon("Assets/test.png");
-        img = background.getImage();
+        ImageIcon board = new ImageIcon("Assets/test.png");
+        ImageIcon background = new ImageIcon("Assets/background.png");
+        this.board = board.getImage();
+        bg = background.getImage();
 
         t = new Timer(5, this);
         t.start();
@@ -51,28 +55,20 @@ public class Board extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) { 
         if (dt > timeDelay && moveFlag)
             timeStart = System.currentTimeMillis();
-
-        // debugg.print(isAnimate);
-
-        if(moveFlag && player.canMoveObj(Map.direct) && dt > timeDelay && !isAnimate) {
+        
+        
+        if(moveFlag && dt > timeDelay && player.canMoveObj(Map.direct) && !isAnimate) {
             
             player.move();
-            // moveFlag = false;
+            // debug.printMap(map.map);
+
             isAnimate = true;
         }
-        debug.print(Map.__mvntCache__);
-        // else if(!isAnimate && Map.__mvntCache__ != 4 && dt > timeDelay) {
-        //     Map.direct = Map.__mvntCache__;
-        //     Map.__mvntCache__ = 4;
-        //     if (player.canMoveObj(Map.direct))
-        //         player.move();
-        // }
-
-        if (isAnimate && dt > timeDelay / (2*numFrames))
+        if (isAnimate && dt > timeDelay / (2 * numFrames)) {
             repaint();
-        // if (dt > timeDelay && moveFlag)
-        //     timeStart = System.currentTimeMillis();
 
+        }
+        
         dt = System.currentTimeMillis() - timeStart;
         
         
@@ -90,25 +86,26 @@ public class Board extends JPanel implements ActionListener{
 
         super.paint(g);
         Graphics2D g2D = (Graphics2D) g;
-
-        g2D.drawImage(img, 0, 0, null);
+        
+        g2D.drawImage(bg, 0, 0, null);
+        g2D.drawImage(board, 100, 100, null);
 
         for (int r = 0; r < map.map.length; r++) {
             for (int c = 0; c < map.map[r].length; c++) {
-
+                // debug.print(r + " " + c);
                 switch(map.map[r][c]) {
                     case 'p':
-                        if (map.map_move[r][c] == true)
+                        if (map.map_move[r][c])
                             animate(player.getImage(), c*scalingFactor, r*scalingFactor, g2D);
                         else
                             g2D.drawImage(player.getImage(), c*scalingFactor, r*scalingFactor, null);
                         break;
 
-                    case ' ': 
+                    case ' ':
                         break;
 
                     default:
-                        if (map.map_move[r][c] == true)
+                        if (map.map_move[r][c])
                             animate(block.getImage(map.map[r][c]), c*scalingFactor, r*scalingFactor, g2D);
                         else
                             g2D.drawImage(block.getImage(map.map[r][c]), c*scalingFactor, r*scalingFactor, null);
@@ -116,6 +113,7 @@ public class Board extends JPanel implements ActionListener{
                 }
             }
         }
+
         if(isAnimate)
             frameNum++;
         
@@ -123,18 +121,17 @@ public class Board extends JPanel implements ActionListener{
 
     public void animate(Image img, int c, int r, Graphics2D graphics) {
         c -= (scalingFactor - frameNum * (scalingFactor/numFrames)) * Map.dc[Map.direct];
-        debug.print(c);
         r -= (scalingFactor - frameNum * (scalingFactor/numFrames)) * Map.dr[Map.direct];
-        debug.print(( frameNum));
+
 
 
         graphics.drawImage(img, c, r, null);
 
         if (frameNum >= numFrames) {
-            map.map_move = new boolean[5][9];
+            map.map_move = new boolean[map.map.length][map.map[0].length];
+            Map.__mvntCache__ = 4;
             isAnimate = false;
             frameNum = 0;
-            // player.move();
         }
     }
 
@@ -150,39 +147,36 @@ public class Board extends JPanel implements ActionListener{
          * @param e keyboard event
          */
         public void keyTyped(KeyEvent e) {
-
+            debug.print(debug.timeDifference(System.currentTimeMillis()));
             char key = e.getKeyChar();
+            debug.print(key);
             moveFlag = true;
-
-            switch(key) {
-                case 'w':
-                    Map.direct = 0;
-                    if(isAnimate)
-                        Map.__mvntCache__ = 0;
-                    break;
-
-                case 'a': 
-                    Map.direct = 1;    
-                    if(isAnimate)
-                        Map.__mvntCache__ = 1;
-                    break;
-
-                case 's':
-                    Map.direct = 2;
-                    if(isAnimate)
-                        Map.__mvntCache__ = 2;
-                    break;
-
-                case 'd':
-                    Map.direct = 3;
-                    if(isAnimate)
-                        Map.__mvntCache__ = 3;
-                    break;
-
-                default:
-                    Map.direct = 4;
-                    break;
+            if (dt > timeDelay / 4) {
+                switch(key) {
+                    case 'w':
+                        Map.direct = 0;
+                        break;
+    
+                    case 'a': 
+                        Map.direct = 1;
+                        break;
+    
+                    case 's':
+                        Map.direct = 2;
+                        break;
+    
+                    case 'd':
+                        Map.direct = 3;
+                        break;
+    
+                    default:
+                        Map.direct = 4;
+                        break;
+                }
             }
+            debug.logTime(System.currentTimeMillis());
+            // debug.print(Map.direct);
+            
         }
 
         public void keyReleased(KeyEvent e) {
@@ -211,7 +205,7 @@ public class Board extends JPanel implements ActionListener{
                     break;
             }
             if (newDirect == Map.direct) {
-                Map.direct = 4;
+                if (!isAnimate) Map.direct = 4;
                 moveFlag = false;
                 dt = 0;
             }

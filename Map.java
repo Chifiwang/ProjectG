@@ -48,14 +48,16 @@ public class Map {
 
     final public char[][] map00 = 
         {
-            {' ', ' ', ' ', ' ', 'u', ' ', ' ', ' ', ' '}, 
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
-            {'u', ' ', ' ', 'u', 'x', 'u', 'u', 'p', 'u'}, 
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
-            {' ', ' ', ' ', ' ', 'u', ' ', ' ', ' ', ' '}
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', 'u', ' ', ' ', ' ', ' ', ' '}, 
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
+            {' ', 'u', ' ', ' ', 'u', 'x', 'u', 'u', 'p', 'u', ' '}, 
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
+            {' ', ' ', ' ', ' ', ' ', 'u', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         };
 
-    final public boolean[][] map00_move = new boolean[5][9];
+    final public boolean[][] map00_move = new boolean[map00.length][map00[0].length];
 
     final public char[][] map01 = 
         {
@@ -66,7 +68,7 @@ public class Map {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         };
 
-    final public boolean[][] map01_move = new boolean[5][9];
+    final public boolean[][] map01_move = new boolean[map01.length][map01[0].length];
 
     /* map select array */
     final public char[][][] levelSelect = {

@@ -16,7 +16,6 @@ public class Player {
         this.map = map;
         this.row = coords[0];
         this.col = coords[1];
-        debug.print(this.col*100 + " " + this.row*100);
     }
 
     /** 
@@ -41,6 +40,11 @@ public class Player {
             }
 
             map.map[r][c] = map.map[r - Map.dr[Map.direct]][c - Map.dc[Map.direct]];
+            if (r < 1 || r > map.map.length - 2 || c < 1 || c > map.map[1].length - 2) {
+                map.map[r][c] = 'd';
+                // debug.printMap(map.map);
+            }
+            
             map.map_move[r][c] = true;
         }
     }
@@ -56,8 +60,8 @@ public class Player {
      * @return boolean returns if a valid move is available
      */
     public boolean canMove(int direct, int r, int c) { // checks all sides of map
-        return r + Map.dr[direct] > -1 && r + Map.dr[direct] < map.map.length && 
-               c + Map.dc[direct] > -1 && c + Map.dc[direct] < map.map[1].length ;
+        return r + Map.dr[direct] > 0 && r + Map.dr[direct] < map.map.length - 1 && 
+               c + Map.dc[direct] > 0 && c + Map.dc[direct] < map.map[1].length - 1;
     }
 
     
@@ -75,6 +79,8 @@ public class Player {
      */
     public boolean canMoveObj(int direct) {
         boolean isValid = true;
+        if (direct == 4)
+            return false;
         
         for(int r =  row, c = col; r > -1 && r < map.map.length && 
             c > -1 && c < map.map[1].length; r += Map.dr[direct], c += Map.dc[direct]) {
@@ -90,7 +96,7 @@ public class Player {
                 // map.map_move[r][c] = true;
             }
 
-            else if (map.map[r][c] != ' ') {
+            else {
                 isValid = (Block.canMoveObj(direct, map.map[r][c])) ? isValid : false;
                 // map.map_move[r][c] = true;
             }
