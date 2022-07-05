@@ -1,7 +1,13 @@
+import javax.swing.Action;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.KeyStroke;
+
 import java.awt.Image;
 
-public class Player {
+public class Player extends JLabel{
+    private static final int ifFocused = JComponent.WHEN_IN_FOCUSED_WINDOW;
 
     ImageIcon pDefault = new ImageIcon("Assets\\player_default.png");
     Debug debug = new Debug();
@@ -97,7 +103,7 @@ public class Player {
             }
 
             else {
-                isValid = (Block.canMoveObj(direct, map.map[r][c])) ? isValid : false;
+                isValid = (Block.canMoveObj(direct, r, c)) ? isValid : false;
                 // map.map_move[r][c] = true;
             }
             
@@ -108,6 +114,14 @@ public class Player {
         // map.map_move = (isValid) ? map.map_move : new boolean[5][9];
 
         return isValid;
+    }
+
+    public void putInputMap(KeyStroke key, String actionString) {
+        this.getInputMap(ifFocused).put(key, actionString);
+    }
+
+    public void putActionMap(String actionString, Action action) {
+        this.getActionMap().put(actionString, action);
     }
 
     public Image getImage() {return pIcon;}
