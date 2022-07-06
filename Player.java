@@ -48,6 +48,7 @@ public class Player extends JLabel{
             map.map[r][c] = map.map[r - Map.dr[Map.direct]][c - Map.dc[Map.direct]];
             if (r < 1 || r > map.map.length - 2 || c < 1 || c > map.map[1].length - 2) {
                 map.map[r][c] = 'd';
+                Map.blockCount--;
                 // debug.printMap(map.map);
             }
             

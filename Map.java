@@ -2,9 +2,11 @@ public class Map {
 
     static int[] dc = {0, -1, 0, 1, 0};
     static int[] dr = {-1, 0, 1, 0, 0};
+    static int[] starBounds = new int[4];
     static int r = 2, c = 4;
     static int direct = 4;
     static int __mvntCache__ = 4;
+    static int blockCount;
 
     public char[][] map;
     public boolean[][] map_move;
@@ -12,9 +14,11 @@ public class Map {
     public Map() { }
 
     /* loads the active map into an instantiated Map for future use */
-    public Map(char[][] loadedmap, boolean[][] loadedMove) {
-        map = loadedmap;
-        map_move = loadedMove;
+    public Map(int mapIndex) {
+        map = levelSelect[mapIndex];
+        map_move = moveSelect[mapIndex];
+        starBounds = starBoundSelect[mapIndex];
+        blockCount = blockCountSelect[mapIndex];
         
     }
 
@@ -51,24 +55,30 @@ public class Map {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', 'u', ' ', ' ', ' ', ' ', ' '}, 
             {' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ', ' ', ' ', ' '}, 
-            {' ', ' ', ' ', ' ', ' ', 'p', 'C', 'C', ' ', ' ', ' '}, 
+            {' ', ' ', ' ', ' ', ' ', 'p', 'C', 'C', 'C', ' ', ' '}, 
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         };
 
     final public boolean[][] map00_move = new boolean[map00.length][map00[0].length];
+    final public int[] map00_starBounds = {30, 45, 50, 60};
+    final public int map00_blockCount = 5;
 
     final public char[][] map01 = 
         {
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
-            {' ', ' ', ' ', ' ', 'p', ' ', 'u', ' ', ' '}, 
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', 'p', ' ', 'u', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
         };
 
     final public boolean[][] map01_move = new boolean[map01.length][map01[0].length];
+    final public int[] map01_starBounds = {10, 15, 20, 30};
+    final public int map01_blockCount = 1;
 
     /* map select array */
     final public char[][][] levelSelect = {
@@ -77,5 +87,13 @@ public class Map {
 
     final public boolean[][][] moveSelect = {
         map00_move, map01_move
+    };
+
+    final public int[][] starBoundSelect = {
+        map00_starBounds, map01_starBounds
+    };
+
+    final public int[] blockCountSelect = {
+        map00_blockCount, map01_blockCount
     };
 }
