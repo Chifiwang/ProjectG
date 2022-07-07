@@ -6,29 +6,38 @@ import java.awt.event.MouseListener;
 
 import java.awt.*;
 
-public class GameFrame implements MouseListener{
+public class GameFrame implements MouseListener {
     Debug debug = new Debug();
     JFrame frame;
     JLabel label;
+    JLabel button1;
     Board board;
-
+    LevelSelect levelSelect;
     GameFrame() {
         frame = new JFrame("ProjectG");
-        board = new Board();
+        levelSelect = new LevelSelect();        
 
         label = new JLabel();
-        label.setBounds(0, 0, 1300, 900);
+        label.setBounds(0, 0, 1100, 900);
         label.setBackground(Color.red);
         label.setOpaque(false);
         label.setVisible(true);
         label.addMouseListener(this);
 
-        frame.add(label);
-        frame.add(board);
+        button1 = new JLabel();
+        button1.setBounds(0, 0, 100, 100);
+        button1.setBackground(Color.red);
+        button1.setOpaque(true);
+        button1.setVisible(true);
+        button1.addMouseListener(this);
+
+        frame.getContentPane().add(label);
+        frame.getContentPane().add(button1);
+        frame.getContentPane().add(levelSelect);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setSize((board.map.map[0].length + 2) * 100, (board.map.map.length + 2) * 100);
+        frame.setSize(1300, 900);
         frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
         frame.setVisible(true);
 ////        frame.setVisible(false); //you can't see me!
@@ -37,15 +46,18 @@ public class GameFrame implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        debug.print("here");
 
-        if (board.isLose || board.isWin) {
+        if (levelSelect.isVisible()) {
 
-            debug.print("remove?");
+            levelSelect.actionHandeler(e.getX(), e.getY());
+
+        } else if (board != null && (board.isLose || board.isWin)) { 
+
+            levelSelect.setVisible(true);
+
             board.setVisible(false);
+            frame.getContentPane().remove(board);
             
-            board = new Board();
-            frame.add(board);
         }
     }
 

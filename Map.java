@@ -62,7 +62,7 @@ public class Map {
         };
 
     final public boolean[][] map00_move = new boolean[map00.length][map00[0].length];
-    final public int[] map00_starBounds = {30, 45, 50, 60};
+    final public int[] map00_starBounds = {30, 31, 32};
     final public int map00_blockCount = 5;
 
     final public char[][] map01 = 
@@ -77,7 +77,7 @@ public class Map {
         };
 
     final public boolean[][] map01_move = new boolean[map01.length][map01[0].length];
-    final public int[] map01_starBounds = {10, 15, 20, 30};
+    final public int[] map01_starBounds = {10, 15, 20};
     final public int map01_blockCount = 1;
 
     /* map select array */

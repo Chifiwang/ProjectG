@@ -1,6 +1,5 @@
 import java.awt.*;
 import javax.swing.*;
-
 import java.awt.event.*;
 
 public class Board extends JPanel{
@@ -51,8 +50,8 @@ public class Board extends JPanel{
     Map map;
     Timer t;
 
-    public Board() {
-        this.map = new Map(1);
+    public Board(int level) {
+        this.map = new Map(level);
         player = new Player(map, map.loadPlayer(map.map));
         block = new Block(map);
         score = new JLabel();
@@ -168,7 +167,7 @@ public class Board extends JPanel{
                 g2D.setComposite(alcom);
                 g2D.drawImage(end, 0, 0, null);
 
-            } else if (isWin) {
+            } else if (isLose) {
                 float alpha = 1 * 0.1f;
                 AlphaComposite alcom = AlphaComposite.getInstance(
                         AlphaComposite.SRC_OVER, alpha);
