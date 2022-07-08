@@ -1,87 +1,103 @@
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JButton;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+// import java.awt.event.MouseEvent;
+// import java.awt.event.MouseListener;
 
-import java.awt.*;
+// import java.awt.*;
 
-public class GameFrame implements MouseListener {
+public class GameFrame/*  implements MouseListener */ {
     Debug debug = new Debug();
     JFrame frame;
     JLabel label;
-    JLabel button1;
+    static JButton testButton;
+    static JButton testButton1;
+    static JButton testButton2;
+    static JButton testButton3;
+    static JButton testButton4;
+
+
     Board board;
     LevelSelect levelSelect;
+
+    static JButton[] buttons = {testButton, testButton1, testButton2, testButton3, testButton4};
+
     GameFrame() {
         frame = new JFrame("ProjectG");
         levelSelect = new LevelSelect();        
 
-        label = new JLabel();
-        label.setBounds(0, 0, 1100, 900);
-        label.setBackground(Color.red);
-        label.setOpaque(false);
-        label.setVisible(true);
-        label.addMouseListener(this);
+        buttons[0] = new JButton();
+        buttons[0].setBounds(900, 50, 50, 400);
+        buttons[0].setVisible(false);
+        buttons[0].addActionListener( (e) -> {if (e.getSource() == buttons[0]) {
+            
+            debug.print("will do something");
+        }});
 
-        button1 = new JLabel();
-        button1.setBounds(0, 0, 100, 100);
-        button1.setBackground(Color.red);
-        button1.setOpaque(true);
-        button1.setVisible(true);
-        button1.addMouseListener(this);
+        
+        buttons[1] = new JButton();
+        buttons[1].setBounds(300, 50, 500, 400);
+        buttons[1].setVisible(false);
+        buttons[1].addActionListener( (e) -> {if (e.getSource() == buttons[1]) {
 
-        frame.getContentPane().add(label);
-        frame.getContentPane().add(button1);
-        frame.getContentPane().add(levelSelect);
+            for (JButton b : buttons) {
+                b.setVisible(false);
+            }
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setSize(1300, 900);
-        frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-        frame.setVisible(true);
-////        frame.setVisible(false); //you can't see me!
-//        frame.dispose(); //Destroy the JFrame object
-    }
+            board = new Board(levelSelect.map);
+            levelSelect.setVisible(false);
+            frame.getContentPane().add(board);
+        }});
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
+        buttons[2] = new JButton();
+        buttons[2].setBounds(150, 50, 50, 400);
+        buttons[2].setVisible(false);
+        buttons[2].addActionListener( (e) -> {if (e.getSource() == buttons[2]) {
+            debug.print("will do something");
+        }});
 
-        if (levelSelect.isVisible()) {
+        buttons[3] = new JButton();
+        buttons[3].setBounds(0, 0, 1300, 900);
+        buttons[3].setVisible(true);
+        buttons[3].addActionListener( (e) -> {if (e.getSource() == buttons[3]) {
 
-            levelSelect.actionHandeler(e.getX(), e.getY());
+            buttons[3].setVisible(false);
 
-        } else if (board != null && (board.isLose || board.isWin)) { 
+            buttons[0].setVisible(true);
+            buttons[1].setVisible(true);
+            buttons[2].setVisible(true);
 
             levelSelect.setVisible(true);
+        }});
 
+        buttons[4] = new JButton();
+        buttons[4].setBounds(0, 0, 1300, 900);
+        buttons[4].setVisible(false);
+        buttons[4].addActionListener( (e) -> {if (e.getSource() == buttons[4]) {
+
+            buttons[4].setVisible(false);
+
+            buttons[0].setVisible(true);
+            buttons[1].setVisible(true);
+            buttons[2].setVisible(true);
+
+            levelSelect.setVisible(true);
+            
             board.setVisible(false);
             frame.getContentPane().remove(board);
-            
+        }});
+
+        AnimationHandeler.setLevelSelect(levelSelect);
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1300, 900);
+        frame.setVisible(true);
+
+        for(JButton b : buttons) {
+            frame.getContentPane().add(b);
         }
-    }
 
-    @Override
-    public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        debug.print("here2");
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        debug.print("here3");
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-        debug.print("here4");
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        debug.print("here5");
+        frame.getContentPane().add(levelSelect);
     }
 }
