@@ -14,11 +14,11 @@ public class LevelSelect extends JPanel {
     int activeButton = -1;
 
     boolean isTest = false;
-    int map = -1;
+    int map = 0;
 
-    private final int[][] objects = {
-        {}
-    };
+    // private final int[][] objects = {
+    //     {}
+    // };
 
     public LevelSelect() {
 
@@ -30,7 +30,7 @@ public class LevelSelect extends JPanel {
         this.board = board.getImage();
         bg = background.getImage();
 
-        setVisible(true);
+        setVisible(false);
         setFocusable(true);
         requestFocus();
     }
@@ -51,13 +51,13 @@ public class LevelSelect extends JPanel {
 
     public void actionHandeler(int x, int y) {
 
-        getButton(x, y);
+        // getButton(x, y);
 
-        if(activeButton == 0) {
-            isTest = true;
-            setOutput();
+        // if(activeButton == 0) {
+        isTest = true;
+        setOutput();
             
-        }
+        // }
 
         repaint();
 

@@ -53,9 +53,9 @@ public class Map {
     final public char[][] map00 = 
         {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', 'u', ' ', ' ', ' ', ' ', ' '}, 
-            {' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ', ' ', ' ', ' '}, 
-            {' ', ' ', ' ', ' ', ' ', 'p', 'C', 'C', 'C', ' ', ' '}, 
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
+            {' ', ' ', ' ', ' ', ' ', 'p', 'u', ' ', ' ', ' ', ' '}, 
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
@@ -63,7 +63,7 @@ public class Map {
 
     final public boolean[][] map00_move = new boolean[map00.length][map00[0].length];
     final public int[] map00_starBounds = {30, 31, 32};
-    final public int map00_blockCount = 5;
+    final public int map00_blockCount = 1;
 
     final public char[][] map01 = 
         {

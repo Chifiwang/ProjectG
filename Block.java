@@ -3,14 +3,14 @@ import java.awt.Image;
 
 public class Block {
 
-    ImageIcon bBasic = new ImageIcon("Assets\\basicBlock_default.png");
-    ImageIcon bImmovable = new ImageIcon("Assets\\Immovable.default.png");
-    ImageIcon bDead = new ImageIcon("Assets\\dead.png");
-    ImageIcon bChainE = new ImageIcon("Assets\\chainE.png");
-    ImageIcon bChainH = new ImageIcon("Assets\\chainH.png");
-    ImageIcon bDirectLR = new ImageIcon("Assets\\directLR.png");
-    ImageIcon bDirectUD = new ImageIcon("Assets\\directUD.png");
-    ImageIcon bMoveLim2 = new ImageIcon("Assets\\moveLim2.png");
+    static ImageIcon bBasic = new ImageIcon("Assets\\basicBlock_default.png");
+    static ImageIcon bImmovable = new ImageIcon("Assets\\Immovable.default.png");
+    static ImageIcon bDead = new ImageIcon("Assets\\dead.png");
+    static ImageIcon bChainE = new ImageIcon("Assets\\chainE.png");
+    static ImageIcon bChainH = new ImageIcon("Assets\\chainH.png");
+    static ImageIcon bDirectLR = new ImageIcon("Assets\\directLR.png");
+    static ImageIcon bDirectUD = new ImageIcon("Assets\\directUD.png");
+    static ImageIcon bMoveLim2 = new ImageIcon("Assets\\moveLim2.png");
 
     static Map map;
 
@@ -169,7 +169,7 @@ public class Block {
      * 
      * @return Image returns correct sprites for the block type.
      */
-    public Image getImage(char type) {
+    static public Image getImage(char type) {
         switch(type) {
             case 'u':
                 return bBasic.getImage();

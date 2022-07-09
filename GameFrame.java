@@ -16,16 +16,18 @@ public class GameFrame/*  implements MouseListener */ {
     static JButton testButton2;
     static JButton testButton3;
     static JButton testButton4;
+    static JButton testButton5;
 
 
     Board board;
     LevelSelect levelSelect;
-
-    static JButton[] buttons = {testButton, testButton1, testButton2, testButton3, testButton4};
+    Settings settings;
+    static JButton[] buttons = {testButton, testButton1, testButton2, testButton3, testButton4, testButton5};
 
     GameFrame() {
         frame = new JFrame("ProjectG");
-        levelSelect = new LevelSelect();        
+        levelSelect = new LevelSelect(); 
+        settings = new Settings();       
 
         buttons[0] = new JButton();
         buttons[0].setBounds(900, 50, 50, 400);
@@ -88,6 +90,17 @@ public class GameFrame/*  implements MouseListener */ {
             frame.getContentPane().remove(board);
         }});
 
+        buttons[5] = new JButton();
+        buttons[5].setBounds(1200, 10, 75, 50);
+        buttons[5].setVisible(true);
+        buttons[5].addActionListener( (e) -> {if (e.getSource() == buttons[5]) {
+            debug.print("here");
+            if(!settings.isOpen)
+                settings.setVisible(true);
+            else
+                settings.setVisible(false);
+        }});
+
         AnimationHandeler.setLevelSelect(levelSelect);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -99,5 +112,6 @@ public class GameFrame/*  implements MouseListener */ {
         }
 
         frame.getContentPane().add(levelSelect);
+        frame.getContentPane().add(settings);
     }
 }
