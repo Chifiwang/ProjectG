@@ -9,12 +9,12 @@ import java.awt.Image;
 public class Player extends JLabel{
     private static final int ifFocused = JComponent.WHEN_IN_FOCUSED_WINDOW;
 
-    ImageIcon pDefault = new ImageIcon("Assets\\player_default.png");
+    static ImageIcon pDefault = new ImageIcon("Assets\\player_default.png");
     Debug debug = new Debug();
 
     int row, col;
 
-    Image pIcon;
+    static Image pIcon;
     Map map;
 
     public Player(Map map, int[] coords) {
@@ -125,5 +125,5 @@ public class Player extends JLabel{
         this.getActionMap().put(actionString, action);
     }
 
-    public Image getImage() {return pIcon;}
+    static public Image getImage() {return pIcon;}
 }

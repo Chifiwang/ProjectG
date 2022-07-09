@@ -1,6 +1,5 @@
 import java.awt.*;
 import javax.swing.*;
-
 import java.awt.event.*;
 
 public class Board extends JPanel{
@@ -51,13 +50,16 @@ public class Board extends JPanel{
     Map map;
     Timer t;
 
-    public Board() {
-        this.map = new Map(1);
+    public Board(int level) {
+        this.map = new Map(level);
         player = new Player(map, map.loadPlayer(map.map));
         block = new Block(map);
         score = new JLabel();
 
         this.add(player);
+
+        AnimationHandeler.setBoard(this);
+        AnimationHandeler.setMap(this.map);
 
         setFocusable(true);
         requestFocus();
@@ -110,17 +112,13 @@ public class Board extends JPanel{
 
         for (int r = 0; r < map.map.length; r++) {
             for (int c = 0; c < map.map[r].length; c++) {
-                // debug.print(r + " " + c);
+                
                 switch(map.map[r][c]) {
                     case 'p':
                         if (map.map_move[r][c])
-//                            try {
-                                animate(player.getImage(), c*scalingFactor, r*scalingFactor, g2D);
-//                            } catch (InterruptedException e1) {
-//                                e1.printStackTrace();
-//                            }
+                            AnimationHandeler.queueAnimation(0, c*scalingFactor, r*scalingFactor);
                         else
-                            g2D.drawImage(player.getImage(), c*scalingFactor, r*scalingFactor, null);
+                            g2D.drawImage(Player.getImage(), c*scalingFactor, r*scalingFactor, null);
                         break;
 
                     case ' ':
@@ -128,59 +126,49 @@ public class Board extends JPanel{
 
                     default:
                         if (map.map_move[r][c])
-//                            try {
-                                animate(block.getImage(map.map[r][c]), c*scalingFactor, r*scalingFactor, g2D);
-//                            } catch (InterruptedException e) {
-//                                e.printStackTrace();
-//                            }
+                            AnimationHandeler.queueAnimation(0, c*scalingFactor, r*scalingFactor);
                         else
-                            g2D.drawImage(block.getImage(map.map[r][c]), c*scalingFactor, r*scalingFactor, null);
+                            g2D.drawImage(Block.getImage(map.map[r][c]), c*scalingFactor, r*scalingFactor, null);
                         break;
                 }
-            }
-            
-    
-            if (isAnimate) {
-                frameNum++;
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            
-                repaint();
-            }      
-    
-            starCount = getStarCount();
-
-            if (starCount == 0) {
-                isLose = true;
-            }
-
-            if (Map.blockCount == 0) {
-                isWin = true;
-            }
-    
-            if (isWin) {
-                float alpha = 1 * 0.1f;
-                AlphaComposite alcom = AlphaComposite.getInstance(
-                        AlphaComposite.SRC_OVER, alpha);
-                g2D.setComposite(alcom);
-                g2D.drawImage(end, 0, 0, null);
-
-            } else if (isWin) {
-                float alpha = 1 * 0.1f;
-                AlphaComposite alcom = AlphaComposite.getInstance(
-                        AlphaComposite.SRC_OVER, alpha);
-                g2D.setComposite(alcom);
-                g2D.drawImage(end, 0, 0, null);
-                
-
-            } else {
-                g2D.drawString("Num moves: " + moveCount + " Num stars: " + starCount, 900, 620);
-            }
-
+            }           
         }
+
+        AnimationHandeler.animate(g2D);
+
+        starCount = getStarCount();
+
+        if (starCount == 0) {
+            isLose = true;
+        }
+
+        if (Map.blockCount == 0) {
+            isWin = true;
+        }
+
+        if (isWin) {
+
+            float alpha = 1 * 0.5f;
+            AlphaComposite alcom = AlphaComposite.getInstance(
+                    AlphaComposite.SRC_OVER, alpha);
+
+            g2D.setComposite(alcom);
+            g2D.drawImage(end, 0, 0, null);
+            GameFrame.buttons[4].setVisible(true);
+
+        } else if (isLose) {
+
+            float alpha = 1 * 0.5f;
+            AlphaComposite alcom = AlphaComposite.getInstance(
+                    AlphaComposite.SRC_OVER, alpha);
+
+            g2D.setComposite(alcom);
+            g2D.drawImage(end, 0, 0, null);
+            
+        } else {
+            g2D.drawString("Num moves: " + moveCount + " Num stars: " + starCount, 900, 620);
+        }
+
     }
 
     public void animate(Image img, int c, int r, Graphics2D graphics) {
@@ -197,6 +185,8 @@ public class Board extends JPanel{
             frameNum = 0;
             
         }
+
+        
     }
 
     public int getStarCount() {
@@ -257,6 +247,4 @@ public class Board extends JPanel{
         }
 
     }
-
-
 }
