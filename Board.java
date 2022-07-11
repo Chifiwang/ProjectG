@@ -27,6 +27,8 @@ public class Board extends JPanel{
     Block block;
 
     /* variables */
+    Graphics2D g2D;
+
     boolean isAnimate = false;
     boolean moveFlag = false;
     boolean isValid = false;
@@ -51,7 +53,9 @@ public class Board extends JPanel{
     Timer t;
 
     public Board(int level) {
+//    	this.setLayout(null);
         this.map = new Map(level);
+        
         player = new Player(map, map.loadPlayer(map.map));
         block = new Block(map);
         score = new JLabel();
@@ -60,17 +64,19 @@ public class Board extends JPanel{
 
         AnimationHandeler.setBoard(this);
         AnimationHandeler.setMap(this.map);
-
-        setFocusable(true);
-        requestFocus();
+        
+        // this.setBa
+        this.setFocusable(true);
+        this.requestFocus();
 
         ImageIcon board = new ImageIcon("Assets\\test.png");
         ImageIcon background = new ImageIcon("Assets\\background.png");
         ImageIcon end = new ImageIcon("Assets\\end.png");
-        this.board = board.getImage();
-        bg = background.getImage();
-        this.end = end.getImage();
+        this.board = board.getImage().getScaledInstance(900, 500, Image.SCALE_DEFAULT);
+        this.bg = background.getImage().getScaledInstance(1300, 900, Image.SCALE_DEFAULT);
+        this.end = end.getImage().getScaledInstance(1300, 900, Image.SCALE_DEFAULT);
 
+        
         // t = new Timer(5, this);
         // t.start();
 
@@ -102,17 +108,15 @@ public class Board extends JPanel{
      * @param g
      */
     public void paint(Graphics g) {
-
+        
         super.paint(g);
-        Graphics2D g2D = (Graphics2D) g;
+        g2D = (Graphics2D) g;
         g2D.setFont(new Font("TimesRoman", Font.PLAIN, 20)); 
-
-        g2D.drawImage(bg, 0, 0, null);
-        g2D.drawImage(board, 100, 100, null);
 
         for (int r = 0; r < map.map.length; r++) {
             for (int c = 0; c < map.map[r].length; c++) {
-                
+                if (!(r == 0 || c == 0 || r == map.map.length - 1 || c == map.map[0].length - 1))
+                    g2D.drawImage(map.tile.getImage(), c*scalingFactor, r*scalingFactor, null);
                 switch(map.map[r][c]) {
                     case 'p':
                         if (map.map_move[r][c])
@@ -122,6 +126,8 @@ public class Board extends JPanel{
                         break;
 
                     case ' ':
+                        // debug.print("a");
+                        // g2D.drawImage(map.tile.getImage(), c*scalingFactor, r*scalingFactor, null); //why no print if called
                         break;
 
                     default:
@@ -133,7 +139,7 @@ public class Board extends JPanel{
                 }
             }           
         }
-
+        
         AnimationHandeler.animate(g2D);
 
         starCount = getStarCount();
@@ -147,14 +153,13 @@ public class Board extends JPanel{
         }
 
         if (isWin) {
-
             float alpha = 1 * 0.5f;
             AlphaComposite alcom = AlphaComposite.getInstance(
                     AlphaComposite.SRC_OVER, alpha);
 
             g2D.setComposite(alcom);
             g2D.drawImage(end, 0, 0, null);
-            GameFrame.buttons[4].setVisible(true);
+//            GameFrame.buttons[4].setVisible(true);
 
         } else if (isLose) {
 
@@ -168,7 +173,9 @@ public class Board extends JPanel{
         } else {
             g2D.drawString("Num moves: " + moveCount + " Num stars: " + starCount, 900, 620);
         }
-
+        
+        //debug
+        // debug.print("here");
     }
 
     public void animate(Image img, int c, int r, Graphics2D graphics) {
@@ -186,7 +193,8 @@ public class Board extends JPanel{
             
         }
 
-        
+        //debug
+        debug.print("bruh");
     }
 
     public int getStarCount() {

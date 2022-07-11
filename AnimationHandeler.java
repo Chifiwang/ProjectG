@@ -38,7 +38,6 @@ public class AnimationHandeler {
                 map.map_move = new boolean[map.map.length][map.map[0].length];
     
                 Map.__mvntCache__ = 4;
-                System.out.print("cleared queue");
                 queue.clear();
                 
             }
@@ -53,6 +52,9 @@ public class AnimationHandeler {
                 board.repaint();
             }
         }
+        
+        //debug
+        System.out.println("bruh2");
     }
 
     public static void drawGame(Graphics2D graphics, Integer[] key) {
@@ -74,13 +76,16 @@ public class AnimationHandeler {
         r -= (scalingFactor - frame * (scalingFactor/numFrames)) * Map.dr[Map.direct];
 
         graphics.drawImage(img, c, r, null);
-
+        // board.remove(GameFrame.settingsButton);
+        GameFrame.settingsButton.requestFocus();
         if (frame >= numFrames) {
             board.isAnimate = false;
             // frame = 0;
             
         }
 
+        //debug
+        // System.out.println("bruh3");
     }
 
     public static void setMap(Map m) { map = m; }

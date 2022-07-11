@@ -14,15 +14,15 @@ public class LevelSelect extends JPanel {
     int activeButton = -1;
 
     boolean isTest = false;
-    int map = 0;
+    int map = 0, unlocked = 0;
 
     // private final int[][] objects = {
     //     {}
     // };
 
     public LevelSelect() {
-
-        
+    	this.setLayout(null);
+        this.setBounds(0, 0, 1300, 900);
 
 
         ImageIcon board = new ImageIcon("Assets\\dead.png");
@@ -30,24 +30,24 @@ public class LevelSelect extends JPanel {
         this.board = board.getImage();
         bg = background.getImage();
 
-        setVisible(false);
-        setFocusable(true);
-        requestFocus();
+        this.setVisible(true);
+        this.setFocusable(true);
+        this.requestFocus();
     }
 
-    public void paint(Graphics g) {
-        
-        super.paint(g);
-        g2D = (Graphics2D) g;
-        g2D.setFont(new Font("TimesRoman", Font.PLAIN, 20)); 
-
-        g2D.drawImage(bg, 0, 0, null);
-        g2D.drawImage(board, 500, 200, null);
-
-        if(isTest) {
-        }
-
-    }
+//    public void paint(Graphics g) {
+//        
+//        super.paint(g);
+//        g2D = (Graphics2D) g;
+//        g2D.setFont(new Font("TimesRoman", Font.PLAIN, 20)); 
+//
+//        g2D.drawImage(bg, 0, 0, null);
+//        g2D.drawImage(board, 500, 200, null);
+//
+//        if(isTest) {
+//        }
+//
+//    }
 
     public void actionHandeler(int x, int y) {
 
@@ -77,6 +77,4 @@ public class LevelSelect extends JPanel {
         if(isTest)
             map = 0;
     }
-
-
 }

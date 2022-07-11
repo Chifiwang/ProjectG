@@ -1,4 +1,7 @@
+import javax.swing.ImageIcon;
+
 public class Map {
+    ImageIcon tile = new ImageIcon("Assets\\girdsquare.png");
 
     static int[] dc = {0, -1, 0, 1, 0};
     static int[] dr = {-1, 0, 1, 0, 0};
@@ -79,21 +82,36 @@ public class Map {
     final public boolean[][] map01_move = new boolean[map01.length][map01[0].length];
     final public int[] map01_starBounds = {10, 15, 20};
     final public int map01_blockCount = 1;
+    
+    final public char[][] map02 = 
+        {
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', 'p', ' ', 'u', 'u', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        };
+
+    final public boolean[][] map02_move = new boolean[map02.length][map02[0].length];
+    final public int[] map02_starBounds = {10, 15, 20};
+    final public int map02_blockCount = 2;
 
     /* map select array */
     final public char[][][] levelSelect = {
-        map00, map01
+        map00, map01, map02
     };
 
     final public boolean[][][] moveSelect = {
-        map00_move, map01_move
+        map00_move, map01_move, map02_move
     };
 
     final public int[][] starBoundSelect = {
-        map00_starBounds, map01_starBounds
+        map00_starBounds, map01_starBounds, map02_starBounds
     };
 
     final public int[] blockCountSelect = {
-        map00_blockCount, map01_blockCount
+        map00_blockCount, map01_blockCount, map02_blockCount
     };
 }

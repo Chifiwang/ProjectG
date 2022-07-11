@@ -11,10 +11,11 @@ class Settings extends JPanel {
 		this.setLayout(null);
 		this.setBackground(new Color(255, 0, 0, 0));
 
-        setVisible(false);
-        setFocusable(true);
-        requestFocus();
+        this.setVisible(false);
+        this.setFocusable(true);
+        this.requestFocus();
 		
+        // add more stuff later
 	}
 
 }
