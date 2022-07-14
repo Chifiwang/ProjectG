@@ -56,7 +56,7 @@ class Bson {
 
                 if (overWrite) {
 
-                    __fileCache__ += newMap + "\n";
+                    __fileCache__ += newMap;
 
                     for(int i = 0; i < saveLength; i++)
                         bufferedReader.readLine();

@@ -8,8 +8,6 @@ Map0 {
 	"blockCount" = 1
 }
 
-
-
 Map1 {
     "firstClear" : true
 	"starsAchived" : 3
@@ -19,8 +17,6 @@ Map1 {
 	"starBounds" = 17, 21, 25
 	"blockCount" = 1
 }
-
-
 
 Map2 {
     "firstClear" : true
@@ -32,8 +28,6 @@ Map2 {
 	"blockCount" = 2
 }
 
-
-
 Map3 {
     "firstClear" : true
 	"starsAchived" : 2
@@ -43,8 +37,6 @@ Map3 {
 	"starBounds" = 17, 21, 25
 	"blockCount" = 2
 }
-
-
 
 Map4 {
     "firstClear" : true
@@ -56,8 +48,6 @@ Map4 {
 	"blockCount" = 4
 }
 
-
-
 Map5 {
     "firstClear" : true
 	"starsAchived" : 2
@@ -67,7 +57,3 @@ Map5 {
 	"starBounds" = 17, 21, 25
 	"blockCount" = 3
 }
-
-
-
-
