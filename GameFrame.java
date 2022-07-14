@@ -12,40 +12,34 @@ import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-// import java.awt.event.MouseEvent;
-// import java.awt.event.MouseListener;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
-// import java.awt.*;
-
-public class GameFrame/*  implements MouseListener */ {
+public class GameFrame {
     Debug debug = new Debug();
     JFrame frame;
     JLabel label;
+
+    static int scaleFactor = 128;
     
     //exit as in exit settings
     static JButton settingsButton, backButton, nextButton, enterButton, exitButton;
-    static JPanel settingsPanel = new JPanel();
-    JLayeredPane current = new JLayeredPane();
 
     Board board;
     LevelSelect levelSelect;
     Settings settings;
+    
+    boolean isGame = true;
 
     GameFrame() {
         frame = new JFrame("ProjectG");
-//        frame.setLayout(null);
         levelSelect = new LevelSelect(); 
         settings = new Settings();
-        
-//        current.setLayout(null);
-        current.setBounds(0, 0, 1300, 900);
-        current.setVisible(true);
-//        current.setFocusable(true);
-//        current.requestFocus();
 
-//        settingsPanel.setBounds(1250, 10, 40, 40);
-//        current.setBounds(0, 0, 1300, 900);
-//        current.setVisible(true);
+//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//        if(screenSize.getWidth() < 128*11 || screenSize.getHeight() < 128*9) {
+//                scaleFactor = 64;
+//        }
         
         //settingsbutton
         ImageIcon icon = new ImageIcon("Assets\\settings.png");
@@ -55,20 +49,17 @@ public class GameFrame/*  implements MouseListener */ {
         settingsButton = new JButton();
         settingsButton.setIcon(icon);
         settingsButton.setBounds(1250, 10, 40, 40);
-//        settingsButton.setSize(40, 40);
         settingsButton.setVisible(true);
         settingsButton.setFocusable(true);
         settingsButton.addActionListener((e) -> {
         	if (e.getSource() == settingsButton) {
-//        		levelSelect.setVisible(false);
-        		current.setVisible(false);
+        		if (isGame) board.setVisible(false); 
+        		else levelSelect.setVisible(false);
+        		settingsButton.setVisible(false);
         		settings.setVisible(true);
         		exitButton.setVisible(true);
         	}
         });
-        
-//        settingsPanel.add(settingsButton);
-//        settingsPanel.setVisible(true);
         
         backButton = new JButton("Back");
         backButton.setBounds(200, 430, 80, 80);
@@ -108,8 +99,9 @@ public class GameFrame/*  implements MouseListener */ {
         exitButton.setVisible(false);
         exitButton.addActionListener((e) -> {
         	if (e.getSource() == exitButton) {
-//        		levelSelect.setVisible(true);
-        		current.setVisible(true);
+        		if (isGame) board.setVisible(true); 
+        		else levelSelect.setVisible(true);
+        		settingsButton.setVisible(true);
         		settings.setVisible(false);
         		exitButton.setVisible(false);
         	}
@@ -122,7 +114,7 @@ public class GameFrame/*  implements MouseListener */ {
         AnimationHandeler.setLevelSelect(levelSelect);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1310, 937); // apparently we need to make the frame bigger than the desired size
+        frame.setSize(scaleFactor*11, scaleFactor*9); // apparently we need to make the frame bigger than the desired size
         frame.setVisible(true);
 
         levelSelect.add(backButton);
@@ -132,19 +124,17 @@ public class GameFrame/*  implements MouseListener */ {
         settings.add(exitButton);
         board.add(settingsButton);
         
-        // current.add(settingsButton, new Integer(2));
-        // current.add(levelSelect, new Integer(1));
-
-        // frame.getContentPane().add(current);
         frame.getContentPane().add(settings);
         frame.getContentPane().add(levelSelect);
-        
-//        newGame(0);
-// idk why it doesnt display board when i put it here
     }
     
+    /** 
+     * creates a new instance of board whenever the player enters a level.
+     * 
+     * @param level selected
+     */
     public void newGame(int map) {
-//    	levelSelect.remove(settingsButton);
+    	isGame = true;
     	levelSelect.setVisible(false);
     	board = new Board(map);
     	board.setVisible(true);
@@ -164,16 +154,19 @@ public class GameFrame/*  implements MouseListener */ {
     		public void mousePressed(MouseEvent e) {
     			// do nothing
     		}
+    		/** 
+    	     * once the game is over, removes instance of board from frame.
+    	     * if the player wins in the most recently unlocked level, unlocks the next level
+    	     * 
+    	     * @param e
+    	     */
     		public void mouseReleased(MouseEvent e) {
     			if (board.isLose || board.isWin) {
-//    				levelSelect.add(settingsButton);
-                                debug.print("A");
-                                board.setVisible(false);
-   				frame.remove(board);
-    				// current.remove(board);
-                                levelSelect.add(settingsButton);
-    				levelSelect.setVisible(true);
-   				levelSelect.repaint();
+    				isGame = false;
+	                board.setVisible(false);
+	   				frame.remove(board);
+	                levelSelect.add(settingsButton);
+	    			levelSelect.setVisible(true);
     			}
     			if (board.isWin && levelSelect.map == levelSelect.unlocked) {
     				levelSelect.unlocked++;

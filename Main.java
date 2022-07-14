@@ -1,13 +1,15 @@
-// import java.awt.*;
-// import java.awt.event.KeyEvent;
-// import javax.swing.*;
-
+import java.io.IOException;
 
 public class Main {
-    static Debug debug = new Debug();
-    static boolean isPlay = true;
     public static void main(String[] args) {
 
         new GameFrame();
+        // try {
+            // Bson.writer();
+            // Map map = new Map();
+            // map.loadSave("01");
+        // } catch(IOException e) {}
+
+        
     }
 }

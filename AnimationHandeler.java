@@ -5,8 +5,8 @@ import java.awt.Image;
 
 public class AnimationHandeler {
     static int frame = 0;
-    static int numFrames = 10;
-    static int scalingFactor = 100;
+    static int numFrames = 8;
+    static int scalingFactor = GameFrame.scaleFactor;
 
     static ArrayList<Integer[]> queue = new ArrayList<Integer[]>();
     static ArrayList<ImageIcon[]> imageLookup = new ArrayList<ImageIcon[]>();
@@ -36,8 +36,6 @@ public class AnimationHandeler {
             if(frame >= numFrames) {
                 frame = 0;
                 map.map_move = new boolean[map.map.length][map.map[0].length];
-    
-                Map.__mvntCache__ = 4;
                 queue.clear();
                 
             }
@@ -52,9 +50,6 @@ public class AnimationHandeler {
                 board.repaint();
             }
         }
-        
-        //debug
-        System.out.println("bruh2");
     }
 
     public static void drawGame(Graphics2D graphics, Integer[] key) {
@@ -76,16 +71,10 @@ public class AnimationHandeler {
         r -= (scalingFactor - frame * (scalingFactor/numFrames)) * Map.dr[Map.direct];
 
         graphics.drawImage(img, c, r, null);
-        // board.remove(GameFrame.settingsButton);
         GameFrame.settingsButton.requestFocus();
         if (frame >= numFrames) {
             board.isAnimate = false;
-            // frame = 0;
-            
         }
-
-        //debug
-        // System.out.println("bruh3");
     }
 
     public static void setMap(Map m) { map = m; }

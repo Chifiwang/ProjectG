@@ -4,8 +4,6 @@ import java.awt.event.*;
 
 public class Board extends JPanel{
 
-    
-
     /* Action key commands */
     final String up = "move up";
     final String down = "move down";
@@ -19,7 +17,6 @@ public class Board extends JPanel{
 
     /* Innit statements */
     Map mapGlobal = new Map();
-    Debug debug = new Debug();
 
     /* objects */
     JLabel score;
@@ -34,8 +31,9 @@ public class Board extends JPanel{
     boolean isValid = false;
     boolean isLose = false;
     boolean isWin = false;
+    boolean init = true;
 
-    int scalingFactor = 100;
+    int scalingFactor = GameFrame.scaleFactor;
     int moveCount = 0;
     int numFrames = 10;
     int frameNum = 0;
@@ -53,7 +51,6 @@ public class Board extends JPanel{
     Timer t;
 
     public Board(int level) {
-//    	this.setLayout(null);
         this.map = new Map(level);
         
         player = new Player(map, map.loadPlayer(map.map));
@@ -65,7 +62,7 @@ public class Board extends JPanel{
         AnimationHandeler.setBoard(this);
         AnimationHandeler.setMap(this.map);
         
-        // this.setBa
+        this.setLayout(null);
         this.setFocusable(true);
         this.requestFocus();
 
@@ -75,10 +72,6 @@ public class Board extends JPanel{
         this.board = board.getImage().getScaledInstance(900, 500, Image.SCALE_DEFAULT);
         this.bg = background.getImage().getScaledInstance(1300, 900, Image.SCALE_DEFAULT);
         this.end = end.getImage().getScaledInstance(1300, 900, Image.SCALE_DEFAULT);
-
-        
-        // t = new Timer(5, this);
-        // t.start();
 
         player.putInputMap(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0, false), up);
         player.putInputMap(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, false), down);
@@ -116,7 +109,7 @@ public class Board extends JPanel{
         for (int r = 0; r < map.map.length; r++) {
             for (int c = 0; c < map.map[r].length; c++) {
                 if (!(r == 0 || c == 0 || r == map.map.length - 1 || c == map.map[0].length - 1))
-                    g2D.drawImage(map.tile.getImage(), c*scalingFactor, r*scalingFactor, null);
+                    g2D.drawImage(map.tileImg, c*scalingFactor, r*scalingFactor, null);
                 switch(map.map[r][c]) {
                     case 'p':
                         if (map.map_move[r][c])
@@ -126,8 +119,6 @@ public class Board extends JPanel{
                         break;
 
                     case ' ':
-                        // debug.print("a");
-                        // g2D.drawImage(map.tile.getImage(), c*scalingFactor, r*scalingFactor, null); //why no print if called
                         break;
 
                     default:
@@ -159,7 +150,6 @@ public class Board extends JPanel{
 
             g2D.setComposite(alcom);
             g2D.drawImage(end, 0, 0, null);
-//            GameFrame.buttons[4].setVisible(true);
 
         } else if (isLose) {
 
@@ -171,32 +161,19 @@ public class Board extends JPanel{
             g2D.drawImage(end, 0, 0, null);
             
         } else {
-            g2D.drawString("Num moves: " + moveCount + " Num stars: " + starCount, 900, 620);
-        }
-        
-        //debug
-        // debug.print("here");
-    }
-
-    public void animate(Image img, int c, int r, Graphics2D graphics) {
-        c -= (scalingFactor - frameNum * (scalingFactor/numFrames)) * Map.dc[Map.direct];
-        r -= (scalingFactor - frameNum * (scalingFactor/numFrames)) * Map.dr[Map.direct];
-
-        graphics.drawImage(img, c, r, null);
-
-        if (frameNum >= numFrames) {
-            map.map_move = new boolean[map.map.length][map.map[0].length];
-
-            Map.__mvntCache__ = 4;
-            isAnimate = false;
-            frameNum = 0;
-            
+            g2D.drawString("Num moves: " + moveCount + " Num stars: " + starCount, 7 * GameFrame.scaleFactor, 13 * GameFrame.scaleFactor/2);
         }
 
-        //debug
-        debug.print("bruh");
+        if(init) {
+            init = false;
+            repaint();
+        }
     }
 
+    /** 
+     * returns how many stars you have according to the number of moves you've made
+     * 
+     */
     public int getStarCount() {
         if (moveCount < Map.starBounds[0])
             return 3;
@@ -208,6 +185,10 @@ public class Board extends JPanel{
         
     }
 
+    /** 
+     * uses keybinding to determine when a player is using WASD keys to move
+     * 
+     */
     private class MoveDecoder extends AbstractAction{
         int direct;
         boolean isRelease;
@@ -229,19 +210,15 @@ public class Board extends JPanel{
                     Map.direct = direct;
                     dt = 200;
                 }
-                
-    //            if (!isAnimate)
-    //            	Map.direct = this.direct;
+
                 moveFlag = !isRelease;
                 
                 if (dt >= timeDelay && moveFlag)
                     timeStart = System.currentTimeMillis();
                 
-                if(moveFlag && dt >= timeDelay && player.canMoveObj(Map.direct) && !isAnimate) {
-                    // debug.print("here");
+                if(moveFlag && dt >= timeDelay && player.canMoveObj() && !isAnimate) {
                     player.move();
                     moveCount++;
-                    // debug.printMap(map.map);
 
                     isAnimate = true;
                 }
