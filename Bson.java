@@ -1,28 +1,26 @@
 import java.io.BufferedReader;
-// import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 class Bson {
-    // Creating a text File using FileWriter
     static String cache;
 
-    static void writer() throws IOException {
-        // Accept a string
-        String str = "Map00 {\n\t\"Hallo\" : true\n    h";
+    // static void writer() throws IOException {
+    //     // Accept a string
+    //     String str = "Map00 {\n\t\"Hallo\" : true\n    h";
 
-        FileWriter fw = new FileWriter("output.txt");
+    //     FileWriter fw = new FileWriter("output.txt");
 
-        for (int i = 0; i < str.length(); i++)
-            fw.write(str.charAt(i));
+    //     for (int i = 0; i < str.length(); i++)
+    //         fw.write(str.charAt(i));
  
-        System.out.println("Writing successful");
+    //     System.out.println("Writing successful");
 
-        //close the file
-        fw.close();
-    }
+    //     //close the file
+    //     fw.close();
+    // }
 
     // static void readFile() throws IOException {
 
@@ -42,7 +40,7 @@ class Bson {
     // }
 
     static void rewrite(String map, String newMap) {
-        int saveLength = 1;
+        int saveLength = 8;
         File file = new File("output.txt");
         String line = "";
         String __fileCache__ = "";
@@ -66,7 +64,7 @@ class Bson {
                 } else { __fileCache__ += line + "\n"; }
             } 
 
-            Debug.print(__fileCache__);
+            // Debug.print(__fileCache__);
 
             FileWriter writer = new FileWriter(file);
             writer.write(__fileCache__);

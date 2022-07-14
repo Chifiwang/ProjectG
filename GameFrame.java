@@ -1,6 +1,4 @@
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import java.awt.Image;
@@ -12,24 +10,23 @@ import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-
 public class GameFrame {
     Debug debug = new Debug();
-    JFrame frame;
-    JLabel label;
+    static JFrame frame;
 
     static int scaleFactor = 128;
     
     //exit as in exit settings
-    static JButton settingsButton, backButton, nextButton, enterButton, exitButton;
+    static JButton menuButton, settingsButton, backButton, nextButton, enterButton, exitButton, returnButton, leaveButton, restartButton;
 
-    Board board;
-    LevelSelect levelSelect;
-    Settings settings;
+    static Board board;
+    static LevelSelect levelSelect;
+    static Settings settings;
+    static JPanel menu = new JPanel();
     
-    boolean isGame = true;
+    static int level = -1;
+    
+    static boolean isGame = true;
 
     GameFrame() {
         frame = new JFrame("ProjectG");
@@ -40,6 +37,23 @@ public class GameFrame {
 //        if(screenSize.getWidth() < 128*11 || screenSize.getHeight() < 128*9) {
 //                scaleFactor = 64;
 //        }
+        
+        menu.setLayout(null);
+        menu.setBounds(0, 0, 1300, 900);
+        menu.setVisible(false);
+        
+        menuButton = new JButton("Menu");
+        menuButton.setBounds(10, 10, 80, 40);
+        menuButton.setVisible(true);
+        menuButton.setFocusable(true);
+        menuButton.addActionListener((e) -> {
+        	if (e.getSource() == menuButton) {
+        		board.setVisible(false);
+        		menuButton.setVisible(false);
+        		settingsButton.setVisible(false);
+        		menu.setVisible(true);
+        	}
+        });
         
         //settingsbutton
         ImageIcon icon = new ImageIcon("Assets\\settings.png");
@@ -53,7 +67,10 @@ public class GameFrame {
         settingsButton.setFocusable(true);
         settingsButton.addActionListener((e) -> {
         	if (e.getSource() == settingsButton) {
-        		if (isGame) board.setVisible(false); 
+        		if (isGame) {
+        			board.setVisible(false);
+        			menuButton.setVisible(false);
+        		}
         		else levelSelect.setVisible(false);
         		settingsButton.setVisible(false);
         		settings.setVisible(true);
@@ -99,11 +116,54 @@ public class GameFrame {
         exitButton.setVisible(false);
         exitButton.addActionListener((e) -> {
         	if (e.getSource() == exitButton) {
-        		if (isGame) board.setVisible(true); 
+        		if (isGame) {
+        			board.setVisible(true);
+        			menuButton.setVisible(true);
+        		}
         		else levelSelect.setVisible(true);
         		settingsButton.setVisible(true);
         		settings.setVisible(false);
         		exitButton.setVisible(false);
+        	}
+        });
+        
+        returnButton = new JButton("Return");
+        returnButton.setBounds(600, 380, 100, 40);
+        returnButton.setVisible(true);
+        returnButton.setFocusable(true);
+        returnButton.addActionListener((e) -> {
+        	if (e.getSource() == returnButton) {
+        		menu.setVisible(false);
+        		board.setVisible(true);
+        		menuButton.setVisible(true);
+        		settingsButton.setVisible(true);
+        	}
+        });
+        
+        leaveButton = new JButton("Levels");
+        leaveButton.setBounds(600, 430, 100, 40);
+        leaveButton.setVisible(true);
+        leaveButton.setFocusable(true);
+        leaveButton.addActionListener((e) -> {
+        	if (e.getSource() == leaveButton) {
+        		settingsButton.setVisible(true);
+        		menuButton.setVisible(true);
+        		menu.setVisible(false);
+        		exitGame();
+        	}
+        });
+        
+        restartButton = new JButton("Restart");
+        restartButton.setBounds(600, 480, 100, 40);
+        restartButton.setVisible(true);
+        restartButton.setFocusable(true);
+        restartButton.addActionListener((e) -> {
+        	if (e.getSource() == restartButton) {
+        		frame.remove(board);
+        		menu.setVisible(false);
+        		menuButton.setVisible(true);
+        		settingsButton.setVisible(true);
+        		newGame(level);
         	}
         });
         
@@ -124,8 +184,13 @@ public class GameFrame {
         settings.add(exitButton);
         board.add(settingsButton);
         
+        menu.add(returnButton);
+        menu.add(leaveButton);
+        menu.add(restartButton);
+        
         frame.getContentPane().add(settings);
         frame.getContentPane().add(levelSelect);
+        frame.getContentPane().add(menu);
     }
     
     /** 
@@ -134,13 +199,15 @@ public class GameFrame {
      * @param level selected
      */
     public void newGame(int map) {
+    	level = map;
     	isGame = true;
     	levelSelect.setVisible(false);
     	board = new Board(map);
     	board.setVisible(true);
         board.add(settingsButton);
+        board.add(menuButton);
         frame.getContentPane().add(board);
-
+//        board.repaint();
     	board.addMouseListener(new MouseListener() {
     		public void mouseClicked(MouseEvent e) {
     			// do nothing
@@ -162,11 +229,7 @@ public class GameFrame {
     	     */
     		public void mouseReleased(MouseEvent e) {
     			if (board.isLose || board.isWin) {
-    				isGame = false;
-	                board.setVisible(false);
-	   				frame.remove(board);
-	                levelSelect.add(settingsButton);
-	    			levelSelect.setVisible(true);
+    				exitGame(map);
     			}
     			if (board.isWin && levelSelect.map == levelSelect.unlocked) {
     				levelSelect.unlocked++;
@@ -176,5 +239,28 @@ public class GameFrame {
     			}
     		}
     	});
+    }
+    
+    /** 
+     * exits the current level
+     * 
+     */
+    static public void exitGame(int map) {
+    	level = -1;
+    	isGame = false;
+	    Bson.rewrite("Map"+Integer.toString(map), Map.rewriteMapData(board.starCount, Integer.toString(map)));
+        board.setVisible(false);
+	    frame.remove(board);
+        levelSelect.add(settingsButton);
+	    levelSelect.setVisible(true);
+    }
+    
+    static public void exitGame() {
+    	level = -1;
+    	isGame = false;
+        board.setVisible(false);
+	    frame.remove(board);
+        levelSelect.add(settingsButton);
+	    levelSelect.setVisible(true);
     }
 }

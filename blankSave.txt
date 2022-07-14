@@ -1,6 +1,6 @@
 Map0 {
-	"firstClear" : true
-	"starsAchived" : 3
+	"firstClear" : false
+	"starsAchived" : 0
 	"col" : 11
 	"row" : 7
 	"map" : "                                      p u                                    "
@@ -8,11 +8,9 @@ Map0 {
 	"blockCount" = 1
 }
 
-
-
 Map1 {
-    "firstClear" : true
-	"starsAchived" : 3
+    "firstClear" : false
+	"starsAchived" : 0
 	"col" : 11
 	"row" : 7
 	"map" : "                                      p x u                                  "
@@ -20,11 +18,9 @@ Map1 {
 	"blockCount" = 1
 }
 
-
-
 Map2 {
-    "firstClear" : true
-	"starsAchived" : 3
+    "firstClear" : false
+	"starsAchived" : 0
 	"col" : 11
 	"row" : 7
 	"map" : "                                      p u u                                  "
@@ -32,10 +28,8 @@ Map2 {
 	"blockCount" = 2
 }
 
-
-
 Map3 {
-    "firstClear" : true
+    "firstClear" : false
 	"starsAchived" : 2
 	"col" : 11
 	"row" : 7
@@ -44,11 +38,9 @@ Map3 {
 	"blockCount" = 2
 }
 
-
-
 Map4 {
-    "firstClear" : true
-	"starsAchived" : 3
+    "firstClear" : false
+	"starsAchived" : 0
 	"col" : 11
 	"row" : 7
 	"map" : "                            xux     p  u u        xux                        "
@@ -56,18 +48,14 @@ Map4 {
 	"blockCount" = 4
 }
 
-
-
 Map5 {
-    "firstClear" : true
+    "firstClear" : false
 	"starsAchived" : 2
 	"col" : 11
 	"row" : 7
 	"map" : " xxxxxxxxx     x x        u u        p          xux                xxxxxxxxx "
 	"starBounds" = 17, 21, 25
-	"blockCount" = 3
+	"blockCount" = 0
 }
-
-
 
 

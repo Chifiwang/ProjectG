@@ -17,6 +17,8 @@ public class Map {
     public char[][] map;
     public boolean[][] map_move;
 
+    public static String template = "\t\"firstClear\" : false\n\t\"starsAchived\" : 0\n\t\"col\" : 11\n\t\"row\" : 7\n\t\"map\" : \"                                      p u                                    \"\n\t\"starBounds\" = 100, 100, 100\n\t\"blockCount\" = 1\n}";
+
     public Map() { }
 
     /* loads the active map into an instantiated Map for future use */
@@ -68,9 +70,19 @@ public class Map {
             starBounds = Stream.of(save.substring(save.indexOf("starBounds") + 14, save.indexOf("blockCount") - 3).split(", ")).mapToInt(Integer::parseInt).toArray();
 
             blockCount = Integer.valueOf(save.substring(save.indexOf("blockCount") + 14, save.indexOf("}") - 1));
-            
+
         } else {
-            // GameFrame.menu.quitGame();
+            GameFrame.exitGame();
         }
+    }
+
+    public static String rewriteMapData(int starsAchived, String id) {
+        String newData = Bson.getClass(id);
+        Debug.print(newData);
+        newData = newData.replaceAll("false", "true");
+        Debug.print(newData);
+        newData = newData.replace(template.substring(template.indexOf("\n\t\"starsAchived\" : ") + "\n\t\"starsAchived\" : ".length() - 1, template.indexOf("\n\t\"col\"")), " " +Integer.toString(starsAchived));
+        Debug.print(newData);
+        return newData;
     }
 }
