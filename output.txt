@@ -14,7 +14,7 @@ Map1 {
 	"col" : 11
 	"row" : 7
 	"map" : "                                      p x u                                  "
-	"starBounds" = 17, 21, 25
+	"starBounds" = 17, 31, 35
 	"blockCount" = 1
 }
 
@@ -30,12 +30,12 @@ Map2 {
 
 Map3 {
     "firstClear" : true
-	"starsAchived" : 2
+	"starsAchived" : 3
 	"col" : 11
 	"row" : 7
 	"map" : "                             x       p uxu         x                         "
-	"starBounds" = 17, 21, 25
-	"blockCount" = 2
+	"starBounds" = 17, 31, 35
+	"blockCount" = 3
 }
 
 Map4 {
@@ -50,10 +50,10 @@ Map4 {
 
 Map5 {
     "firstClear" : true
-	"starsAchived" : 2
+	"starsAchived" : 3
 	"col" : 11
 	"row" : 7
 	"map" : " xxxxxxxxx     x x        u u        p          xux                xxxxxxxxx "
-	"starBounds" = 17, 21, 25
+	"starBounds" = 17, 31, 35
 	"blockCount" = 3
 }
