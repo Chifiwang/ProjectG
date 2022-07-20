@@ -2,7 +2,7 @@ import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.util.stream.Stream;
 
-public class Map {
+class Map {
     ImageIcon tile = new ImageIcon("Assets\\tileBlockNormal.png");
     Image tileImg = tile.getImage().getScaledInstance(GameFrame.scaleFactor, GameFrame.scaleFactor, Image.SCALE_DEFAULT);
 
@@ -75,14 +75,15 @@ public class Map {
 
     public static String rewriteMapData(int starsAchived, String id) {
         String newData = Bson.getClass(id);
-        Debug.print(newData);
-        newData = newData.replaceAll("false", "true");
-        Debug.print(newData);
+//        Debug.print(newData);
+        newData = newData.replaceAll("true", "false");
+//        Debug.print(newData);
         newData = newData.replace(newData.substring(newData.indexOf("\n\t\"starsAchived\" : ") + "\n\t\"starsAchived\" : ".length() - 1, 
                   newData.indexOf("\n\t\"col\"")), " " +Integer.toString(Math.max(starsAchived, 
                   Integer.parseInt(newData.substring(newData.indexOf("\n\t\"starsAchived\" : ") + "\n\t\"starsAchived\" : ".length(), 
                   newData.indexOf("\n\t\"col\""))))));
-        Debug.print(newData);
+                  
+//        Debug.print(newData);
         return newData;
     }
 }

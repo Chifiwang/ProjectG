@@ -1,6 +1,5 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import java.awt.Image;
 // import java.awt.event.KeyEvent;
 // import java.awt.event.KeyListener;
@@ -10,7 +9,7 @@ import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-public class GameFrame {
+class GameFrame {
     Debug debug = new Debug();
     static JFrame frame;
 
@@ -28,7 +27,11 @@ public class GameFrame {
     
     static boolean isGame = true;
 
-    GameFrame() {
+    GameFrame() throws Exception {
+    	Sound.init();
+    	Sound.setMusicVolume(50);
+    	Sound.setSfxVolume(50);
+    	
         frame = new JFrame("ProjectG");
         levelSelect = new LevelSelect(); 
         settings = new Settings();
@@ -52,6 +55,7 @@ public class GameFrame {
         		menuButton.setVisible(false);
         		settingsButton.setVisible(false);
         		menu.setVisible(true);
+        		Sound.playSfx(0);
         	}
         });
         
@@ -75,6 +79,7 @@ public class GameFrame {
         		settingsButton.setVisible(false);
         		settings.setVisible(true);
         		exitButton.setVisible(true);
+        		Sound.playSfx(0);
         	}
         });
         
@@ -87,6 +92,7 @@ public class GameFrame {
         		if (levelSelect.map == 1) backButton.setVisible(false);
         		nextButton.setVisible(true);
         		enterButton.setText(String.valueOf(levelSelect.map));
+        		Sound.playSfx(0);
         	}
         });
         
@@ -99,6 +105,7 @@ public class GameFrame {
         		if (levelSelect.map == levelSelect.unlocked) nextButton.setVisible(false);
         		backButton.setVisible(true);
         		enterButton.setText(String.valueOf(levelSelect.map));
+        		Sound.playSfx(0);
         	}
         });
         
@@ -108,6 +115,7 @@ public class GameFrame {
         enterButton.addActionListener((e) -> {
         	if (e.getSource() == enterButton) {
         		newGame(levelSelect.map);
+        		Sound.playSfx(0);
         	}
         });
         
@@ -124,6 +132,7 @@ public class GameFrame {
         		settingsButton.setVisible(true);
         		settings.setVisible(false);
         		exitButton.setVisible(false);
+        		Sound.playSfx(0);
         	}
         });
         
@@ -137,6 +146,7 @@ public class GameFrame {
         		board.setVisible(true);
         		menuButton.setVisible(true);
         		settingsButton.setVisible(true);
+        		Sound.playSfx(0);
         	}
         });
         
@@ -150,6 +160,7 @@ public class GameFrame {
         		menuButton.setVisible(true);
         		menu.setVisible(false);
         		exitGame();
+        		Sound.playSfx(0);
         	}
         });
         
@@ -164,25 +175,33 @@ public class GameFrame {
         		menuButton.setVisible(true);
         		settingsButton.setVisible(true);
         		newGame(level);
+        		Sound.playSfx(0);
         	}
         });
         
+        levelSelect.unlocked = Bson.getUnlocked();
         //tutorial
         newGame(0);
-
+        if (levelSelect.unlocked > 0) {
+        	exitGame();
+        	levelSelect.map = 1;
+        	enterButton.setText("1");
+        	if (levelSelect.unlocked > 1) nextButton.setVisible(true);
+        }
 
         AnimationHandeler.setLevelSelect(levelSelect);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(scaleFactor*11, scaleFactor*9); // apparently we need to make the frame bigger than the desired size
+        frame.setSize(scaleFactor*11, scaleFactor*7); // apparently we need to make the frame bigger than the desired size
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
         levelSelect.add(backButton);
         levelSelect.add(nextButton);
         levelSelect.add(enterButton);
         levelSelect.add(settingsButton);
+        
         settings.add(exitButton);
-        board.add(settingsButton);
         
         menu.add(returnButton);
         menu.add(leaveButton);
@@ -199,6 +218,7 @@ public class GameFrame {
      * @param level selected
      */
     public void newGame(int map) {
+    	Sound.playMusic(1);
     	level = map;
     	isGame = true;
     	levelSelect.setVisible(false);
@@ -245,17 +265,13 @@ public class GameFrame {
      * exits the current level
      * 
      */
-    static public void exitGame(int map) {
-    	level = -1;
-    	isGame = false;
+    public static void exitGame(int map) {
 	    Bson.rewrite("Map"+Integer.toString(map), Map.rewriteMapData(board.starCount, Integer.toString(map)));
-        board.setVisible(false);
-	    frame.remove(board);
-        levelSelect.add(settingsButton);
-	    levelSelect.setVisible(true);
+        exitGame();
     }
     
-    static public void exitGame() {
+    public static void exitGame() {
+    	Sound.playMusic(0);
     	level = -1;
     	isGame = false;
         board.setVisible(false);

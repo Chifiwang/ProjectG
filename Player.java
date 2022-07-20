@@ -6,7 +6,7 @@ import javax.swing.KeyStroke;
 
 import java.awt.Image;
 
-public class Player extends JLabel{
+class Player extends JLabel{
     private static final int ifFocused = JComponent.WHEN_IN_FOCUSED_WINDOW;
 
     static ImageIcon pDefault = new ImageIcon("Assets\\playerBlock.png");

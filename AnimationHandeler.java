@@ -3,7 +3,7 @@ import javax.swing.ImageIcon;
 import java.awt.Graphics2D;
 import java.awt.Image;
 
-public class AnimationHandeler {
+class AnimationHandeler {
     static int frame = 0;
     static int numFrames = 8;
     static int scalingFactor = GameFrame.scaleFactor;

@@ -110,5 +110,25 @@ class Bson {
 
         return __fileCache__;
     }
+    static int getUnlocked() {
+    	int unlocked = -1;
+    	File file = new File("output.txt");
+        String line = "";
+
+        try {
+            FileReader reader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            while ((line = bufferedReader.readLine()) != null) { // checks to see if a line is present
+            	if (line.indexOf("firstClear") != -1) unlocked++;
+            	if (line.indexOf("true") != -1) break;
+            }
+
+            bufferedReader.close();
+        } catch (IOException e) {
+            System.err.println("File Not Found");
+        }
+        
+    	return unlocked;
+    }
 }
 

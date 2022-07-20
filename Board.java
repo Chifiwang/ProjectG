@@ -2,7 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class Board extends JPanel{
+class Board extends JPanel{
 
     /* Action key commands */
     final String up = "move up";
@@ -58,7 +58,7 @@ public class Board extends JPanel{
         score = new JLabel();
 
         this.add(player);
-
+        
         AnimationHandeler.setBoard(this);
         AnimationHandeler.setMap(this.map);
         
