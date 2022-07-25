@@ -12,6 +12,7 @@ public class AnimationHandeler {
     static ArrayList<ImageIcon[]> imageLookup = new ArrayList<ImageIcon[]>();
 
     static int[] frameTime1 = {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
+    static int[] tutorialFrames = {TextEventHandler.tutorial1_text.length(), TextEventHandler.tutorial2_text.length()};
 
     static Board board;
     static LevelSelect levelSelect;
@@ -20,8 +21,10 @@ public class AnimationHandeler {
     static int canvas = -1;
 
     public static void queueAnimation(int EventKey, int x, int y) {
+        // queue.clear();
         Integer[] temp = {EventKey, x, y};
         // frame = 0;
+        // if (!queue.contains(temp))
         queue.add(temp);
     }
 
@@ -34,10 +37,11 @@ public class AnimationHandeler {
                     drawGame(g2D, queue.get(i));
                     canvas = 0;
                     break;
-                case 1:
-                    numFrames = 343;
+                case 1: case 2:
+                    numFrames = tutorialFrames[queue.get(i)[0] - 1];
                     // frame = 0;
-                    drawTutorial1_text(queue.get(i), g2D);
+                    drawTutorial(queue.get(i), g2D);
+                    // queue.clear();
                     canvas = 1;
                     break;
             }
@@ -65,6 +69,7 @@ public class AnimationHandeler {
             }
             else if (canvas == 1){
                 frame++;
+                // queue.clear();
                 // if(frame > 24) {
                 //     board.isTutorial = false;
                 // }
@@ -104,8 +109,8 @@ public class AnimationHandeler {
         }
     }
 
-    public static void drawTutorial1_text(Integer[] key, Graphics2D g2D) {
-        TextEventHandler.gameTutorial1_text(key, g2D);
+    public static void drawTutorial(Integer[] key, Graphics2D g2D) {
+        TextEventHandler.gameTutorial(key, g2D);
     }
 
     public static void setMap(Map m) { map = m; }

@@ -1,48 +1,61 @@
 import java.awt.Color;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
 public class TextEventHandler {
+    static ImageIcon textBox1 = new ImageIcon("Assets\\textBox.png");
     static JPanel panel;
     static int[] sizeX = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
     static int[] sizeY = {50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};
-    static String tutorial1_text = "Welcome to ProjectG.\n To move the character use the 'W', 'A', 'S', and 'D' keys\n to move the player up, down, left, and right respectively.\n See that blue box? Run into it to push it.\n Your goal, as the player, is to push all the boxes off the map.\n Don't worry, I will guide you through each of the block's mechanics as we go along.          ";
+    // static int x = 200, y = 650;
+    static String tutorial1_text = "   Welcome to ProjectG. To move the character use the 'W', 'A', 'S', and 'D' keys to move the player\n   up, down, left, and right respectively. See that blue box? It's called a \"Universal Block\". Run into it to push it in any \n   direction. Your goal, as the player, is to push all the boxes off the map. Don't worry, I will guide you through each of the \n   block's mechanics as we go along.          ";
+    static String tutorial2_text = "   Hello there          ";
     public static void initiateEvent(int type, JPanel p) {
         panel = p;
-        switch (type) {
-            case 0:
-                gameTutorial1();
-                break;
+        AnimationHandeler.queueAnimation(type + 1, 100, 200);
+    }
+
+    // public static void gameTutorial1() {
+    //     AnimationHandeler.queueAnimation(1, 100, 200);
+
+    // }
+
+    public static void gameTutorial(Integer[] key, Graphics2D g2D) {
+        int x = 200, y = 650;
+        g2D.drawImage(textBox1.getImage(), 200, 653, null);
+
+        String[] buff;
+        switch (key[0]) {
             case 1:
+                buff = tutorial1_text.substring(0, AnimationHandeler.frame).split("\n");
+                // Debug.print(x + ", " + y + " Frame:" + AnimationHandeler.frame);
+                if (AnimationHandeler.frame >= tutorial1_text.indexOf("character")) {
+                    g2D.drawImage(Player.getImage(), 5*GameFrame.scaleFactor, 3*GameFrame.scaleFactor, null);
+                }
+                if (AnimationHandeler.frame >= tutorial1_text.indexOf("box?")) {
+                    g2D.drawImage(Block.getImage('u'), 7*GameFrame.scaleFactor, 3*GameFrame.scaleFactor, null);
+                }
+                for(int i = 0; i < buff.length; i++) {
+                    g2D.drawString(buff[i], x, y += g2D.getFontMetrics().getHeight());
+                }
                 break;
             case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 6:
-                break;
+                buff = tutorial2_text.substring(0, AnimationHandeler.frame).split("\n");
+                // Debug.print(x + ", " + y + " Frame:" + AnimationHandeler.frame);
+        
+                for(int i = 0; i < buff.length; i++) {
+                    g2D.drawString(buff[i], x, y += g2D.getFontMetrics().getHeight());
+                }
             default:
                 break;
         }
-    }
 
-    public static void gameTutorial1() {
-        AnimationHandeler.queueAnimation(1, 100, 200);
-
-    }
-
-    public static void gameTutorial1_text(Integer[] key, Graphics2D g2D) {
-        int x = 1350, y = 400;
-        g2D.drawRect(x, y, 200, 100);
         
-        for (String line : tutorial1_text.substring(0, AnimationHandeler.frame).split("\n"))
-            g2D.drawString(line, x, y += g2D.getFontMetrics().getHeight());
+            
     }
 }
+

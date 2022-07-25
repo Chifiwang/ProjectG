@@ -16,11 +16,12 @@ public class GameFrame {
     static int scaleFactor = 128;
     
     //exit as in exit settings
-    static JButton menuButton, settingsButton, backButton, nextButton, enterButton, exitButton, returnButton, leaveButton, restartButton;
+    static JButton menuButton, settingsButton, backButton, nextButton, enterButton, exitButton, returnButton, leaveButton, restartButton, directoryButton, exitDirectoryButton;
 
     static Board board;
     static LevelSelect levelSelect;
     static Settings settings;
+    static Directory directory;
     static JPanel menu = new JPanel();
     
     static int level = -1;
@@ -35,6 +36,7 @@ public class GameFrame {
         frame = new JFrame("ProjectG");
         levelSelect = new LevelSelect(); 
         settings = new Settings();
+        directory = new Directory();
 
 //        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 //        if(screenSize.getWidth() < 128*11 || screenSize.getHeight() < 128*9) {
@@ -47,16 +49,11 @@ public class GameFrame {
         
         menuButton = new JButton("Menu");
         menuButton.setBounds(10, 10, 80, 40);
-        menuButton.setVisible(true);
         menuButton.setFocusable(true);
         menuButton.addActionListener((e) -> {
-        	if (e.getSource() == menuButton) {
-        		board.setVisible(false);
-        		menuButton.setVisible(false);
-        		settingsButton.setVisible(false);
-        		menu.setVisible(true);
-        		Sound.playSfx(0);
-        	}
+    		board.setVisible(false);
+    		menu.setVisible(true);
+    		Sound.playSfx(0);
         });
         
         //settingsbutton
@@ -64,127 +61,110 @@ public class GameFrame {
         Image scaleImage = icon.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
         icon = new ImageIcon(scaleImage); // dw
         
+        directoryButton = new JButton("Directory");
+        directoryButton.setBounds(1140, 10, 100, 40);
+        directoryButton.setFocusable(true);
+        directoryButton.addActionListener((e) -> {
+    		levelSelect.setVisible(false);
+    		directory.setVisible(true);
+    		directory.displayButtons();
+    		Sound.playSfx(0);
+        });
+        
+        exitDirectoryButton = new JButton("Exit");
+        exitDirectoryButton.setBounds(10, 10, 80, 40);
+        exitDirectoryButton.addActionListener((e) -> {
+    		levelSelect.setVisible(true);
+    		directory.setVisible(false);
+    		Sound.playSfx(0);
+        });
+        
         settingsButton = new JButton();
         settingsButton.setIcon(icon);
         settingsButton.setBounds(1250, 10, 40, 40);
-        settingsButton.setVisible(true);
         settingsButton.setFocusable(true);
         settingsButton.addActionListener((e) -> {
-        	if (e.getSource() == settingsButton) {
-        		if (isGame) {
-        			board.setVisible(false);
-        			menuButton.setVisible(false);
-        		}
-        		else levelSelect.setVisible(false);
-        		settingsButton.setVisible(false);
-        		settings.setVisible(true);
-        		exitButton.setVisible(true);
-        		Sound.playSfx(0);
-        	}
+    		if (isGame) board.setVisible(false);
+    		else levelSelect.setVisible(false);
+    		settings.setVisible(true);
+    		Sound.playSfx(0);
         });
         
         backButton = new JButton("Back");
         backButton.setBounds(200, 430, 80, 80);
         backButton.setVisible(false);
         backButton.addActionListener((e) -> {
-        	if (e.getSource() == backButton) {
-        		levelSelect.map--;
-        		if (levelSelect.map == 1) backButton.setVisible(false);
-        		nextButton.setVisible(true);
-        		enterButton.setText(String.valueOf(levelSelect.map));
-        		Sound.playSfx(0);
-        	}
+    		levelSelect.map--;
+    		if (levelSelect.map == 1) backButton.setVisible(false);
+    		nextButton.setVisible(true);
+    		enterButton.setText(String.valueOf(levelSelect.map));
+    		Sound.playSfx(0);
         });
         
         nextButton = new JButton("Next");
         nextButton.setBounds(1020, 430, 80, 80);
         nextButton.setVisible(false);
         nextButton.addActionListener((e) -> {
-        	if (e.getSource() == nextButton) {
-        		levelSelect.map++;
-        		if (levelSelect.map == levelSelect.unlocked) nextButton.setVisible(false);
-        		backButton.setVisible(true);
-        		enterButton.setText(String.valueOf(levelSelect.map));
-        		Sound.playSfx(0);
-        	}
+    		levelSelect.map++;
+    		if (levelSelect.map == levelSelect.unlocked) nextButton.setVisible(false);
+    		backButton.setVisible(true);
+    		enterButton.setText(String.valueOf(levelSelect.map));
+    		Sound.playSfx(0);
         });
         
         enterButton = new JButton("0");
         enterButton.setBounds(300, 250, 700, 400);
-        enterButton.setVisible(true);
         enterButton.addActionListener((e) -> {
-        	if (e.getSource() == enterButton) {
-        		newGame(levelSelect.map);
-        		Sound.playSfx(0);
-        	}
+    		newGame(levelSelect.map);
+    		Sound.playSfx(0);
         });
         
         exitButton = new JButton("Exit");
         exitButton.setBounds(10, 10, 80, 40);
-        exitButton.setVisible(false);
+        exitButton.setVisible(true);
         exitButton.addActionListener((e) -> {
-        	if (e.getSource() == exitButton) {
-        		if (isGame) {
-        			board.setVisible(true);
-        			menuButton.setVisible(true);
-        		}
-        		else levelSelect.setVisible(true);
-        		settingsButton.setVisible(true);
-        		settings.setVisible(false);
-        		exitButton.setVisible(false);
-        		Sound.playSfx(0);
-        	}
+    		if (isGame) board.setVisible(true);
+    		else levelSelect.setVisible(true);
+    		settings.setVisible(false);
+    		Sound.playSfx(0);
         });
         
         returnButton = new JButton("Return");
         returnButton.setBounds(600, 380, 100, 40);
-        returnButton.setVisible(true);
         returnButton.setFocusable(true);
         returnButton.addActionListener((e) -> {
-        	if (e.getSource() == returnButton) {
-        		menu.setVisible(false);
-        		board.setVisible(true);
-        		menuButton.setVisible(true);
-        		settingsButton.setVisible(true);
-        		Sound.playSfx(0);
-        	}
+    		menu.setVisible(false);
+    		board.setVisible(true);
+    		Sound.playSfx(0);
         });
         
         leaveButton = new JButton("Levels");
         leaveButton.setBounds(600, 430, 100, 40);
-        leaveButton.setVisible(true);
         leaveButton.setFocusable(true);
         leaveButton.addActionListener((e) -> {
-        	if (e.getSource() == leaveButton) {
-        		settingsButton.setVisible(true);
-        		menuButton.setVisible(true);
-        		menu.setVisible(false);
-        		exitGame();
-        		Sound.playSfx(0);
-        	}
+    		menu.setVisible(false);
+    		exitGame();
+    		Sound.playSfx(0);
         });
         
         restartButton = new JButton("Restart");
         restartButton.setBounds(600, 480, 100, 40);
-        restartButton.setVisible(true);
         restartButton.setFocusable(true);
         restartButton.addActionListener((e) -> {
-        	if (e.getSource() == restartButton) {
-        		frame.remove(board);
-        		menu.setVisible(false);
-        		menuButton.setVisible(true);
-        		settingsButton.setVisible(true);
-        		newGame(level);
-        		Sound.playSfx(0);
-        	}
+    		frame.remove(board);
+    		menu.setVisible(false);
+    		newGame(level);
+    		Sound.playSfx(0);
         });
         
         levelSelect.unlocked = Bson.getUnlocked();
         //tutorial
-		levelSelect.map = 1;
+        if (levelSelect.unlocked == 0) newGame(0);
+        directory.loadSave(levelSelect.unlocked);
+        
+    	levelSelect.map = 1;
     	enterButton.setText("1");
-    	if (levelSelect.unlocked > 1) 
-			nextButton.setVisible(true);
+    	if (levelSelect.unlocked > 1) nextButton.setVisible(true);
 
         AnimationHandeler.setLevelSelect(levelSelect);
 
@@ -197,8 +177,11 @@ public class GameFrame {
         levelSelect.add(nextButton);
         levelSelect.add(enterButton);
         levelSelect.add(settingsButton);
+        levelSelect.add(directoryButton);
         
         settings.add(exitButton);
+        
+        directory.add(exitDirectoryButton);
         
         menu.add(returnButton);
         menu.add(leaveButton);
@@ -207,12 +190,13 @@ public class GameFrame {
         frame.getContentPane().add(settings);
         frame.getContentPane().add(levelSelect);
         frame.getContentPane().add(menu);
+        frame.getContentPane().add(directory);
     }
     
     /** 
      * creates a new instance of board whenever the player enters a level.
      * 
-     * @param level selected
+     * @param map is the level selected
      */
     public void newGame(int map) {
     	Sound.playMusic(1);
@@ -220,11 +204,9 @@ public class GameFrame {
     	isGame = true;
     	levelSelect.setVisible(false);
     	board = new Board(map);
-    	board.setVisible(true);
         board.add(settingsButton);
         board.add(menuButton);
         frame.getContentPane().add(board);
-//        board.repaint();
     	board.addMouseListener(new MouseListener() {
     		public void mouseClicked(MouseEvent e) {
     			// do nothing
@@ -253,17 +235,17 @@ public class GameFrame {
     				levelSelect.map++;
     				if (map > 0) backButton.setVisible(true);
     				enterButton.setText(String.valueOf(levelSelect.map));
+    				directory.add(levelSelect.unlocked);
     			}
-				if (board.isTutorial) {
-					Debug.print("here");
-					AnimationHandeler.frame = AnimationHandeler.numFrames - 10;
+				if(board.isTutorial) {
+					AnimationHandeler.frame = AnimationHandeler.numFrames - 1;
 				}
     		}
     	});
     }
     
     /** 
-     * exits the current level
+     * exits the current level due to technical difficulties
      * 
      */
     public static void exitGame(int map) {
@@ -271,6 +253,10 @@ public class GameFrame {
         exitGame();
     }
     
+    /** 
+     * exits the current level
+     * 
+     */
     public static void exitGame() {
     	Sound.playMusic(0);
     	level = -1;

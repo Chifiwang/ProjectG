@@ -19,8 +19,8 @@ Map1 {
 }
 
 Map2 {
-    "firstClear" : false
-	"starsAchived" : 3
+    "firstClear" : true
+	"starsAchived" : 0
 	"col" : 11
 	"row" : 7
 	"map" : "                                      p u u                                  "
@@ -29,8 +29,8 @@ Map2 {
 }
 
 Map3 {
-    "firstClear" : false
-	"starsAchived" : 3
+    "firstClear" : true
+	"starsAchived" : 0
 	"col" : 11
 	"row" : 7
 	"map" : "                             x       p uxu         x                         "

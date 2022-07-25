@@ -3,12 +3,19 @@
     We can prob expand this for testing other things as well by creating new methods to test more specific
     issues
  */
-
+import java.util.Scanner;
 
 public class Debug {
 
     private static long __chache__ = 0;
 
+    public static void advance() {
+        Scanner advance = new Scanner(System.in);
+        
+        print(advance.nextLine());
+
+        advance.close();
+    }
 
     public static void print(String s) {
         System.out.println(s);

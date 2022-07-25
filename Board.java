@@ -26,7 +26,7 @@ public class Board extends JPanel{
     /* variables */
     Graphics2D g2D;
 
-    boolean canTutorial = true;
+    // boolean canTutorial = true;
     boolean isTutorial = false;
     boolean isAnimate = false;
     boolean moveFlag = false;
@@ -40,6 +40,7 @@ public class Board extends JPanel{
     int numFrames = 10;
     int frameNum = 0;
     int starCount = 3;
+    int level;
 
     long timeDelay = 200;
     long timeStart; 
@@ -53,11 +54,13 @@ public class Board extends JPanel{
     Timer t;
 
     public Board(int level) {
+        this.level = level;
         this.map = new Map(level);
         
         player = new Player(map, map.loadPlayer(map.map));
         block = new Block(map);
         score = new JLabel();
+        isTutorial = (level == 0 || level % 10 == 1 || level == 12) && Map.firstGame;
 
         this.add(player);
         
@@ -105,15 +108,17 @@ public class Board extends JPanel{
      */
     public void paint(Graphics g) {
         
-        if (Map.firstGame) {
-            TextEventHandler.initiateEvent(0, this);
-            isTutorial = true;
+        if (init && isTutorial) {
+            Debug.print(level);
+            TextEventHandler.initiateEvent(level, this);
+            
             // Debug.print("called");
         }
 
         super.paint(g);
         g2D = (Graphics2D) g;
-        g2D.setFont(new Font("TimesRoman", Font.PLAIN, 20)); 
+        g2D.setFont(new Font("times new roman", Font.PLAIN, 20));
+        g2D.setColor(Color.WHITE);
 
         for (int r = 0; r < map.map.length; r++) {
             for (int c = 0; c < map.map[r].length; c++) {
@@ -140,18 +145,18 @@ public class Board extends JPanel{
             }           
 
         }
-        if (Map.firstGame) {
-            float alpha = 1 * 0.5f;
+        if (isTutorial && AnimationHandeler.frame < AnimationHandeler.numFrames) {
+            float alpha = 1 * 0.8f;
             AlphaComposite alcom = AlphaComposite.getInstance(
                     AlphaComposite.SRC_OVER, alpha);
 
             g2D.setComposite(alcom);
             g2D.drawImage(end, 0, 0, null);
-            TextEventHandler.initiateEvent(0, this);
-            canTutorial = false;
+            // TextEventHandler.initiateEvent(level, this);
+            // canTutorial = false;
             // Debug.print("called");
         }
-        if (AnimationHandeler.frame + 1 >= AnimationHandeler.numFrames && Map.firstGame) {
+        if (AnimationHandeler.frame > AnimationHandeler.numFrames && Map.firstGame) {
             Map.firstGame = false;
             repaint();
         }
@@ -187,6 +192,7 @@ public class Board extends JPanel{
             
         } else {
             g2D.drawString("Num moves: " + moveCount + " Num stars: " + starCount, 7 * GameFrame.scaleFactor, 13 * GameFrame.scaleFactor/2);
+            g2D.drawString("Num moves to keep " + starCount + " stars: " + (Map.starBounds[3 - starCount] - moveCount - 1), 7 * GameFrame.scaleFactor, GameFrame.scaleFactor/2);
         }
 
         if(init) {
