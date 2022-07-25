@@ -1,6 +1,6 @@
 Map0 {
-	"firstClear" : true
-	"starsAchived" : 0
+	"firstClear" : false
+	"starsAchived" : 3
 	"col" : 11
 	"row" : 7
 	"map" : "                                      p u                                    "
@@ -9,8 +9,8 @@ Map0 {
 }
 
 Map1 {
-    "firstClear" : true
-	"starsAchived" : 0
+    "firstClear" : false
+	"starsAchived" : 3
 	"col" : 11
 	"row" : 7
 	"map" : "                                      p x u                                  "
@@ -19,8 +19,8 @@ Map1 {
 }
 
 Map2 {
-    "firstClear" : true
-	"starsAchived" : 0
+    "firstClear" : false
+	"starsAchived" : 3
 	"col" : 11
 	"row" : 7
 	"map" : "                                      p u u                                  "
@@ -29,8 +29,8 @@ Map2 {
 }
 
 Map3 {
-    "firstClear" : true
-	"starsAchived" : 0
+    "firstClear" : false
+	"starsAchived" : 3
 	"col" : 11
 	"row" : 7
 	"map" : "                             x       p uxu         x                         "

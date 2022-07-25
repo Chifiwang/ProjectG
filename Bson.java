@@ -4,7 +4,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-class Bson {
+public class Bson {
     static String cache;
 
     // static void writer() throws IOException {
@@ -41,7 +41,7 @@ class Bson {
 
     static void rewrite(String map, String newMap) {
         int saveLength = 8;
-        File file = new File("output.txt");
+        File file = new File("Saves\\output.txt");
         String line = "";
         String __fileCache__ = "";
         boolean overWrite = false;
@@ -79,7 +79,7 @@ class Bson {
 
     static String getClass(String id) {
         int saveLength = 9;
-        File file = new File("output.txt");
+        File file = new File("Saves\\output.txt");
         String line = "";
         String __fileCache__ = "";
         boolean overWrite = false;
@@ -112,7 +112,7 @@ class Bson {
     }
     static int getUnlocked() {
     	int unlocked = -1;
-    	File file = new File("output.txt");
+    	File file = new File("Saves\\output.txt");
         String line = "";
 
         try {

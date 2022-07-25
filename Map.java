@@ -2,7 +2,7 @@ import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.util.stream.Stream;
 
-class Map {
+public class Map {
     ImageIcon tile = new ImageIcon("Assets\\tileBlockNormal.png");
     Image tileImg = tile.getImage().getScaledInstance(GameFrame.scaleFactor, GameFrame.scaleFactor, Image.SCALE_DEFAULT);
 
@@ -13,6 +13,7 @@ class Map {
     static int r = 2, c = 4;
     static int direct = 4;
     static int blockCount;
+    static boolean firstGame;
 
     public char[][] map;
     public boolean[][] map_move;
@@ -67,6 +68,8 @@ class Map {
             starBounds = Stream.of(save.substring(save.indexOf("starBounds") + 14, save.indexOf("blockCount") - 3).split(", ")).mapToInt(Integer::parseInt).toArray();
 
             blockCount = Integer.valueOf(save.substring(save.indexOf("blockCount") + 14, save.indexOf("}") - 1));
+
+            firstGame = save.contains("true");
 
         } else {
             GameFrame.exitGame();

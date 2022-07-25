@@ -3,7 +3,7 @@ import javax.swing.ImageIcon;
 import java.awt.Graphics2D;
 import java.awt.Image;
 
-class AnimationHandeler {
+public class AnimationHandeler {
     static int frame = 0;
     static int numFrames = 8;
     static int scalingFactor = GameFrame.scaleFactor;
@@ -11,23 +11,34 @@ class AnimationHandeler {
     static ArrayList<Integer[]> queue = new ArrayList<Integer[]>();
     static ArrayList<ImageIcon[]> imageLookup = new ArrayList<ImageIcon[]>();
 
+    static int[] frameTime1 = {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
+
     static Board board;
     static LevelSelect levelSelect;
     static Map map;
 
-    static boolean canvas = false;
+    static int canvas = -1;
 
     public static void queueAnimation(int EventKey, int x, int y) {
         Integer[] temp = {EventKey, x, y};
+        // frame = 0;
         queue.add(temp);
     }
 
     public static void animate(Graphics2D g2D) {
-        for(Integer[] key : queue) {
-            switch (key[0]) {
+        for(int i = 0; i < queue.size(); i++) {
+            switch (queue.get(i)[0]) {
                 case 0:
-                    drawGame(g2D, key);
-                    canvas = true;
+                    numFrames = 8;
+                    // frame = 0;
+                    drawGame(g2D, queue.get(i));
+                    canvas = 0;
+                    break;
+                case 1:
+                    numFrames = 343;
+                    // frame = 0;
+                    drawTutorial1_text(queue.get(i), g2D);
+                    canvas = 1;
                     break;
             }
         }
@@ -37,12 +48,28 @@ class AnimationHandeler {
                 frame = 0;
                 map.map_move = new boolean[map.map.length][map.map[0].length];
                 queue.clear();
+                canvas = -1;
+                board.isTutorial = false;
+                Map.firstGame = false;
                 
             }
-            else if (canvas) {
+            else if (canvas == 0) {
                 frame++;
     
                 try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                board.repaint();
+            }
+            else if (canvas == 1){
+                frame++;
+                // if(frame > 24) {
+                //     board.isTutorial = false;
+                // }
+                try {
+                    // Debug.print(frameTime1[frame]);
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -75,6 +102,10 @@ class AnimationHandeler {
         if (frame >= numFrames) {
             board.isAnimate = false;
         }
+    }
+
+    public static void drawTutorial1_text(Integer[] key, Graphics2D g2D) {
+        TextEventHandler.gameTutorial1_text(key, g2D);
     }
 
     public static void setMap(Map m) { map = m; }

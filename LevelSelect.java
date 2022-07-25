@@ -1,7 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 
-class LevelSelect extends JPanel {
+public class LevelSelect extends JPanel {
 
     Image board;
     Image bg;

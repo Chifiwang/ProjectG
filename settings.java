@@ -3,7 +3,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-class Settings extends JPanel {
+public class Settings extends JPanel {
     boolean isOpen = false, isClick = false, isHover = false;
 	JPanel musicVolumeDisplay = new JPanel(), sfxVolumeDisplay = new JPanel();
 	JSlider musicVolume, sfxVolume;

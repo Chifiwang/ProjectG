@@ -1,7 +1,7 @@
 import javax.swing.ImageIcon;
 import java.awt.Image;
 
-class Block {
+public class Block {
 
     static ImageIcon universalBlock = new ImageIcon("Assets\\universalBlock.png");
     static ImageIcon immovableBlock = new ImageIcon("Assets\\immovableBlock.png");

@@ -2,7 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-class Board extends JPanel{
+public class Board extends JPanel{
 
     /* Action key commands */
     final String up = "move up";
@@ -26,6 +26,8 @@ class Board extends JPanel{
     /* variables */
     Graphics2D g2D;
 
+    boolean canTutorial = true;
+    boolean isTutorial = false;
     boolean isAnimate = false;
     boolean moveFlag = false;
     boolean isValid = false;
@@ -61,7 +63,7 @@ class Board extends JPanel{
         
         AnimationHandeler.setBoard(this);
         AnimationHandeler.setMap(this.map);
-        
+
         this.setLayout(null);
         this.setFocusable(true);
         this.requestFocus();
@@ -92,6 +94,7 @@ class Board extends JPanel{
         player.putActionMap(down_release, new MoveDecoder(2, true));
         player.putActionMap(left_release, new MoveDecoder(1, true));
         player.putActionMap(right_release, new MoveDecoder(3, true));
+
     }
     
     /** 
@@ -102,6 +105,12 @@ class Board extends JPanel{
      */
     public void paint(Graphics g) {
         
+        if (Map.firstGame) {
+            TextEventHandler.initiateEvent(0, this);
+            isTutorial = true;
+            // Debug.print("called");
+        }
+
         super.paint(g);
         g2D = (Graphics2D) g;
         g2D.setFont(new Font("TimesRoman", Font.PLAIN, 20)); 
@@ -129,8 +138,24 @@ class Board extends JPanel{
                         break;
                 }
             }           
+
         }
-        
+        if (Map.firstGame) {
+            float alpha = 1 * 0.5f;
+            AlphaComposite alcom = AlphaComposite.getInstance(
+                    AlphaComposite.SRC_OVER, alpha);
+
+            g2D.setComposite(alcom);
+            g2D.drawImage(end, 0, 0, null);
+            TextEventHandler.initiateEvent(0, this);
+            canTutorial = false;
+            // Debug.print("called");
+        }
+        if (AnimationHandeler.frame + 1 >= AnimationHandeler.numFrames && Map.firstGame) {
+            Map.firstGame = false;
+            repaint();
+        }
+
         AnimationHandeler.animate(g2D);
 
         starCount = getStarCount();
@@ -201,7 +226,7 @@ class Board extends JPanel{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (!isLose && !isWin) {
+            if (!isLose && !isWin && !isTutorial) {
                 if (isRelease && direct == Map.direct) {
                     if (!isAnimate) Map.direct = 4;
                     dt = 200;
@@ -230,6 +255,5 @@ class Board extends JPanel{
                 dt = System.currentTimeMillis() - timeStart;
             }
         }
-
     }
 }

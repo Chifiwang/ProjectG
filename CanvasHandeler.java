@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
-class CanvasHandeler {
+public class CanvasHandeler {
     static ArrayList<Integer[]> queue = new ArrayList<Integer[]>();
     static ArrayList<ImageIcon[]> imageLookup = new ArrayList<ImageIcon[]>();
 

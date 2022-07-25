@@ -9,7 +9,7 @@ import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-class GameFrame {
+public class GameFrame {
     Debug debug = new Debug();
     static JFrame frame;
 
@@ -25,7 +25,7 @@ class GameFrame {
     
     static int level = -1;
     
-    static boolean isGame = true;
+    static boolean isGame = false;
 
     GameFrame() throws Exception {
     	Sound.init();
@@ -181,13 +181,10 @@ class GameFrame {
         
         levelSelect.unlocked = Bson.getUnlocked();
         //tutorial
-        newGame(0);
-        if (levelSelect.unlocked > 0) {
-        	exitGame();
-        	levelSelect.map = 1;
-        	enterButton.setText("1");
-        	if (levelSelect.unlocked > 1) nextButton.setVisible(true);
-        }
+		levelSelect.map = 1;
+    	enterButton.setText("1");
+    	if (levelSelect.unlocked > 1) 
+			nextButton.setVisible(true);
 
         AnimationHandeler.setLevelSelect(levelSelect);
 
@@ -257,6 +254,10 @@ class GameFrame {
     				if (map > 0) backButton.setVisible(true);
     				enterButton.setText(String.valueOf(levelSelect.map));
     			}
+				if (board.isTutorial) {
+					Debug.print("here");
+					AnimationHandeler.frame = AnimationHandeler.numFrames - 10;
+				}
     		}
     	});
     }
