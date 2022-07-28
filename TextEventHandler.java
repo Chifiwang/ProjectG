@@ -12,7 +12,7 @@ public class TextEventHandler {
     static int[] sizeX = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
     static int[] sizeY = {50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};
     // static int x = 200, y = 650;
-    static String tutorial1_text = "   Welcome to ProjectG. To move the character use the 'W', 'A', 'S', and 'D' keys to move the player\n   up, down, left, and right respectively. See that blue box? It's called a \"Universal Block\". Run into it to push it in any \n   direction. Your goal, as the player, is to push all the boxes off the map. Don't worry, I will guide you through each of the \n   block's mechanics as we go along.          ";
+    static String tutorial1_text = "   Welcome to ProjectG. To move the character use the 'W', 'A', 'S', and 'D' keys to move the player\n   up, down, left, and right respectively. See that blue box? It's called a \"Universal Block\". Run into\n   it to push it in any direction. Your goal, as the player, is to push all the boxes off the map. Don't\n   worry, I will guide you through each of the block's mechanics as we go along.          ";
     static String tutorial2_text = "   Hello there          ";
     public static void initiateEvent(int type, JPanel p) {
         panel = p;
@@ -25,7 +25,7 @@ public class TextEventHandler {
     // }
 
     public static void gameTutorial(Integer[] key, Graphics2D g2D) {
-        int x = 200, y = 650;
+        int x = 200, y = 660;
         g2D.drawImage(textBox1.getImage(), 200, 653, null);
 
         String[] buff;

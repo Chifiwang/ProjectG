@@ -117,7 +117,7 @@ public class Board extends JPanel{
 
         super.paint(g);
         g2D = (Graphics2D) g;
-        g2D.setFont(new Font("times new roman", Font.PLAIN, 20));
+        g2D.setFont(new Font("ocr a extended", Font.PLAIN, 15));
         g2D.setColor(Color.WHITE);
 
         for (int r = 0; r < map.map.length; r++) {

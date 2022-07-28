@@ -1,6 +1,6 @@
 Map0 {
-	"firstClear" : false
-	"starsAchived" : 3
+	"firstClear" : true
+	"starsAchived" : 0
 	"col" : 11
 	"row" : 7
 	"map" : "                                      p u                                    "
@@ -9,8 +9,8 @@ Map0 {
 }
 
 Map1 {
-    "firstClear" : false
-	"starsAchived" : 3
+    "firstClear" : true
+	"starsAchived" : 0
 	"col" : 11
 	"row" : 7
 	"map" : "                                      p x u                                  "
