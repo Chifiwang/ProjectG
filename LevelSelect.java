@@ -1,5 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
+import java.awt.Graphics2D;
 
 public class LevelSelect extends JPanel {
 
@@ -18,7 +19,7 @@ public class LevelSelect extends JPanel {
     public LevelSelect() {
     	this.setLayout(null);
         this.setBounds(0, 0, 1300, 900);
-
+        Debug.print("hallo");
 
         ImageIcon board = new ImageIcon("Assets\\dead.png");
         ImageIcon background = new ImageIcon("Assets\\levelSelect_background.png");

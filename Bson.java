@@ -7,37 +7,12 @@ import java.io.IOException;
 public class Bson {
     static String cache;
 
-    // static void writer() throws IOException {
-    //     // Accept a string
-    //     String str = "Map00 {\n\t\"Hallo\" : true\n    h";
-
-    //     FileWriter fw = new FileWriter("output.txt");
-
-    //     for (int i = 0; i < str.length(); i++)
-    //         fw.write(str.charAt(i));
- 
-    //     System.out.println("Writing successful");
-
-    //     //close the file
-    //     fw.close();
-    // }
-
-    // static void readFile() throws IOException {
-
-    //     try {
-    //         FileReader input = new FileReader("output.txt");
-    //         BufferedReader row = new BufferedReader(input);
-
-    //         // if((cache = row.readLine().substring(1, 6)).equals("Hallo")) {
-    //         //     Debug.print(true);
-    //         // }
-
-    //         Debug.print(cache);
-    //         row.close();
-    //     } catch (IOException e) {
-    //         System.err.println("File Not Found");
-    //     }
-    // }
+    /** 
+     * updates the bson structure text file
+     * 
+     * @param map provides the map class that needs to be updated
+     * @param newMap provides the updated class structure
+     */
 
     static void rewrite(String map, String newMap) {
         int saveLength = 8;
@@ -64,8 +39,6 @@ public class Bson {
                 } else { __fileCache__ += line + "\n"; }
             } 
 
-            // Debug.print(__fileCache__);
-
             FileWriter writer = new FileWriter(file);
             writer.write(__fileCache__);
 
@@ -77,6 +50,13 @@ public class Bson {
         }
     }
 
+    
+    /** 
+     * Returns the bson txt file class structure with the given id
+     * 
+     * @param id provides the id of the bson struct class
+     * @return String returns the bson struct class
+     */
     static String getClass(String id) {
         int saveLength = 9;
         File file = new File("Saves\\output.txt");
@@ -99,9 +79,6 @@ public class Bson {
                     break;
                 }
             } 
-            // Debug.print(__fileCache__.indexOf("\"starBounds\""));
-            // Debug.print(__fileCache__.charAt(81));
-            // Debug.print(__fileCache__.substring(__fileCache__.indexOf("map") + 8, __fileCache__.indexOf("starBounds") - 4).length());
 
             bufferedReader.close();
         } catch (IOException e) {
@@ -110,6 +87,12 @@ public class Bson {
 
         return __fileCache__;
     }
+    
+    /** 
+     * Checks and provides which levels are unlocked by the player
+     * 
+     * @return int returns the last unlocked level
+     */
     static int getUnlocked() {
     	int unlocked = -1;
     	File file = new File("Saves\\output.txt");

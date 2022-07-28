@@ -1,6 +1,6 @@
 Map0 {
-	"firstClear" : true
-	"starsAchived" : 0
+	"firstClear" : false
+	"starsAchived" : 3
 	"col" : 11
 	"row" : 7
 	"map" : "                                      p u                                    "
@@ -10,7 +10,7 @@ Map0 {
 
 Map1 {
     "firstClear" : true
-	"starsAchived" : 0
+	"starsAchived" : 3
 	"col" : 11
 	"row" : 7
 	"map" : "                                      p x u                                  "
@@ -57,5 +57,3 @@ Map5 {
 	"starBounds" = 17, 21, 25
 	"blockCount" = 0
 }
-
-

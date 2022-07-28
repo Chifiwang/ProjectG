@@ -5,11 +5,15 @@ public class Sound {
 	static Clip levelMusic, gameMusic;
 	static int volume = 50;
 	
-	public Sound() {
-		
-	}
+	public Sound() {}
     
-    public static void init() throws Exception {
+    
+	/** 
+	 * initializes the sound player
+	 * 
+	 * @throws Exception
+	 */
+	public static void init() throws Exception {
     	AudioInputStream level = AudioSystem.getAudioInputStream(new File("Sound\\kahoot.wav")), game = AudioSystem.getAudioInputStream(new File("Sound\\misstherage.wav"));
     	levelMusic = AudioSystem.getClip();
     	levelMusic.open(level);
@@ -18,7 +22,13 @@ public class Sound {
     	playMusic(0);
     }
 	
-    public static void playMusic(int music) {
+    
+	/** 
+	 * Play's the background music
+	 * 
+	 * @param music provides an id for which music needs to be played
+	 */
+	public static void playMusic(int music) {
     	switch (music) {
     		case 1:
     			levelMusic.stop();
@@ -33,16 +43,29 @@ public class Sound {
     	}
     }
     
-    public static void playSfx(int sfx) {
+    
+	/** 
+	 * plays a sound effect
+	 * 
+	 * @param sfx sends query to which sound effect needs to be played
+	 */
+	public static void playSfx(int sfx) {
     	try {
     		sfx(sfx);
     	} catch (Exception e) {
-    		Debug.print("bruh");
+    		Debug.print("Sound effect could not play");
     		e.printStackTrace();
     	}
     }
     
-    public static void sfx(int sfx) throws Exception {
+    
+	/** 
+	 * determines and plays the correct sound effect
+	 * 
+	 * @param sfx provides a key for which sound effect needs to be played
+	 * @throws Exception
+	 */
+	public static void sfx(int sfx) throws Exception {
     	AudioInputStream stream = null;
     	switch (sfx) {
     		case 1:
@@ -57,20 +80,28 @@ public class Sound {
         gainControl.setValue(20f * (float) Math.log10(Sound.volume/100.0));
     	clip.start();
     }
+
     
-//    public static float getVolume() {
-//        FloatControl gainControl = (FloatControl) music.getControl(FloatControl.Type.MASTER_GAIN);        
-//        return (float) Math.pow(10f, gainControl.getValue() / 20f);
-//    }
     
-    public static void setMusicVolume(int volume) {
+	/** 
+	 * Sets the music volume
+	 * 
+	 * @param volume provides the volume in %
+	 */
+	public static void setMusicVolume(int volume) {
 		FloatControl gainControl = (FloatControl) levelMusic.getControl(FloatControl.Type.MASTER_GAIN);       
         gainControl.setValue(20f * (float) Math.log10(volume/100.0));
         gainControl = (FloatControl) gameMusic.getControl(FloatControl.Type.MASTER_GAIN);       
         gainControl.setValue(20f * (float) Math.log10(volume/100.0));
     }
     
-    public static void setSfxVolume(int volume) {
+    
+	/** 
+	 * Sets the sound effect's volume
+	 * 
+	 * @param volume provides the volume in %
+	 */
+	public static void setSfxVolume(int volume) {
     	Sound.volume = volume;
     }
 }

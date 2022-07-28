@@ -31,7 +31,6 @@ public class Map {
      * finds the player coordinates for player initialization.
      * 
      * @param map provides the map that the player is being loaded into
-     * 
      * @return int[] returns {row, column} data
      */
     public int[] loadPlayer(char[][] map) {
@@ -50,6 +49,12 @@ public class Map {
         return pCoords;
     }
 
+    
+    /** 
+     * takes the given class and puts it into local memory for use in game
+     * 
+     * @param id provides the class that needs to be loaded
+     */
     public void loadSave(String id) {
 
         String save = Bson.getClass(id);
@@ -76,17 +81,23 @@ public class Map {
         }
     }
 
+    /** 
+     * rewrites the map class structure data based on the class that 
+     * is being updated
+     * 
+     * @param starsAchived provides the field "starsAchived"s data
+     * @param id provides the class structure that needs updating
+     * @return String returns the updated class structure
+     */
     public static String rewriteMapData(int starsAchived, String id) {
         String newData = Bson.getClass(id);
-//        Debug.print(newData);
+
         newData = newData.replaceAll("true", "false");
-//        Debug.print(newData);
         newData = newData.replace(newData.substring(newData.indexOf("\n\t\"starsAchived\" : ") + "\n\t\"starsAchived\" : ".length() - 1, 
                   newData.indexOf("\n\t\"col\"")), " " +Integer.toString(Math.max(starsAchived, 
                   Integer.parseInt(newData.substring(newData.indexOf("\n\t\"starsAchived\" : ") + "\n\t\"starsAchived\" : ".length(), 
                   newData.indexOf("\n\t\"col\""))))));
                   
-//        Debug.print(newData);
         return newData;
     }
 }

@@ -14,8 +14,6 @@ public class Settings extends JPanel {
         super();
 		this.setBounds(0, 0, 800, 500);
 		this.setLayout(null);
-//		this.setBackground(new Color(255, 0, 0, 255));
-
         this.setVisible(false);
         this.setFocusable(true);
         this.requestFocus();
@@ -119,6 +117,12 @@ public class Settings extends JPanel {
 		this.add(sfxVolumeDisplay);
 	}
 	
+	
+	/** 
+	 * displays the music volume tag
+	 * 
+	 * @param i provides the mouse's x position
+	 */
 	public void displayMusicVolume(int i) {
 		musicLevel.setText(String.valueOf(i));
 		//starts at 98
@@ -127,6 +131,12 @@ public class Settings extends JPanel {
 		musicVolumeDisplay.setVisible(true);
 	}
 	
+	
+	/** 
+	 * displays the sound effect's volume tag
+	 * 
+	 * @param i provides the mouse's x position
+	 */
 	public void displaySfxVolume(int i) {
 		sfxLevel.setText(String.valueOf(i));
 		//starts at 98

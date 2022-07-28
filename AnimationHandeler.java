@@ -4,6 +4,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 
 public class AnimationHandeler {
+
+    // Basic driver informaiton
     static int frame = 0;
     static int numFrames = 8;
     static int scalingFactor = GameFrame.scaleFactor;
@@ -11,7 +13,6 @@ public class AnimationHandeler {
     static ArrayList<Integer[]> queue = new ArrayList<Integer[]>();
     static ArrayList<ImageIcon[]> imageLookup = new ArrayList<ImageIcon[]>();
 
-    static int[] frameTime1 = {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
     static int[] tutorialFrames = {TextEventHandler.tutorial1_text.length(), TextEventHandler.tutorial2_text.length()};
 
     static Board board;
@@ -20,14 +21,25 @@ public class AnimationHandeler {
 
     static int canvas = -1;
 
+    /** 
+     * queues an event into the event queue mechanism
+     * 
+     * @param EventKey provides a key to identify the event
+     * @param x provides an x coordinate of the event
+     * @param y provides a y coordinate of the event
+     */
     public static void queueAnimation(int EventKey, int x, int y) {
-        // queue.clear();
         Integer[] temp = {EventKey, x, y};
-        // frame = 0;
-        // if (!queue.contains(temp))
         queue.add(temp);
     }
 
+    /** 
+     * Sends an animate request based on the queued events. 
+     * {@code} Animate(Graphics2D g2D) also handles the management 
+     * 
+     * of frames and frame related events
+     * @param g2D passes through the class that draws stuff
+     */
     public static void animate(Graphics2D g2D) {
         for(int i = 0; i < queue.size(); i++) {
             switch (queue.get(i)[0]) {
@@ -69,12 +81,7 @@ public class AnimationHandeler {
             }
             else if (canvas == 1){
                 frame++;
-                // queue.clear();
-                // if(frame > 24) {
-                //     board.isTutorial = false;
-                // }
                 try {
-                    // Debug.print(frameTime1[frame]);
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -84,6 +91,13 @@ public class AnimationHandeler {
         }
     }
 
+    
+    /** 
+     * Excecutes the animation for moving blocks during the game
+     * 
+     * @param graphics provides the graphics class
+     * @param key provides the coordinates of the animation
+     */
     public static void drawGame(Graphics2D graphics, Integer[] key) {
         int c = key[1]; 
         int r = key[2]; 
@@ -109,6 +123,13 @@ public class AnimationHandeler {
         }
     }
 
+    
+    /** 
+     * sends a request to animate the tutorial text in {@code} 
+     * TextEventHandlre.java
+     * @param key provides the tutorial number
+     * @param g2D provides the graphics2D class
+     */
     public static void drawTutorial(Integer[] key, Graphics2D g2D) {
         TextEventHandler.gameTutorial(key, g2D);
     }

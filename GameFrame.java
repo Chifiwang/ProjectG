@@ -11,8 +11,8 @@ import javax.swing.JButton;
 
 public class GameFrame {
     Debug debug = new Debug();
-    static JFrame frame;
 
+    static JFrame frame;
     static int scaleFactor = 128;
     
     //exit as in exit settings
@@ -37,11 +37,6 @@ public class GameFrame {
         levelSelect = new LevelSelect(); 
         settings = new Settings();
         directory = new Directory();
-
-//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//        if(screenSize.getWidth() < 128*11 || screenSize.getHeight() < 128*9) {
-//                scaleFactor = 64;
-//        }
         
         menu.setLayout(null);
         menu.setBounds(0, 0, 1300, 900);
@@ -220,6 +215,7 @@ public class GameFrame {
     		public void mousePressed(MouseEvent e) {
     			// do nothing
     		}
+        
     		/** 
     	     * once the game is over, removes instance of board from frame.
     	     * if the player wins in the most recently unlocked level, unlocks the next level

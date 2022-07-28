@@ -15,9 +15,6 @@ public class Board extends JPanel{
     final String left_release = "release left";
     final String right_release = "release right";
 
-    /* Innit statements */
-    Map mapGlobal = new Map();
-
     /* objects */
     JLabel score;
     Player player;
@@ -26,7 +23,7 @@ public class Board extends JPanel{
     /* variables */
     Graphics2D g2D;
 
-    // boolean canTutorial = true;
+    /* Boolean flags */
     boolean isTutorial = false;
     boolean isAnimate = false;
     boolean moveFlag = false;
@@ -35,23 +32,23 @@ public class Board extends JPanel{
     boolean isWin = false;
     boolean init = true;
 
+    /* game counters and storage values */
     int scalingFactor = GameFrame.scaleFactor;
     int moveCount = 0;
-    int numFrames = 10;
-    int frameNum = 0;
     int starCount = 3;
     int level;
 
+    /* Timer values and logs */
     long timeDelay = 200;
     long timeStart; 
     long dt = 200;
 
+    /* Image types */
     Image board;
     Image end;
     Image bg;
 
     Map map;
-    Timer t;
 
     public Board(int level) {
         this.level = level;
@@ -111,8 +108,6 @@ public class Board extends JPanel{
         if (init && isTutorial) {
             Debug.print(level);
             TextEventHandler.initiateEvent(level, this);
-            
-            // Debug.print("called");
         }
 
         super.paint(g);
@@ -120,6 +115,7 @@ public class Board extends JPanel{
         g2D.setFont(new Font("ocr a extended", Font.PLAIN, 15));
         g2D.setColor(Color.WHITE);
 
+        /* This is the main loop that prints and queues the game board's items and objects visuals and animations */
         for (int r = 0; r < map.map.length; r++) {
             for (int c = 0; c < map.map[r].length; c++) {
                 if (!(r == 0 || c == 0 || r == map.map.length - 1 || c == map.map[0].length - 1))
@@ -143,8 +139,9 @@ public class Board extends JPanel{
                         break;
                 }
             }           
-
         }
+
+        /* does some tutorial logic checks */
         if (isTutorial && AnimationHandeler.frame < AnimationHandeler.numFrames) {
             float alpha = 1 * 0.8f;
             AlphaComposite alcom = AlphaComposite.getInstance(
@@ -152,10 +149,8 @@ public class Board extends JPanel{
 
             g2D.setComposite(alcom);
             g2D.drawImage(end, 0, 0, null);
-            // TextEventHandler.initiateEvent(level, this);
-            // canTutorial = false;
-            // Debug.print("called");
         }
+
         if (AnimationHandeler.frame > AnimationHandeler.numFrames && Map.firstGame) {
             Map.firstGame = false;
             repaint();
@@ -163,6 +158,7 @@ public class Board extends JPanel{
 
         AnimationHandeler.animate(g2D);
 
+        /* does win loss checks every move */
         starCount = getStarCount();
 
         if (starCount == 0) {
@@ -182,7 +178,6 @@ public class Board extends JPanel{
             g2D.drawImage(end, 0, 0, null);
 
         } else if (isLose) {
-
             float alpha = 1 * 0.5f;
             AlphaComposite alcom = AlphaComposite.getInstance(
                     AlphaComposite.SRC_OVER, alpha);
@@ -195,6 +190,7 @@ public class Board extends JPanel{
             g2D.drawString("Num moves to keep " + starCount + " stars: " + (Map.starBounds[3 - starCount] - moveCount - 1), 7 * GameFrame.scaleFactor, GameFrame.scaleFactor/2);
         }
 
+        /* initialization repaint to play tutorial */
         if(init) {
             init = false;
             repaint();
@@ -231,6 +227,12 @@ public class Board extends JPanel{
         }
 
         @Override
+        /** 
+         * listens for keyboard inputs and interprets them according to
+         * the key pressed. It also handles the movement timing logic.
+         * 
+         * @param e keyboard event
+         */
         public void actionPerformed(ActionEvent e) {
             if (!isLose && !isWin && !isTutorial) {
                 if (isRelease && direct == Map.direct) {
