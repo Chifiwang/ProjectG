@@ -57,9 +57,9 @@ public class Bson {
      * @param id provides the id of the bson struct class
      * @return String returns the bson struct class
      */
-    public static String getClass(String id) {
+    public static String getClass(String id, String fileLocation) {
         int saveLength = 9;
-        File file = new File("Saves\\output.txt");
+        File file = new File(fileLocation);
         String line = "";
         String __fileCache__ = "";
         boolean overWrite = false;
@@ -69,7 +69,7 @@ public class Bson {
             BufferedReader bufferedReader = new BufferedReader(reader);
             while ((line = bufferedReader.readLine()) != null) { // checks to see if a line is present
 
-                overWrite = line.equals("Map" + id + " {");
+                overWrite = line.equals(id + " {");
 
                 if (overWrite) {
                     for(int i = 0; i < saveLength; i++) {
@@ -267,6 +267,59 @@ public class Bson {
 
     }
 
+    public static int getNumClasses(String fileLocation) {
+        File file = new File(fileLocation);
+        String line;
+        int counter = 0;
+        try {
+            FileReader reader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            
+            while ((line = bufferedReader.readLine()) != null) { // checks to see if a line is present
 
+                if (line.contains("{"))
+                    counter++;
+                
+            } 
+
+            bufferedReader.close();
+
+        } catch (IOException e) {
+            System.err.println("File Not Found");
+        }
+
+        return counter;
+    }
+
+    public static String[] getAllClasses(String fileLocation) {
+        File file = new File(fileLocation);
+        String line;
+        String[] classes = new String[getNumClasses(fileLocation)];
+        int counter = 0;
+
+        try {
+            FileReader reader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            
+            while ((line = bufferedReader.readLine()) != null) { // checks to see if a line is present
+
+                if (line.contains("{")) {
+                    line = line.replace(" {", "");
+                    Debug.print(line);
+                    classes[counter] = line;
+                    counter++;
+                }
+                    
+                
+            } 
+
+            bufferedReader.close();
+
+        } catch (IOException e) {
+            System.err.println("File Not Found");
+        }
+
+        return classes;
+    }
 }
 

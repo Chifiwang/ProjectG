@@ -63,7 +63,7 @@ public class Map {
 
     public void loadSave(String id) {
 
-        String save = Bson.getClass(id);
+        String save = Bson.getClass("Map" + id, "Saves\\output.txt");
 
         if(save.length() > 0) {
             int col = Integer.valueOf(save.substring(save.indexOf("col") + 7, save.indexOf("row") - 3));
@@ -96,7 +96,7 @@ public class Map {
      * @return String returns the updated class structure
      */
     public static String rewriteMapData(int starsAchived, String id) {
-        String newData = Bson.getClass(id);
+        String newData = Bson.getClass("Map" + id, "Saves\\output.txt");
 //        Debug.print(newData);
         newData = newData.replaceAll("true", "false");
 //        Debug.print(newData);

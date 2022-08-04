@@ -170,7 +170,7 @@ public class Editor extends JPanel {
                 __mapBuff__ += map.map[i][j];
             }
         }
-        template += __mapBuff__ + "\"\n	\"starBounds\" = -1, -1, -1\n    \"blockCount\" = 1\n	\"isPlayable\" : false\n}";
+        template += __mapBuff__ + "\"\n	\"starBounds\" = -1, -1, -1\n      \"blockCount\" = 1\n	\"isPlayable\" : false\n}";
         
         Bson.createCustomClass(template, name);
     }

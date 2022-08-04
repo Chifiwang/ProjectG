@@ -17,7 +17,30 @@ public class GameFrame {
     static int scaleFactor = 128;
     
     //exit as in exit settings
-    static JButton menuButton, settingsButton, backButton, nextButton, enterButton, exitButton, returnButton, leaveButton, restartButton, directoryButton, exitDirectoryButton, editorButton, optionsButton, saveButton, discardButton, exitEditorButton, playButton, returnButtonEditor, namingButton, exitNamerButton, nameSaveButton;
+    static JButton menuButton, 
+                   settingsButton, 
+                   backButton, 
+                   nextButton, 
+                   enterButton, 
+                   exitButton, 
+                   returnButton, 
+                   leaveButton, 
+                   restartButton, 
+                   directoryButton, 
+                   exitDirectoryButton, 
+                   editorButton, 
+                   optionsButton, 
+                   saveButton, 
+                   discardButton, 
+                   exitEditorButton, 
+                   playButton, 
+                   returnButtonEditor, 
+                   namingButton, 
+                   exitNamerButton, 
+                   nameSaveButton, 
+                   customLevelsButton,
+                   backButtonc;
+
     static JTextField customNamer;
 
     static Board board;
@@ -25,6 +48,7 @@ public class GameFrame {
     static Settings settings;
     static Directory directory;
     static Editor editor;
+    static CustomLevelSelect cLevelSelect;
     static JPanel menu = new JPanel(), options = new JPanel(), namer = new JPanel();
     
     static int level = -1;
@@ -37,6 +61,7 @@ public class GameFrame {
         levelSelect = new LevelSelect(); 
         settings = new Settings();
         directory = new Directory();
+        cLevelSelect = new CustomLevelSelect();
         
         menu.setLayout(null);
         menu.setBounds(0, 0, 1300, 900);
@@ -104,6 +129,17 @@ public class GameFrame {
           // Debug.print("called");
 
           editor.save();
+          Sound.playSfx(0);
+        });
+
+        backButtonc = new JButton("Back");
+        backButtonc.setBounds(1140, 10, 100, 40);
+        backButtonc.setFocusable(true);
+        backButtonc.setVisible(false);
+        backButtonc.addActionListener((e) -> {
+          levelSelect.setVisible(true);
+          backButtonc.setVisible(false);
+          cLevelSelect.setVisible(false);
           Sound.playSfx(0);
         });
         
@@ -208,6 +244,17 @@ public class GameFrame {
           newGame(levelSelect.map);
           Sound.playSfx(0);
         });
+
+        customLevelsButton = new JButton("Custom Levels");
+        customLevelsButton.setBounds(1140, 60, 100, 40);
+        customLevelsButton.setFocusable(true);
+        customLevelsButton.setVisible(true);
+        customLevelsButton.addActionListener((e) -> {
+          levelSelect.setVisible(false);
+          backButtonc.setVisible(true);
+          cLevelSelect.setVisible(true);
+          cLevelSelect.updateSaves();
+        });
         
         exitButton = new JButton("Exit");
         exitButton.setBounds(10, 10, 80, 40);
@@ -291,8 +338,11 @@ public class GameFrame {
         levelSelect.add(settingsButton);
         levelSelect.add(directoryButton);
         levelSelect.add(editorButton);
+        levelSelect.add(customLevelsButton);
         
         settings.add(exitButton);
+
+        cLevelSelect.add(backButtonc);
         
         directory.add(exitDirectoryButton);
         
@@ -311,6 +361,8 @@ public class GameFrame {
         namer.add(exitNamerButton);
         namer.add(nameSaveButton);
         // namer.add(saveButton);
+
+        // cLevelSelect.add(exit2231)
         
         frame.getContentPane().add(settings);
         frame.getContentPane().add(levelSelect);
@@ -318,6 +370,7 @@ public class GameFrame {
         frame.getContentPane().add(directory);
         frame.getContentPane().add(options);
         frame.getContentPane().add(namer);
+        frame.getContentPane().add(cLevelSelect);
 
         Sound.init();
         Sound.setMusicVolume(settings.musicVolumeLevel);

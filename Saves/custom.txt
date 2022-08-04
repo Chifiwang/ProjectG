@@ -1,9 +1,19 @@
-a {
+test1 {
 	"firstClear" : true
 	"starsAchived" : 0
 	"col" : 11
 	"row" : 7
-	"map" : "                                                                             "
+	"map" : "                                      p>                                     "
+	"starBounds" = -1, -1, -1
+    "blockCount" = 1
+	"isPlayable" : false
+}
+test2 {
+	"firstClear" : true
+	"starsAchived" : 0
+	"col" : 11
+	"row" : 7
+	"map" : "                                     up                                      "
 	"starBounds" = -1, -1, -1
     "blockCount" = 1
 	"isPlayable" : false
