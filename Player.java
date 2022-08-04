@@ -13,11 +13,12 @@ public class Player extends JLabel{
 
     int row, col;
 
-    static Image pIcon;
+//    static Image pIcon;
+    static Image pIcon = pDefault.getImage().getScaledInstance(GameFrame.scaleFactor, GameFrame.scaleFactor, Image.SCALE_DEFAULT);
     Map map;
 
     public Player(Map map, int[] coords) {
-        pIcon = pDefault.getImage().getScaledInstance(GameFrame.scaleFactor, GameFrame.scaleFactor, Image.SCALE_DEFAULT);
+//        pIcon = pDefault.getImage().getScaledInstance(GameFrame.scaleFactor, GameFrame.scaleFactor, Image.SCALE_DEFAULT);
         this.map = map;
         this.row = coords[0];
         this.col = coords[1];

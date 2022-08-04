@@ -1,0 +1,10 @@
+a {
+	"firstClear" : true
+	"starsAchived" : 0
+	"col" : 11
+	"row" : 7
+	"map" : "                                                                             "
+	"starBounds" = -1, -1, -1
+    "blockCount" = 1
+	"isPlayable" : false
+}

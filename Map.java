@@ -27,6 +27,18 @@ public class Map {
         
     }
     
+    public Map(char[][] map) {
+    	this.map = map;
+    	map_move = new boolean[7][11];
+    	firstGame = false;
+    	blockCount = 0;
+    	for (int i = 1; i < 6; i++) {
+    		for (int j = 1; j < 10; j++) {
+    			if (map[i][j] != ' ' && map[i][j] != 'p' && map[i][j] != 'x') blockCount++;
+    		}
+    	}
+    }
+    
     /** 
      * finds the player coordinates for player initialization.
      * 
@@ -49,12 +61,6 @@ public class Map {
         return pCoords;
     }
 
-    
-    /** 
-     * takes the given class and puts it into local memory for use in game
-     * 
-     * @param id provides the class that needs to be loaded
-     */
     public void loadSave(String id) {
 
         String save = Bson.getClass(id);
@@ -91,13 +97,15 @@ public class Map {
      */
     public static String rewriteMapData(int starsAchived, String id) {
         String newData = Bson.getClass(id);
-
+//        Debug.print(newData);
         newData = newData.replaceAll("true", "false");
+//        Debug.print(newData);
         newData = newData.replace(newData.substring(newData.indexOf("\n\t\"starsAchived\" : ") + "\n\t\"starsAchived\" : ".length() - 1, 
                   newData.indexOf("\n\t\"col\"")), " " +Integer.toString(Math.max(starsAchived, 
                   Integer.parseInt(newData.substring(newData.indexOf("\n\t\"starsAchived\" : ") + "\n\t\"starsAchived\" : ".length(), 
                   newData.indexOf("\n\t\"col\""))))));
                   
+//        Debug.print(newData);
         return newData;
     }
 }

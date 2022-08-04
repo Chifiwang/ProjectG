@@ -8,7 +8,7 @@ public class Settings extends JPanel {
 	JPanel musicVolumeDisplay = new JPanel(), sfxVolumeDisplay = new JPanel();
 	JSlider musicVolume, sfxVolume;
 	JLabel musicLevel = new JLabel("50"), sfxLevel = new JLabel("50"), music = new JLabel("Music Volume"), sfx = new JLabel("SFX Volume");
-	int musicVolumeLevel = 50, sfxVolumeLevel = 50;
+	int musicVolumeLevel = Bson.getMusicVolume(), sfxVolumeLevel = Bson.getSFXVolume();
 
 	public Settings() {
         super();
@@ -29,11 +29,13 @@ public class Settings extends JPanel {
 		musicVolume.setMajorTickSpacing(10);
 		this.add(musicVolume);
 		musicVolume.setVisible(true);
+		musicVolume.setValue(musicVolumeLevel);
 		musicVolume.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				musicVolumeLevel = musicVolume.getValue();
 		        displayMusicVolume(musicVolumeLevel);
 		        Sound.setMusicVolume(musicVolumeLevel);
+				Bson.updateMusic(musicVolumeLevel);
 			}
 		});
 		musicVolume.addMouseListener(new MouseListener() {
@@ -78,11 +80,13 @@ public class Settings extends JPanel {
 		sfxVolume.setMajorTickSpacing(10);
 		this.add(sfxVolume);
 		sfxVolume.setVisible(true);
+		sfxVolume.setValue(sfxVolumeLevel);
 		sfxVolume.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				sfxVolumeLevel = sfxVolume.getValue();
 		        displaySfxVolume(sfxVolumeLevel);
 		        Sound.setSfxVolume(sfxVolumeLevel);
+				Bson.updateSFX(sfxVolumeLevel);
 			}
 		});
 		sfxVolume.addMouseListener(new MouseListener() {

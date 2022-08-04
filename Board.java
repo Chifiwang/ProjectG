@@ -26,6 +26,7 @@ public class Board extends JPanel{
     /* Boolean flags */
     boolean isTutorial = false;
     boolean isAnimate = false;
+    boolean isCustom = false;
     boolean moveFlag = false;
     boolean isValid = false;
     boolean isLose = false;
@@ -51,13 +52,27 @@ public class Board extends JPanel{
     Map map;
 
     public Board(int level) {
-        this.level = level;
+    	this.level = level;
         this.map = new Map(level);
+        init();
+    }
+    
+    public Board(char[][] map) {
+    	this.level = -1;
+    	this.map = new Map(map);
+		isCustom = true;
+		init();
+    }
+    
+    public void init() {
         
         player = new Player(map, map.loadPlayer(map.map));
         block = new Block(map);
-        score = new JLabel();
-        isTutorial = (level == 0 || level % 10 == 1 || level == 12) && Map.firstGame;
+        
+        if (!isCustom) {
+	        score = new JLabel();
+	        isTutorial = (level == 0 || level % 10 == 1 || level == 12) && Map.firstGame;
+        }
 
         this.add(player);
         
@@ -94,6 +109,26 @@ public class Board extends JPanel{
         player.putActionMap(down_release, new MoveDecoder(2, true));
         player.putActionMap(left_release, new MoveDecoder(1, true));
         player.putActionMap(right_release, new MoveDecoder(3, true));
+        
+        player.putInputMap(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, false), up);
+        player.putInputMap(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, false), down);
+        player.putInputMap(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, false), left);
+        player.putInputMap(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, false), right);
+
+        player.putInputMap(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, true), up_release);
+        player.putInputMap(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, true), down_release);
+        player.putInputMap(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, true), left_release);
+        player.putInputMap(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, true), right_release);
+
+        player.putActionMap(up, new MoveDecoder(0, false));
+        player.putActionMap(down, new MoveDecoder(2, false));
+        player.putActionMap(left, new MoveDecoder(1, false));
+        player.putActionMap(right, new MoveDecoder(3, false));
+
+        player.putActionMap(up_release, new MoveDecoder(0, true));
+        player.putActionMap(down_release, new MoveDecoder(2, true));
+        player.putActionMap(left_release, new MoveDecoder(1, true));
+        player.putActionMap(right_release, new MoveDecoder(3, true));
 
     }
     
@@ -108,6 +143,8 @@ public class Board extends JPanel{
         if (init && isTutorial) {
             Debug.print(level);
             TextEventHandler.initiateEvent(level, this);
+            
+            // Debug.print("called");
         }
 
         super.paint(g);
@@ -139,6 +176,7 @@ public class Board extends JPanel{
                         break;
                 }
             }           
+
         }
 
         /* does some tutorial logic checks */
@@ -158,8 +196,7 @@ public class Board extends JPanel{
 
         AnimationHandeler.animate(g2D);
 
-        /* does win loss checks every move */
-        starCount = getStarCount();
+        if (!isCustom) starCount = getStarCount();
 
         if (starCount == 0) {
             isLose = true;
@@ -178,6 +215,7 @@ public class Board extends JPanel{
             g2D.drawImage(end, 0, 0, null);
 
         } else if (isLose) {
+
             float alpha = 1 * 0.5f;
             AlphaComposite alcom = AlphaComposite.getInstance(
                     AlphaComposite.SRC_OVER, alpha);
@@ -185,7 +223,7 @@ public class Board extends JPanel{
             g2D.setComposite(alcom);
             g2D.drawImage(end, 0, 0, null);
             
-        } else {
+        } else if (!isCustom) {
             g2D.drawString("Num moves: " + moveCount + " Num stars: " + starCount, 7 * GameFrame.scaleFactor, 13 * GameFrame.scaleFactor/2);
             g2D.drawString("Num moves to keep " + starCount + " stars: " + (Map.starBounds[3 - starCount] - moveCount - 1), 7 * GameFrame.scaleFactor, GameFrame.scaleFactor/2);
         }

@@ -14,7 +14,8 @@ public class Sound {
 	 * @throws Exception
 	 */
 	public static void init() throws Exception {
-    	AudioInputStream level = AudioSystem.getAudioInputStream(new File("Sound\\kahoot.wav")), game = AudioSystem.getAudioInputStream(new File("Sound\\misstherage.wav"));
+    	AudioInputStream level = AudioSystem.getAudioInputStream(new File("Sound\\kahoot.wav")), 
+						 game = AudioSystem.getAudioInputStream(new File("Sound\\misstherage.wav"));
     	levelMusic = AudioSystem.getClip();
     	levelMusic.open(level);
     	gameMusic = AudioSystem.getClip();
@@ -89,10 +90,13 @@ public class Sound {
 	 * @param volume provides the volume in %
 	 */
 	public static void setMusicVolume(int volume) {
+		Debug.print(volume);
 		FloatControl gainControl = (FloatControl) levelMusic.getControl(FloatControl.Type.MASTER_GAIN);       
         gainControl.setValue(20f * (float) Math.log10(volume/100.0));
         gainControl = (FloatControl) gameMusic.getControl(FloatControl.Type.MASTER_GAIN);       
         gainControl.setValue(20f * (float) Math.log10(volume/100.0));
+
+		// Bson.updateMusic(volume);
     }
     
     
@@ -103,5 +107,6 @@ public class Sound {
 	 */
 	public static void setSfxVolume(int volume) {
     	Sound.volume = volume;
+		// Bson.updateSFX(volume);
     }
 }
