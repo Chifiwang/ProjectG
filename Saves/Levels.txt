@@ -1,0 +1,18 @@
+Map0;
+   name : Level 0;
+   firstClear : false;
+   starsAchived : 3;
+   col : 11;
+   row : 7;
+   map :                                       p u u                                  ;
+   starBounds : 100, 100, 100;
+   blockCount : 2;
+Map1;
+   name : Level 1;
+   firstClear : false;
+   starsAchived : 3;
+   col : 11;
+   row : 7;
+   map :                                       p u                                    ;
+   starBounds : 100, 100, 100;
+   blockCount : 1;

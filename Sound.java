@@ -90,7 +90,7 @@ public class Sound {
 	 * @param volume provides the volume in %
 	 */
 	public static void setMusicVolume(int volume) {
-		Debug.print(volume);
+//		Debug.print(volume);
 		FloatControl gainControl = (FloatControl) levelMusic.getControl(FloatControl.Type.MASTER_GAIN);       
         gainControl.setValue(20f * (float) Math.log10(volume/100.0));
         gainControl = (FloatControl) gameMusic.getControl(FloatControl.Type.MASTER_GAIN);       

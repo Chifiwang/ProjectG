@@ -14,7 +14,7 @@ public class CustomLevelSelect extends JPanel{
     char[][] map;
     boolean firstGame;
     boolean[][] map_move;
-    int starCount;
+    int starCount, blockCount;
     int[] starBounds;
 
     public CustomLevelSelect() {
@@ -25,7 +25,7 @@ public class CustomLevelSelect extends JPanel{
         this.setFocusable(true);
         this.requestFocus();
 
-        saves = Bson.getAllClasses("Saves\\custom.txt");
+        saves = Bson.getAllClassNames("Saves\\CustomLevels.txt");
         select = new JComboBox<>(saves);
         select.setBounds(80, 50, 500, 20);
         select.addActionListener((e) -> {
@@ -79,7 +79,7 @@ public class CustomLevelSelect extends JPanel{
     public void updateSaves() {
         
         select.removeAllItems();
-        for (String map : Bson.getAllClasses("Saves\\custom.txt")) {
+        for (String map : Bson.getAllClassNames("Saves\\CustomLevels.txt")) {
             select.addItem(map);
         }
 
@@ -87,20 +87,24 @@ public class CustomLevelSelect extends JPanel{
     }
 
     public void updateSelection() {
-        String temp = Bson.getClass((String) select.getSelectedItem(), "Saves\\custom.txt");
+        String[] save = Bson.extractClassInfo(Bson.getClass("MapC" + String.valueOf(select.getSelectedIndex()), "Saves\\CustomLevels.txt"));
 
-        if(temp.length() > 0) {
-            int col = Integer.valueOf(temp.substring(temp.indexOf("col") + 7, temp.indexOf("row") - 3));
-            int row = Integer.valueOf(temp.substring(temp.indexOf("row") + 7, temp.indexOf("map") - 3));
-            String mapString = temp.substring(temp.indexOf("map") + 8, temp.indexOf("starBounds") - 4);
+        if(save.length > 0) {
+            int col = Integer.parseInt(save[4]);
+            int row = Integer.parseInt(save[5]);
+            String mapString = save[6];
 
             map = new char[row][col];
             for(int i = 0; i < col*row; i++)
                 map[i / col][i % col] = mapString.charAt(i);
-            
-            starBounds = Stream.of(temp.substring(temp.indexOf("starBounds") + 14, temp.indexOf("blockCount") - 6).split(", ")).mapToInt(Integer::parseInt).toArray();
 
-            firstGame = temp.contains("true");
+            map_move = new boolean[row][col];
+
+            starBounds = Stream.of(save[7].split(", ")).mapToInt(Integer::parseInt).toArray();
+
+            blockCount = Integer.parseInt(save[8]);
+
+            firstGame = save[2].contains("true");
 
         }
     }

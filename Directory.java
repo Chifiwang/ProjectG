@@ -3,6 +3,9 @@ import javax.swing.*;
 //import java.util.*;
 
 public class Directory extends JPanel {
+	
+	JButton exitDirectoryButton;
+	
 	int unlocked = 1;
 	JButton okButton;
 	JButton[] blocks = new JButton[7];
@@ -11,11 +14,22 @@ public class Directory extends JPanel {
 	
 	public Directory() {
 		super();
+		
+		exitDirectoryButton = new JButton("Exit");
+        exitDirectoryButton.setBounds(10, 10, 80, 40);
+        exitDirectoryButton.addActionListener((e) -> {
+          GameFrame.levelSelect.setVisible(true);
+          this.setVisible(false);
+          Sound.playSfx(0);
+        });
+		
 		this.setLayout(null);
 		this.setBounds(0, 0, 800, 500);
         this.setVisible(false);
         this.setFocusable(true);
         this.requestFocus();
+        
+        this.add(exitDirectoryButton);
         
         buttons.setLayout(new GridLayout(3, 3));
         buttons.setBounds(0, 100, 800, 400);

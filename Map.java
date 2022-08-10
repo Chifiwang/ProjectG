@@ -63,12 +63,12 @@ public class Map {
 
     public void loadSave(String id) {
 
-        String save = Bson.getClass("Map" + id, "Saves\\output.txt");
+        String[] save = Bson.extractClassInfo(Bson.getClass(id, "Saves\\Levels.txt"));
 
-        if(save.length() > 0) {
-            int col = Integer.valueOf(save.substring(save.indexOf("col") + 7, save.indexOf("row") - 3));
-            int row = Integer.valueOf(save.substring(save.indexOf("row") + 7, save.indexOf("map") - 3));
-            String mapString = save.substring(save.indexOf("map") + 8, save.indexOf("starBounds") - 4);
+        if(save.length > 0) {
+            int col = Integer.parseInt(save[4]);
+            int row = Integer.parseInt(save[5]);
+            String mapString = save[6];
 
             map = new char[row][col];
             for(int i = 0; i < col*row; i++)
@@ -76,11 +76,11 @@ public class Map {
 
             map_move = new boolean[row][col];
 
-            starBounds = Stream.of(save.substring(save.indexOf("starBounds") + 14, save.indexOf("blockCount") - 3).split(", ")).mapToInt(Integer::parseInt).toArray();
+            starBounds = Stream.of(save[7].split(", ")).mapToInt(Integer::parseInt).toArray();
 
-            blockCount = Integer.valueOf(save.substring(save.indexOf("blockCount") + 14, save.indexOf("}") - 1));
+            blockCount = Integer.parseInt(save[8]);
 
-            firstGame = save.contains("true");
+            firstGame = save[2].contains("true");
 
         } else {
             GameFrame.exitGame();
@@ -95,17 +95,21 @@ public class Map {
      * @param id provides the class structure that needs updating
      * @return String returns the updated class structure
      */
-    public static String rewriteMapData(int starsAchived, String id) {
-        String newData = Bson.getClass("Map" + id, "Saves\\output.txt");
-//        Debug.print(newData);
-        newData = newData.replaceAll("true", "false");
-//        Debug.print(newData);
-        newData = newData.replace(newData.substring(newData.indexOf("\n\t\"starsAchived\" : ") + "\n\t\"starsAchived\" : ".length() - 1, 
-                  newData.indexOf("\n\t\"col\"")), " " +Integer.toString(Math.max(starsAchived, 
-                  Integer.parseInt(newData.substring(newData.indexOf("\n\t\"starsAchived\" : ") + "\n\t\"starsAchived\" : ".length(), 
-                  newData.indexOf("\n\t\"col\""))))));
-                  
-//        Debug.print(newData);
-        return newData;
+    public static String[] rewriteMapData(int starsAchived, String id) {
+    	
+    	String[] save = Bson.extractClassInfo(Bson.getClass(id, "Saves\\Levels.txt"));
+    	return Bson.writeContent(id, save[1], starsAchived == 0, starsAchived, Integer.parseInt(save[4]), Integer.parseInt(save[5]), save[6], Stream.of(save[7].split(", ")).mapToInt(Integer::parseInt).toArray(), Integer.parseInt(save[8]));
+    	
+//        String newData = Bson.getClass(id, "Saves\\Levels.txt");
+////        Debug.print(newData);
+//        newData = newData.replaceAll("true", "false");
+////        Debug.print(newData);
+//        newData = newData.replace(newData.substring(newData.indexOf("\n\t\"starsAchived\" : ") + "\n\t\"starsAchived\" : ".length() - 1, 
+//                  newData.indexOf("\n\t\"col\"")), " " +Integer.toString(Math.max(starsAchived, 
+//                  Integer.parseInt(newData.substring(newData.indexOf("\n\t\"starsAchived\" : ") + "\n\t\"starsAchived\" : ".length(), 
+//                  newData.indexOf("\n\t\"col\""))))));
+//                  
+////        Debug.print(newData);
+//        return newData;
     }
 }

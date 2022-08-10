@@ -4,6 +4,9 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 public class Settings extends JPanel {
+	
+	JButton exitButton;
+	
     boolean isOpen = false, isClick = false, isHover = false;
 	JPanel musicVolumeDisplay = new JPanel(), sfxVolumeDisplay = new JPanel();
 	JSlider musicVolume, sfxVolume;
@@ -12,6 +15,18 @@ public class Settings extends JPanel {
 
 	public Settings() {
         super();
+        
+        exitButton = new JButton("Exit");
+        exitButton.setBounds(10, 10, 80, 40);
+        exitButton.setFocusable(true);
+        exitButton.addActionListener((e) -> {
+          if (GameFrame.isGame) GameFrame.board.setVisible(true);
+          else if (GameFrame.isEdit) GameFrame.editor.setVisible(true);
+          else GameFrame.levelSelect.setVisible(true);
+          this.setVisible(false);
+    		  Sound.playSfx(0);
+        });
+        
 		this.setBounds(0, 0, 800, 500);
 		this.setLayout(null);
         this.setVisible(false);
@@ -119,6 +134,8 @@ public class Settings extends JPanel {
 		sfxVolumeDisplay.setBackground(Color.white);
 		sfxVolumeDisplay.add(sfxLevel);
 		this.add(sfxVolumeDisplay);
+        
+        this.add(exitButton);
 	}
 	
 	

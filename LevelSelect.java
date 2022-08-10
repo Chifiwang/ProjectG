@@ -1,8 +1,9 @@
 import java.awt.*;
 import javax.swing.*;
-import java.awt.Graphics2D;
 
 public class LevelSelect extends JPanel {
+	
+	JButton settingsButton, backButton, nextButton, enterButton, directoryButton, editorButton;
 
     Image board;
     Image bg;
@@ -17,9 +18,73 @@ public class LevelSelect extends JPanel {
     int map = 0, unlocked = 0;
 
     public LevelSelect() {
+    	
+    	editorButton = new JButton("Editor");
+        editorButton.setBounds(1170, 810, 100, 40);
+        editorButton.setFocusable(true);
+        editorButton.addActionListener((e) -> {
+          this.setVisible(false);
+          GameFrame.newEditor();
+          Sound.playSfx(0);
+        });
+        
+        directoryButton = new JButton("Directory");
+        directoryButton.setBounds(1140, 10, 100, 40);
+        directoryButton.setFocusable(true);
+        directoryButton.addActionListener((e) -> {
+          this.setVisible(false);
+          GameFrame.directory.setVisible(true);
+          GameFrame.directory.displayButtons();
+          Sound.playSfx(0);
+        });
+        
+      //settingsbutton
+        ImageIcon icon = new ImageIcon("Assets\\settings.png");
+        Image scaleImage = icon.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
+        icon = new ImageIcon(scaleImage); // dw
+        
+        settingsButton = new JButton();
+        settingsButton.setIcon(icon);
+        settingsButton.setBounds(1250, 10, 40, 40);
+        settingsButton.setFocusable(true);
+        settingsButton.addActionListener((e) -> {
+        	this.setVisible(false);
+            GameFrame.settings.setVisible(true);
+            Sound.playSfx(0);
+        });
+        
+        backButton = new JButton("Back");
+        backButton.setBounds(200, 430, 80, 80);
+        backButton.setVisible(false);
+        backButton.addActionListener((e) -> {
+          this.map--;
+          if (this.map == 1) backButton.setVisible(false);
+            nextButton.setVisible(true);
+            enterButton.setText(String.valueOf(this.map));
+            Sound.playSfx(0);
+        });
+        
+        nextButton = new JButton("Next");
+        nextButton.setBounds(1020, 430, 80, 80);
+        nextButton.setVisible(false);
+        nextButton.addActionListener((e) -> {
+          this.map++;
+          if (this.map == this.unlocked) nextButton.setVisible(false);
+            backButton.setVisible(true);
+            enterButton.setText(String.valueOf(this.map));
+            Sound.playSfx(0);
+        });
+        
+        enterButton = new JButton("0");
+        enterButton.setBounds(300, 250, 700, 400);
+        enterButton.addActionListener((e) -> {
+          GameFrame.newGame(this.map);
+          Sound.playSfx(0);
+        });
+    	
     	this.setLayout(null);
         this.setBounds(0, 0, 1300, 900);
-        Debug.print("hallo");
+//        Debug.print("hallo");
 
         ImageIcon board = new ImageIcon("Assets\\dead.png");
         ImageIcon background = new ImageIcon("Assets\\levelSelect_background.png");
@@ -29,5 +94,12 @@ public class LevelSelect extends JPanel {
         this.setVisible(true);
         this.setFocusable(true);
         this.requestFocus();
+
+        this.add(backButton);
+        this.add(nextButton);
+        this.add(enterButton);
+        this.add(settingsButton);
+        this.add(directoryButton);
+        this.add(editorButton);
     }
 }

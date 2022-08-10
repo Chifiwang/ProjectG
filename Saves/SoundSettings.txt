@@ -1,0 +1,4 @@
+Sound {
+    music : 0
+    sfx : 11
+}

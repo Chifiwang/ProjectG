@@ -3,6 +3,9 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class Board extends JPanel{
+	
+	JButton menuButton, settingsButton, returnButton, leaveButton, restartButton;
+	JPanel menu = new JPanel();
 
     /* Action key commands */
     final String up = "move up";
@@ -65,6 +68,75 @@ public class Board extends JPanel{
     }
     
     public void init() {
+    	
+    	menu.setLayout(null);
+        menu.setBounds(0, 0, 1300, 900);
+        menu.setVisible(false);
+        
+        menuButton = new JButton("Menu");
+        menuButton.setBounds(10, 10, 80, 40);
+        menuButton.setFocusable(true);
+        menuButton.addActionListener((e) -> {
+          this.setVisible(false);
+          menu.setVisible(true);
+          Sound.playSfx(0);
+          menu.repaint();
+        });
+        
+      //settingsbutton
+        ImageIcon icon = new ImageIcon("Assets\\settings.png");
+        Image scaleImage = icon.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
+        icon = new ImageIcon(scaleImage); // dw
+        
+        settingsButton = new JButton();
+        settingsButton.setIcon(icon);
+        settingsButton.setBounds(1250, 10, 40, 40);
+        settingsButton.setFocusable(true);
+        settingsButton.addActionListener((e) -> {
+        	this.setVisible(false);
+            GameFrame.settings.setVisible(true);
+            Sound.playSfx(0);
+        });
+        
+        returnButton = new JButton("Return");
+        returnButton.setBounds(600, 380, 100, 40);
+        returnButton.setFocusable(true);
+        returnButton.addActionListener((e) -> {
+          menu.setVisible(false);
+          this.setVisible(true);
+          Sound.playSfx(0);
+        });
+        
+        leaveButton = new JButton("Levels");
+        leaveButton.setBounds(600, 430, 100, 40);
+        leaveButton.setFocusable(true);
+        leaveButton.addActionListener((e) -> {
+          menu.setVisible(false);
+          GameFrame.exitGame();
+          Sound.playSfx(0);
+        });
+        
+        restartButton = new JButton("Restart");
+        restartButton.setBounds(600, 480, 100, 40);
+        restartButton.setFocusable(true);
+        restartButton.addActionListener((e) -> {
+          GameFrame.frame.remove(this);
+          menu.setVisible(false);
+          if (level != -1) GameFrame.newGame(level);
+          else GameFrame.newGame(this.map.map);
+          Sound.playSfx(0);
+        });
+        
+        //test restart
+        
+        menu.add(returnButton);
+        menu.add(leaveButton);
+        menu.add(restartButton);
+        
+//        this.add(menu);
+        GameFrame.frame.getContentPane().add(menu);
+        this.add(menuButton);
+        this.add(settingsButton);
         
         player = new Player(map, map.loadPlayer(map.map));
         block = new Block(map);

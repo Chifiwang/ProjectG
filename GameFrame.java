@@ -1,12 +1,15 @@
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.Color;
 import java.awt.Font;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
@@ -17,30 +20,7 @@ public class GameFrame {
     static int scaleFactor = 128;
     
     //exit as in exit settings
-    static JButton menuButton, 
-                   settingsButton, 
-                   backButton, 
-                   nextButton, 
-                   enterButton, 
-                   exitButton, 
-                   returnButton, 
-                   leaveButton, 
-                   restartButton, 
-                   directoryButton, 
-                   exitDirectoryButton, 
-                   editorButton, 
-                   optionsButton, 
-                   saveButton, 
-                   discardButton, 
-                   exitEditorButton, 
-                   playButton, 
-                   returnButtonEditor, 
-                   namingButton, 
-                   exitNamerButton, 
-                   nameSaveButton, 
-                   customLevelsButton,
-                   backButtonc;
-
+    static JButton menuButton, settingsButton, backButton, nextButton, enterButton, exitButton, returnButton, leaveButton, restartButton, directoryButton, exitDirectoryButton, editorButton, optionsButton, saveButton, discardButton, exitEditorButton, playButton, returnButtonEditor, namingButton, exitNamerButton, nameSaveButton, yesButton, noButton;
     static JTextField customNamer;
 
     static Board board;
@@ -48,8 +28,7 @@ public class GameFrame {
     static Settings settings;
     static Directory directory;
     static Editor editor;
-    static CustomLevelSelect cLevelSelect;
-    static JPanel menu = new JPanel(), options = new JPanel(), namer = new JPanel();
+    static JPanel menu = new JPanel(), options = new JPanel(), namer = new JPanel(), savePrompt = new JPanel();
     
     static int level = -1;
     
@@ -61,260 +40,284 @@ public class GameFrame {
         levelSelect = new LevelSelect(); 
         settings = new Settings();
         directory = new Directory();
-        cLevelSelect = new CustomLevelSelect();
-        
-        menu.setLayout(null);
-        menu.setBounds(0, 0, 1300, 900);
-        menu.setVisible(false);
-        
-        options.setLayout(null);
-        options.setBounds(0, 0, 1300, 900);
-        options.setVisible(false);
 
-        namer.setLayout(null);
-        namer.setBounds(0, 0, 1300, 900);
-        namer.setVisible(false);
+        Sound.init();
+        Sound.setMusicVolume(settings.musicVolumeLevel);
+        Sound.setSfxVolume(settings.sfxVolumeLevel);
         
-        menuButton = new JButton("Menu");
-        menuButton.setBounds(10, 10, 80, 40);
-        menuButton.setFocusable(true);
-        menuButton.addActionListener((e) -> {
-          board.setVisible(false);
-          menu.setVisible(true);
-          Sound.playSfx(0);
-        });
-        
-        editorButton = new JButton("Editor");
-        editorButton.setBounds(1170, 810, 100, 40);
-        editorButton.setFocusable(true);
-        editorButton.addActionListener((e) -> {
-          levelSelect.setVisible(false);
-          newEditor();
-          Sound.playSfx(0);
-        });
-        
-        optionsButton = new JButton("Options");
-        optionsButton.setBounds(10, 10, 80, 40);
-        optionsButton.setFocusable(true);
-        optionsButton.addActionListener((e) -> {
-          editor.setVisible(false);
-          options.setVisible(true);
-          Sound.playSfx(0);
-        });
-        
-        returnButtonEditor = new JButton("Return");
-        returnButtonEditor.setBounds(600, 300, 100, 40);
-        returnButtonEditor.setFocusable(true);
-        returnButtonEditor.addActionListener((e) -> {
-          options.setVisible(false);
-          editor.setVisible(true);
-          Sound.playSfx(0);
-        });
-        
-        exitEditorButton = new JButton("Exit");
-        exitEditorButton.setBounds(600, 350, 100, 40);
-        exitEditorButton.setFocusable(true);
-        exitEditorButton.addActionListener((e) -> {
-          options.setVisible(false);
-          exitEditor();
-          Sound.playSfx(0);
-        });
-        
-        saveButton = new JButton("Save");
-        saveButton.setBounds(600, 400, 100, 40);
-        saveButton.setFocusable(true);
-        saveButton.setEnabled(false);
-        saveButton.addActionListener((e) -> {
-          // save function in bson, add later
-          // Debug.print("called");
-
-          editor.save();
-          Sound.playSfx(0);
-        });
-
-        backButtonc = new JButton("Back");
-        backButtonc.setBounds(1140, 10, 100, 40);
-        backButtonc.setFocusable(true);
-        backButtonc.setVisible(false);
-        backButtonc.addActionListener((e) -> {
-          levelSelect.setVisible(true);
-          backButtonc.setVisible(false);
-          cLevelSelect.setVisible(false);
-          Sound.playSfx(0);
-        });
-        
-        discardButton = new JButton("Discard");
-        discardButton.setBounds(600, 450, 100, 40);
-        discardButton.setFocusable(true);
-        discardButton.addActionListener((e) -> {
-    		// discard function in bson or smth, add later
-        	options.setVisible(false);
-        	exitEditor();
-    		Sound.playSfx(0);
-        });
-        
-        playButton = new JButton("Play");
-        playButton.setBounds(600, 500, 100, 40);
-        playButton.setFocusable(true);
-        playButton.addActionListener((e) -> {
-    		// save first
-        	// newgame() for custom levels or smth
-        	options.setVisible(false);
-        	// just exits for now, might keep
-        	exitEditor();
-        	newGame(editor.map.map);
-    		Sound.playSfx(0);
-        });
-
-        namingButton = new JButton("Name");
-        namingButton.setBounds(200, 550, 100, 40);
-        namingButton.setFocusable(true);
-        namingButton.addActionListener((e) -> {
-          options.setVisible(false);
-          namer.setVisible(true);
-    		  Sound.playSfx(0);
-        });
-        
-        customNamer = new JTextField("choose a file name");
-        customNamer.setFont(new Font("ocr a extended", Font.PLAIN, 15));
-        customNamer.setBounds(400, 200, 600, 20);
-        // customNamer.setVisible(true);
-        customNamer.setFocusable(true);
-
-        //settingsbutton
-        ImageIcon icon = new ImageIcon("Assets\\settings.png");
-        Image scaleImage = icon.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
-        icon = new ImageIcon(scaleImage); // dw
-        
-        directoryButton = new JButton("Directory");
-        directoryButton.setBounds(1140, 10, 100, 40);
-        directoryButton.setFocusable(true);
-        directoryButton.addActionListener((e) -> {
-          levelSelect.setVisible(false);
-          directory.setVisible(true);
-          directory.displayButtons();
-          Sound.playSfx(0);
-        });
-        
-        exitDirectoryButton = new JButton("Exit");
-        exitDirectoryButton.setBounds(10, 10, 80, 40);
-        exitDirectoryButton.addActionListener((e) -> {
-          levelSelect.setVisible(true);
-          directory.setVisible(false);
-          Sound.playSfx(0);
-        });
-        
-        settingsButton = new JButton();
-        settingsButton.setIcon(icon);
-        settingsButton.setBounds(1250, 10, 40, 40);
-        settingsButton.setFocusable(true);
-        settingsButton.addActionListener((e) -> {
-          if (isGame) board.setVisible(false);
-          else if (isEdit) editor.setVisible(false);
-          else levelSelect.setVisible(false);
-            settings.setVisible(true);
-            Sound.playSfx(0);
-        });
-        
-        backButton = new JButton("Back");
-        backButton.setBounds(200, 430, 80, 80);
-        backButton.setVisible(false);
-        backButton.addActionListener((e) -> {
-          levelSelect.map--;
-          if (levelSelect.map == 1) backButton.setVisible(false);
-            nextButton.setVisible(true);
-            enterButton.setText(String.valueOf(levelSelect.map));
-            Sound.playSfx(0);
-        });
-        
-        nextButton = new JButton("Next");
-        nextButton.setBounds(1020, 430, 80, 80);
-        nextButton.setVisible(false);
-        nextButton.addActionListener((e) -> {
-          levelSelect.map++;
-          if (levelSelect.map == levelSelect.unlocked) nextButton.setVisible(false);
-            backButton.setVisible(true);
-            enterButton.setText(String.valueOf(levelSelect.map));
-            Sound.playSfx(0);
-        });
-        
-        enterButton = new JButton("0");
-        enterButton.setBounds(300, 250, 700, 400);
-        enterButton.addActionListener((e) -> {
-          newGame(levelSelect.map);
-          Sound.playSfx(0);
-        });
-
-        customLevelsButton = new JButton("Custom Levels");
-        customLevelsButton.setBounds(1140, 60, 100, 40);
-        customLevelsButton.setFocusable(true);
-        customLevelsButton.setVisible(true);
-        customLevelsButton.addActionListener((e) -> {
-          levelSelect.setVisible(false);
-          backButtonc.setVisible(true);
-          cLevelSelect.setVisible(true);
-          cLevelSelect.updateSaves();
-        });
-        
-        exitButton = new JButton("Exit");
-        exitButton.setBounds(10, 10, 80, 40);
-        exitButton.setFocusable(true);
-        exitButton.addActionListener((e) -> {
-          if (isGame) board.setVisible(true);
-          else if (isEdit) editor.setVisible(true);
-          else levelSelect.setVisible(true);
-          settings.setVisible(false);
-    		  Sound.playSfx(0);
-        });
-
-        exitNamerButton = new JButton("Exit");
-        exitNamerButton.setBounds(10, 10, 80, 40);
-        exitNamerButton.setFocusable(true);
-        exitNamerButton.addActionListener((e) -> {
-          namer.setVisible(false);
-          options.setVisible(true);
-    		  Sound.playSfx(0);
-        });
-
-        nameSaveButton = new JButton("Save");
-        nameSaveButton.setBounds(600, 350, 100, 40);
-        nameSaveButton.setFocusable(true);
-        nameSaveButton.addActionListener((e) -> {
-            editor.updateName();
-            saveButton.setEnabled(true);
-            namingButton.setText("Rename");
-    		  Sound.playSfx(0);
-        });
-
-        
-        returnButton = new JButton("Return");
-        returnButton.setBounds(600, 380, 100, 40);
-        returnButton.setFocusable(true);
-        returnButton.addActionListener((e) -> {
-          menu.setVisible(false);
-          board.setVisible(true);
-          Sound.playSfx(0);
-        });
-        
-        leaveButton = new JButton("Levels");
-        leaveButton.setBounds(600, 430, 100, 40);
-        leaveButton.setFocusable(true);
-        leaveButton.addActionListener((e) -> {
-          menu.setVisible(false);
-          exitGame();
-          Sound.playSfx(0);
-        });
-        
-        restartButton = new JButton("Restart");
-        restartButton.setBounds(600, 480, 100, 40);
-        restartButton.setFocusable(true);
-        restartButton.addActionListener((e) -> {
-          frame.remove(board);
-          menu.setVisible(false);
-          if (level != -1) newGame(level);
-          else newGame(board.map.map);
-          Sound.playSfx(0);
-        });
+//        menu.setLayout(null);
+//        menu.setBounds(0, 0, 1300, 900);
+//        menu.setVisible(false);
+//        
+//        options.setLayout(null);
+//        options.setBounds(0, 0, 1300, 900);
+//        options.setVisible(false);
+//        
+//        savePrompt.setLayout(null);
+//        savePrompt.setBounds(550, 375, 200, 150);
+//        savePrompt.setBorder(BorderFactory.createRaisedBevelBorder());
+//        savePrompt.setVisible(false);
+//
+//        namer.setLayout(null);
+//        namer.setBounds(0, 0, 1300, 900);
+//        namer.setVisible(false);
+//        
+//        JLabel saveMessage = new JLabel("Save changes?");
+//        saveMessage.setBounds(55, 10, 90, 40);
+//        
+//        yesButton = new JButton("Yes");
+//        yesButton.setBounds(15, 80, 80, 40);
+//        yesButton.setFocusable(true);
+//        yesButton.addActionListener((e) -> {
+//          editor.save();
+//          savePrompt.setVisible(false);
+//          exitEditor();
+//          if (isGame) newGame(editor.map.map);
+//          Sound.playSfx(0);
+//        });
+//        
+//        noButton = new JButton("No");
+//        noButton.setBounds(105, 80, 80, 40);
+//        noButton.setFocusable(true);
+//        noButton.addActionListener((e) -> {
+//        	savePrompt.setVisible(false);
+//        	// set editor map to last saved version of map
+//        	exitEditor();
+//            if (isGame) newGame(editor.map.map);
+//          Sound.playSfx(0);
+//        });
+//        
+//        savePrompt.add(saveMessage);
+//        savePrompt.add(yesButton);
+//        savePrompt.add(noButton);
+//        
+//        menuButton = new JButton("Menu");
+//        menuButton.setBounds(10, 10, 80, 40);
+//        menuButton.setFocusable(true);
+//        menuButton.addActionListener((e) -> {
+//          board.setVisible(false);
+//          menu.setVisible(true);
+//          Sound.playSfx(0);
+//        });
+//        
+//        editorButton = new JButton("Editor");
+//        editorButton.setBounds(1170, 810, 100, 40);
+//        editorButton.setFocusable(true);
+//        editorButton.addActionListener((e) -> {
+//          levelSelect.setVisible(false);
+//          newEditor();
+//          Sound.playSfx(0);
+//        });
+//        
+//        optionsButton = new JButton("Options");
+//        optionsButton.setBounds(10, 10, 80, 40);
+//        optionsButton.setFocusable(true);
+//        optionsButton.addActionListener((e) -> {
+//          editor.setVisible(false);
+//          options.setVisible(true);
+//          Sound.playSfx(0);
+//        });
+//        
+//        returnButtonEditor = new JButton("Return");
+//        returnButtonEditor.setBounds(600, 300, 100, 40);
+//        returnButtonEditor.setFocusable(true);
+//        returnButtonEditor.addActionListener((e) -> {
+//          options.setVisible(false);
+//          editor.setVisible(true);
+//          Sound.playSfx(0);
+//        });
+//        
+//        exitEditorButton = new JButton("Exit");
+//        exitEditorButton.setBounds(600, 350, 100, 40);
+//        exitEditorButton.setFocusable(true);
+//        exitEditorButton.addActionListener((e) -> {
+//          options.setVisible(false);
+//          if (!editor.saved) savePrompt.setVisible(true);
+//          else exitEditor();
+//          Sound.playSfx(0);
+//        });
+//        
+//        saveButton = new JButton("Save");
+//        saveButton.setBounds(600, 400, 100, 40);
+//        saveButton.setFocusable(true);
+//        saveButton.setEnabled(false);
+//        saveButton.addActionListener((e) -> {
+//          // save function in bson, add later
+//          // Debug.print("called");
+//        	saveButton.setEnabled(false);
+//          editor.save();
+//          Sound.playSfx(0);
+//        });
+//        
+//        discardButton = new JButton("Discard");
+//        discardButton.setBounds(600, 450, 100, 40);
+//        discardButton.setFocusable(true);
+//        discardButton.addActionListener((e) -> {
+//    		// discard function in bson or smth, add later
+//        	options.setVisible(false);
+//        	exitEditor();
+//    		Sound.playSfx(0);
+//        });
+//        
+//        playButton = new JButton("Play");
+//        playButton.setBounds(600, 500, 100, 40);
+//        playButton.setFocusable(true);
+//        playButton.addActionListener((e) -> {
+//    		// save first
+//        	// newgame() for custom levels or smth
+//        	options.setVisible(false);
+//        	if (!editor.saved) {
+//        		savePrompt.setVisible(true);
+//        		isGame = true;
+//        	}
+//        	else {
+//	        	// just exits for now, might keep
+//	        	exitEditor();
+//	        	newGame(editor.map.map);
+//        	}
+//    		Sound.playSfx(0);
+//        });
+//
+//        namingButton = new JButton("Name");
+//        namingButton.setBounds(200, 550, 100, 40);
+//        namingButton.setFocusable(true);
+//        namingButton.addActionListener((e) -> {
+//          options.setVisible(false);
+//          namer.setVisible(true);
+//    		  Sound.playSfx(0);
+//        });
+//        
+//        customNamer = new JTextField("choose a file name");
+//        customNamer.setFont(new Font("ocr a extended", Font.PLAIN, 15));
+//        customNamer.setBounds(400, 200, 600, 20);
+//        // customNamer.setVisible(true);
+//        customNamer.setFocusable(true);
+//        
+//        directoryButton = new JButton("Directory");
+//        directoryButton.setBounds(1140, 10, 100, 40);
+//        directoryButton.setFocusable(true);
+//        directoryButton.addActionListener((e) -> {
+//          levelSelect.setVisible(false);
+//          directory.setVisible(true);
+//          directory.displayButtons();
+//          Sound.playSfx(0);
+//        });
+//        
+//        exitDirectoryButton = new JButton("Exit");
+//        exitDirectoryButton.setBounds(10, 10, 80, 40);
+//        exitDirectoryButton.addActionListener((e) -> {
+//          levelSelect.setVisible(true);
+//          directory.setVisible(false);
+//          Sound.playSfx(0);
+//        });
+//        
+//        //settingsbutton
+//        ImageIcon icon = new ImageIcon("Assets\\settings.png");
+//        Image scaleImage = icon.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
+//        icon = new ImageIcon(scaleImage); // dw
+//        
+//        settingsButton = new JButton();
+//        settingsButton.setIcon(icon);
+//        settingsButton.setBounds(1250, 10, 40, 40);
+//        settingsButton.setFocusable(true);
+//        settingsButton.addActionListener((e) -> {
+//          if (isGame) board.setVisible(false);
+//          else if (isEdit) editor.setVisible(false);
+//          else levelSelect.setVisible(false);
+//            settings.setVisible(true);
+//            Sound.playSfx(0);
+//        });
+//        
+//        backButton = new JButton("Back");
+//        backButton.setBounds(200, 430, 80, 80);
+//        backButton.setVisible(false);
+//        backButton.addActionListener((e) -> {
+//          levelSelect.map--;
+//          if (levelSelect.map == 1) backButton.setVisible(false);
+//            nextButton.setVisible(true);
+//            enterButton.setText(String.valueOf(levelSelect.map));
+//            Sound.playSfx(0);
+//        });
+//        
+//        nextButton = new JButton("Next");
+//        nextButton.setBounds(1020, 430, 80, 80);
+//        nextButton.setVisible(false);
+//        nextButton.addActionListener((e) -> {
+//          levelSelect.map++;
+//          if (levelSelect.map == levelSelect.unlocked) nextButton.setVisible(false);
+//            backButton.setVisible(true);
+//            enterButton.setText(String.valueOf(levelSelect.map));
+//            Sound.playSfx(0);
+//        });
+//        
+//        enterButton = new JButton("0");
+//        enterButton.setBounds(300, 250, 700, 400);
+//        enterButton.addActionListener((e) -> {
+//          newGame(levelSelect.map);
+//          Sound.playSfx(0);
+//        });
+//        
+//        exitButton = new JButton("Exit");
+//        exitButton.setBounds(10, 10, 80, 40);
+//        exitButton.setFocusable(true);
+//        exitButton.addActionListener((e) -> {
+//          if (isGame) board.setVisible(true);
+//          else if (isEdit) editor.setVisible(true);
+//          else levelSelect.setVisible(true);
+//          settings.setVisible(false);
+//    		  Sound.playSfx(0);
+//        });
+//
+//        exitNamerButton = new JButton("Cancel");
+//        exitNamerButton.setBounds(400, 250, 80, 40);
+//        exitNamerButton.setFocusable(true);
+//        exitNamerButton.addActionListener((e) -> {
+//          namer.setVisible(false);
+//          options.setVisible(true);
+//    		  Sound.playSfx(0);
+//        });
+//
+//        nameSaveButton = new JButton("Ok");
+//        nameSaveButton.setBounds(500, 250, 80, 40);
+//        nameSaveButton.setFocusable(true);
+//        nameSaveButton.addActionListener((e) -> {
+//            editor.updateName();
+////            saveButton.setEnabled(true);
+//            namingButton.setText("Rename");
+//            namer.setVisible(false);
+//            options.setVisible(true);
+//    		  Sound.playSfx(0);
+//        });
+//
+//        
+//        returnButton = new JButton("Return");
+//        returnButton.setBounds(600, 380, 100, 40);
+//        returnButton.setFocusable(true);
+//        returnButton.addActionListener((e) -> {
+//          menu.setVisible(false);
+//          board.setVisible(true);
+//          Sound.playSfx(0);
+//        });
+//        
+//        leaveButton = new JButton("Levels");
+//        leaveButton.setBounds(600, 430, 100, 40);
+//        leaveButton.setFocusable(true);
+//        leaveButton.addActionListener((e) -> {
+//          menu.setVisible(false);
+//          exitGame();
+//          Sound.playSfx(0);
+//        });
+//        
+//        restartButton = new JButton("Restart");
+//        restartButton.setBounds(600, 480, 100, 40);
+//        restartButton.setFocusable(true);
+//        restartButton.addActionListener((e) -> {
+//          frame.remove(board);
+//          menu.setVisible(false);
+//          if (level != -1) newGame(level);
+//          else newGame(board.map.map);
+//          Sound.playSfx(0);
+//        });
         
         levelSelect.unlocked = Bson.getUnlocked();
         //tutorial
@@ -322,8 +325,8 @@ public class GameFrame {
         directory.loadSave(levelSelect.unlocked);
         
     	levelSelect.map = 1;
-    	enterButton.setText("1");
-    	if (levelSelect.unlocked > 1) nextButton.setVisible(true);
+    	levelSelect.enterButton.setText("1");
+    	if (levelSelect.unlocked > 1) levelSelect.nextButton.setVisible(true);
 
         AnimationHandeler.setLevelSelect(levelSelect);
 
@@ -332,57 +335,48 @@ public class GameFrame {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        levelSelect.add(backButton);
-        levelSelect.add(nextButton);
-        levelSelect.add(enterButton);
-        levelSelect.add(settingsButton);
-        levelSelect.add(directoryButton);
-        levelSelect.add(editorButton);
-        levelSelect.add(customLevelsButton);
-        
-        settings.add(exitButton);
-
-        cLevelSelect.add(backButtonc);
-        
-        directory.add(exitDirectoryButton);
-        
-        menu.add(returnButton);
-        menu.add(leaveButton);
-        menu.add(restartButton);
-        
-        options.add(saveButton);
-        options.add(discardButton);
-        options.add(exitEditorButton);
-        options.add(playButton);
-        options.add(returnButtonEditor);
-        options.add(namingButton);
-        
-        namer.add(customNamer);
-        namer.add(exitNamerButton);
-        namer.add(nameSaveButton);
+//        levelSelect.add(backButton);
+//        levelSelect.add(nextButton);
+//        levelSelect.add(enterButton);
+//        levelSelect.add(settingsButton);
+//        levelSelect.add(directoryButton);
+//        levelSelect.add(editorButton);
+//        
+//        settings.add(exitButton);
+//        
+//        directory.add(exitDirectoryButton);
+//        
+//        menu.add(returnButton);
+//        menu.add(leaveButton);
+//        menu.add(restartButton);
+//        
+//        options.add(saveButton);
+//        options.add(discardButton);
+//        options.add(exitEditorButton);
+//        options.add(playButton);
+//        options.add(returnButtonEditor);
+//        options.add(namingButton);
+//        
+//        namer.add(customNamer);
+//        namer.add(exitNamerButton);
+//        namer.add(nameSaveButton);
         // namer.add(saveButton);
-
-        // cLevelSelect.add(exit2231)
         
         frame.getContentPane().add(settings);
         frame.getContentPane().add(levelSelect);
-        frame.getContentPane().add(menu);
+//        frame.getContentPane().add(menu);
         frame.getContentPane().add(directory);
-        frame.getContentPane().add(options);
-        frame.getContentPane().add(namer);
-        frame.getContentPane().add(cLevelSelect);
-
-        Sound.init();
-        Sound.setMusicVolume(settings.musicVolumeLevel);
-        Sound.setSfxVolume(settings.sfxVolumeLevel);
+//        frame.getContentPane().add(options);
+//        frame.getContentPane().add(namer);
+//        frame.getContentPane().add(savePrompt);
     }
     
-    public void newGame(char[][] map) {
+    public static void newGame(char[][] map) {
     	board = new Board(map);
     	newGame();
     }
     
-    public void newGame(int map) {
+    public static void newGame(int map) {
     	level = map;
     	board = new Board(map);
     	newGame();
@@ -393,14 +387,14 @@ public class GameFrame {
      * 
      * @param map is the level selected
      */
-    public void newGame() {
+    public static void newGame() {
     	Sound.playMusic(1);
 //    	level = map;
     	isGame = true;
     	levelSelect.setVisible(false);
 //    	board = new Board(map);
-        board.add(settingsButton);
-        board.add(menuButton);
+//        board.add(settingsButton);
+//        board.add(menuButton);
         frame.getContentPane().add(board);
     	board.addMouseListener(new MouseListener() {
     		public void mouseClicked(MouseEvent e) {
@@ -426,8 +420,8 @@ public class GameFrame {
     			if (board.isWin && levelSelect.map == levelSelect.unlocked) {
     				levelSelect.unlocked++;
     				levelSelect.map++;
-    				if (levelSelect.map > 0) backButton.setVisible(true);
-    				enterButton.setText(String.valueOf(levelSelect.map));
+    				if (levelSelect.map > 0) levelSelect.backButton.setVisible(true);
+    				levelSelect.enterButton.setText(String.valueOf(levelSelect.map));
     				directory.add(levelSelect.unlocked);
     			}
 				if(board.isTutorial) {
@@ -442,7 +436,7 @@ public class GameFrame {
      * 
      */
     public static void exitGame(int map) {
-	    if (map != -1) Bson.rewrite("Map"+Integer.toString(map), Map.rewriteMapData(board.starCount, Integer.toString(map)));
+	    if (map != -1) Bson.writeClass("Map"+Integer.toString(map), Map.rewriteMapData(board.starCount, Integer.toString(map)), "Saves\\Levels.txt");
         exitGame();
     }
     
@@ -456,15 +450,15 @@ public class GameFrame {
     	isGame = false;
 //        board.setVisible(false);
 	    frame.remove(board);
-        levelSelect.add(settingsButton);
+//        levelSelect.add(settingsButton);
 	    levelSelect.setVisible(true);
     }
     
-    public void newEditor() {
+    public static void newEditor() {
     	isEdit = true;
     	editor = new Editor();
-    	editor.add(settingsButton);
-    	editor.add(optionsButton);
+//    	editor.add(settingsButton);
+//    	editor.add(optionsButton);
     	frame.getContentPane().add(editor);
     }
     
@@ -472,11 +466,11 @@ public class GameFrame {
     	isEdit = false;
 //        editor.setVisible(false);
 	    frame.remove(editor);
-        levelSelect.add(settingsButton);
+//        levelSelect.add(settingsButton);
 	    levelSelect.setVisible(true);
     }
     
     public static void setPlayButton(boolean visible) {
-    	playButton.setVisible(visible);
+    	editor.playButton.setVisible(visible);
     }
 }

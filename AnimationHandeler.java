@@ -117,7 +117,7 @@ public class AnimationHandeler {
         r -= (scalingFactor - frame * (scalingFactor/numFrames)) * Map.dr[Map.direct];
 
         graphics.drawImage(img, c, r, null);
-        GameFrame.settingsButton.requestFocus();
+//        GameFrame.settingsButton.requestFocus();
         if (frame >= numFrames) {
             board.isAnimate = false;
         }
