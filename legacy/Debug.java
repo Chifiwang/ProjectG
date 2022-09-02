@@ -1,3 +1,4 @@
+package legacy;
 /*  
     This code is just because I got annoyed with writing "System.out.println();" every single time lmao
     We can prob expand this for testing other things as well by creating new methods to test more specific

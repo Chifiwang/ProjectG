@@ -1,9 +1,11 @@
 import java.awt.*;
 import javax.swing.*;
 
+import legacy.Debug;
+
 public class LevelSelect extends JPanel {
 	
-	JButton settingsButton, backButton, nextButton, enterButton, directoryButton, editorButton;
+	JButton settingsButton, backButton, nextButton, enterButton, directoryButton/* , editorButton */;
 
     Image board;
     Image bg;
@@ -19,15 +21,17 @@ public class LevelSelect extends JPanel {
 
     public LevelSelect() {
     	
-    	editorButton = new JButton("Editor");
-        editorButton.setBounds(1170, 810, 100, 40);
-        editorButton.setFocusable(true);
-        editorButton.addActionListener((e) -> {
-          this.setVisible(false);
-          GameFrame.newEditor();
-          Sound.playSfx(0);
-        });
+    	// editorButton = new JButton("Editor");
+      //   editorButton.setBounds(1170, 810, 100, 40);
+      //   editorButton.setFocusable(true);
+      //   editorButton.addActionListener((e) -> {
+      //     this.setVisible(false);
+      //     GameFrame.newEditor();
+      //     Sound.playSfx(0);
+      //   });
         
+        this.setBackground(Color.BLACK);
+
         directoryButton = new JButton("Directory");
         directoryButton.setBounds(1140, 10, 100, 40);
         directoryButton.setFocusable(true);
@@ -53,8 +57,11 @@ public class LevelSelect extends JPanel {
             Sound.playSfx(0);
         });
         
-        backButton = new JButton("Back");
-        backButton.setBounds(200, 430, 80, 80);
+        backButton = new JButton();
+        backButton.setIcon((new ImageIcon("Assets\\leftScrollButton.png")));
+        backButton.setBackground(Color.BLACK);
+        // backButton.setBorder(BorderFactory.createEmptyBorder(4, 4, 2, 20));
+        backButton.setBounds(200, 350, 80, 240);
         backButton.setVisible(false);
         backButton.addActionListener((e) -> {
           this.map--;
@@ -64,8 +71,11 @@ public class LevelSelect extends JPanel {
             Sound.playSfx(0);
         });
         
-        nextButton = new JButton("Next");
-        nextButton.setBounds(1020, 430, 80, 80);
+        nextButton = new JButton();
+        nextButton.setIcon((new ImageIcon("Assets\\rightScrollButton.png")));
+        nextButton.setBackground(Color.BLACK);
+
+        nextButton.setBounds(1020, 350, 80, 240);
         nextButton.setVisible(false);
         nextButton.addActionListener((e) -> {
           this.map++;
@@ -82,8 +92,9 @@ public class LevelSelect extends JPanel {
           Sound.playSfx(0);
         });
     	
-    	this.setLayout(null);
-        this.setBounds(0, 0, 1300, 900);
+    	  this.setLayout(null);
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setBounds(0, 0, (int) size.getWidth(), (int) size.getHeight());
 //        Debug.print("hallo");
 
         ImageIcon board = new ImageIcon("Assets\\dead.png");
@@ -100,6 +111,6 @@ public class LevelSelect extends JPanel {
         this.add(enterButton);
         this.add(settingsButton);
         this.add(directoryButton);
-        this.add(editorButton);
+        // this.add(editorButton);
     }
 }

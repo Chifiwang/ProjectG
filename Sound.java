@@ -1,6 +1,8 @@
 import java.io.*;
 import javax.sound.sampled.*;
 
+import legacy.Debug;
+
 public class Sound {
 	static Clip levelMusic, gameMusic;
 	static int volume = 50;
@@ -54,7 +56,7 @@ public class Sound {
     	try {
     		sfx(sfx);
     	} catch (Exception e) {
-    		Debug.print("Sound effect could not play");
+    		System.err.println("Sound effect could not play");
     		e.printStackTrace();
     	}
     }

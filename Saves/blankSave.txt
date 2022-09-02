@@ -1,5 +1,5 @@
 Map0 {
-	"firstClear" : true
+	"firstClear" : false
 	"starsAchived" : 0
 	"col" : 11
 	"row" : 7
@@ -9,7 +9,7 @@ Map0 {
 }
 
 Map1 {
-    "firstClear" : true
+    "firstClear" : false
 	"starsAchived" : 0
 	"col" : 11
 	"row" : 7
@@ -19,7 +19,7 @@ Map1 {
 }
 
 Map2 {
-    "firstClear" : true
+    "firstClear" : false
 	"starsAchived" : 0
 	"col" : 11
 	"row" : 7
@@ -29,7 +29,7 @@ Map2 {
 }
 
 Map3 {
-    "firstClear" : true
+    "firstClear" : false
 	"starsAchived" : 0
 	"col" : 11
 	"row" : 7
@@ -39,7 +39,7 @@ Map3 {
 }
 
 Map4 {
-    "firstClear" : true
+    "firstClear" : false
 	"starsAchived" : 0
 	"col" : 11
 	"row" : 7
@@ -49,7 +49,7 @@ Map4 {
 }
 
 Map5 {
-    "firstClear" : true
+    "firstClear" : false
 	"starsAchived" : 0
 	"col" : 11
 	"row" : 7

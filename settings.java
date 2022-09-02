@@ -21,7 +21,7 @@ public class Settings extends JPanel {
         exitButton.setFocusable(true);
         exitButton.addActionListener((e) -> {
           if (GameFrame.isGame) GameFrame.board.setVisible(true);
-          else if (GameFrame.isEdit) GameFrame.editor.setVisible(true);
+        //   else if (GameFrame.isEdit) GameFrame.editor.setVisible(true);
           else GameFrame.levelSelect.setVisible(true);
           this.setVisible(false);
     		  Sound.playSfx(0);

@@ -95,21 +95,15 @@ public class Map {
      * @param id provides the class structure that needs updating
      * @return String returns the updated class structure
      */
-    public static String[] rewriteMapData(int starsAchived, String id) {
+    public static String[] rewriteMapData(boolean isWin, int starsAchived, String id) {
     	
     	String[] save = Bson.extractClassInfo(Bson.getClass(id, "Saves\\Levels.txt"));
-    	return Bson.writeContent(id, save[1], starsAchived == 0, starsAchived, Integer.parseInt(save[4]), Integer.parseInt(save[5]), save[6], Stream.of(save[7].split(", ")).mapToInt(Integer::parseInt).toArray(), Integer.parseInt(save[8]));
-    	
-//        String newData = Bson.getClass(id, "Saves\\Levels.txt");
-////        Debug.print(newData);
-//        newData = newData.replaceAll("true", "false");
-////        Debug.print(newData);
-//        newData = newData.replace(newData.substring(newData.indexOf("\n\t\"starsAchived\" : ") + "\n\t\"starsAchived\" : ".length() - 1, 
-//                  newData.indexOf("\n\t\"col\"")), " " +Integer.toString(Math.max(starsAchived, 
-//                  Integer.parseInt(newData.substring(newData.indexOf("\n\t\"starsAchived\" : ") + "\n\t\"starsAchived\" : ".length(), 
-//                  newData.indexOf("\n\t\"col\""))))));
-//                  
-////        Debug.print(newData);
-//        return newData;
+
+        save[0] = id;
+        save[1] = "level " + id;
+        save[2] = (isWin) ? "false" : "true";
+        save[3] = Integer.toString(starsAchived);
+
+    	return Bson.formatContent(save);
     }
 }

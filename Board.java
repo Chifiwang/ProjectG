@@ -1,5 +1,8 @@
 import java.awt.*;
 import javax.swing.*;
+
+import legacy.Debug;
+
 import java.awt.event.*;
 
 public class Board extends JPanel{
@@ -68,9 +71,12 @@ public class Board extends JPanel{
     }
     
     public void init() {
-    	
+        
+        this.setBackground(Color.BLACK);
+
     	menu.setLayout(null);
-        menu.setBounds(0, 0, 1300, 900);
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setBounds(0, 0, (int) size.getWidth(), (int) size.getHeight());
         menu.setVisible(false);
         
         menuButton = new JButton("Menu");
@@ -99,6 +105,7 @@ public class Board extends JPanel{
         });
         
         returnButton = new JButton("Return");
+        returnButton.setVisible(true);
         returnButton.setBounds(600, 380, 100, 40);
         returnButton.setFocusable(true);
         returnButton.addActionListener((e) -> {
@@ -108,6 +115,7 @@ public class Board extends JPanel{
         });
         
         leaveButton = new JButton("Levels");
+        leaveButton.setVisible(true);
         leaveButton.setBounds(600, 430, 100, 40);
         leaveButton.setFocusable(true);
         leaveButton.addActionListener((e) -> {
@@ -117,6 +125,7 @@ public class Board extends JPanel{
         });
         
         restartButton = new JButton("Restart");
+        restartButton.setVisible(true);
         restartButton.setBounds(600, 480, 100, 40);
         restartButton.setFocusable(true);
         restartButton.addActionListener((e) -> {
@@ -213,7 +222,7 @@ public class Board extends JPanel{
     public void paint(Graphics g) {
         
         if (init && isTutorial) {
-            Debug.print(level);
+            // Debug.print(level);
             TextEventHandler.initiateEvent(level, this);
             
             // Debug.print("called");

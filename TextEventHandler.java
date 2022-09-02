@@ -1,5 +1,8 @@
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
+import legacy.Debug;
+
 import java.awt.Graphics2D;
 
 public class TextEventHandler {

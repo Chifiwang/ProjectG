@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import legacy.Debug;
 
 public class Bson {
     public static final int CLASS_LENGTH = 9;
@@ -22,19 +23,11 @@ public class Bson {
         "   blockCount : "
     };
     
-    public static String[] writeContent(String id, String name, Boolean firstClear, int starsAchived, int col, int row, String map, int[] starBounds, int blockCount) {
-        String[] content = TEMPLATE_CLASS;
-        String temp;
+    public static String[] formatContent(String[] content) {
 
-        content[0] += id + ";\n";
-        content[1] += name + ";\n";
-        content[2] += (firstClear) ? "true" : "false" + ";\n";
-        content[3] += Integer.toString(starsAchived) + ";\n";
-        content[4] += Integer.toString(col) + ";\n";
-        content[5] += Integer.toString(row) + ";\n";
-        content[6] += map + ";\n";
-        content[7] += (temp = Arrays.toString(starBounds)).substring(1, temp.length() - 1) + ";\n";
-        content[8] += Integer.toString(blockCount) + ";\n";
+        for (int i = 0; i < content.length; i++) {
+            content[i] = TEMPLATE_CLASS[i] + content[i] + ";\n";
+        }
 
         return content;
     }
@@ -166,7 +159,7 @@ public class Bson {
         String[] temp = classCompressed.split(";\n");
 
         for(int i = 0; i < CLASS_LENGTH; i++) {
-            System.out.println(temp[i] + ", " + CLASS_INFO_POINTERS[i]);
+            // System.out.println(temp[i] + ", " + CLASS_INFO_POINTERS[i]);
             classInfo[i] = temp[i].substring(CLASS_INFO_POINTERS[i]);
         }
 
@@ -194,10 +187,9 @@ public class Bson {
         try {
             FileReader reader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(reader);
-
             while ((line = bufferedReader.readLine()) != null) {
                 
-            	if (line.indexOf("firstClear") != -1) unlocked++;
+            	if (line.indexOf("firstClear") != -1) unlocked += (unlocked < numClasses("Saves\\Levels.txt") - 2) ? 1 : 0;
             	if (line.indexOf("true") != -1) break;
             }
 

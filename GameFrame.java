@@ -1,6 +1,13 @@
 import javax.swing.JFrame;
+
+import legacy.Debug;
+// import legacy.Editor;
+
+import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 public class GameFrame {
     Debug debug = new Debug();
@@ -10,20 +17,24 @@ public class GameFrame {
     static LevelSelect levelSelect;
     static Settings settings;
     static Directory directory;
-    static Editor editor;
-    static CustomLevelSelect cLevelSelect;
+    // static Editor editor;
+    // static CustomLevelSelect cLevelSelect;
 
     static int level = -1;
     static int scaleFactor = 128;
     static boolean isGame = false, isEdit = false, isName = false;
+    static Dimension size;
 
     GameFrame() throws Exception {
-    	
+    	Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+
         frame = new JFrame("ProjectG");
         levelSelect = new LevelSelect(); 
         settings = new Settings();
         directory = new Directory();
-        cLevelSelect = new CustomLevelSelect();
+        // cLevelSelect = new CustomLevelSelect();
+        
+        frame.setBackground(Color.BLACK);
 
         Sound.init();
         Sound.setMusicVolume(settings.musicVolumeLevel);
@@ -32,25 +43,26 @@ public class GameFrame {
         levelSelect.unlocked = Bson.getUnlocked();
         
         if (levelSelect.unlocked == 0) newGame(0);
+        else {
+            directory.loadSave(levelSelect.unlocked);
+        
+            levelSelect.map = 1;
+            levelSelect.enterButton.setText("1");
+        }
 
-        directory.loadSave(levelSelect.unlocked);
-        
-    	levelSelect.map = 1;
-    	levelSelect.enterButton.setText("1");
-        
     	if (levelSelect.unlocked > 1) levelSelect.nextButton.setVisible(true);
 
         AnimationHandeler.setLevelSelect(levelSelect);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(scaleFactor*11, scaleFactor*7); // apparently we need to make the frame bigger than the desired size
+        frame.setSize((int) size.getWidth(), (int) size.getHeight()); // apparently we need to make the frame bigger than the desired size
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         
         frame.getContentPane().add(settings);
         frame.getContentPane().add(levelSelect);
         frame.getContentPane().add(directory);
-        frame.getContentPane().add(cLevelSelect);
+        // frame.getContentPane().add(cLevelSelect);
     }
     
     public static void newGame(char[][] map) {
@@ -90,11 +102,15 @@ public class GameFrame {
     	     * @param e
     	     */
     		public void mouseReleased(MouseEvent e) {
+                Debug.print((levelSelect.unlocked + 1 < Bson.numClasses("Saves\\Levels.txt") - 2) ? 1 : 0);
+                Debug.print(board.isWin);
+                Debug.print(levelSelect.map + " " + levelSelect.unlocked);
+                Debug.print("-----------------------");
     			if (board.isWin || board.isLose) exitGame(level);
     			if (board.isWin && levelSelect.map == levelSelect.unlocked) {
-
-    				levelSelect.unlocked++;
-    				levelSelect.map++;
+                    // Debug.print(Bson.numClasses("Saves\\Levels.txt") - 2 + " " + levelSelect.unlocked + 1);
+    				levelSelect.unlocked += (levelSelect.unlocked + 1 < Bson.numClasses("Saves\\Levels.txt") - 1) ? 1 : 0;
+    				levelSelect.map += (levelSelect.map + 1 < Bson.numClasses("Saves\\Levels.txt") - 1) ? 1 : 0;
 
     				if (levelSelect.map > 0) levelSelect.backButton.setVisible(true);
 
@@ -114,7 +130,7 @@ public class GameFrame {
      * 
      */
     public static void exitGame(int map) {
-	    if (map != -1) Bson.writeClass("Map"+Integer.toString(map), Map.rewriteMapData(board.starCount, Integer.toString(map)), "Saves\\Levels.txt");
+	    if (map != -1) Bson.writeClass("Map"+Integer.toString(map), Map.rewriteMapData(board.isWin, board.starCount, Integer.toString(map)), "Saves\\Levels.txt");
         exitGame();
     }
     
@@ -131,21 +147,21 @@ public class GameFrame {
 	    levelSelect.setVisible(true);
     }
     
-    public static void newEditor() {
-    	isEdit = true;
+    // public static void newEditor() {
+    // 	isEdit = true;
 
-    	editor = new Editor();
-    	frame.getContentPane().add(editor);
-    }
+    // 	editor = new Editor();
+    // 	frame.getContentPane().add(editor);
+    // }
     
-    public static void exitEditor() {
-    	isEdit = false;
+    // public static void exitEditor() {
+    // 	isEdit = false;
         
-	    frame.remove(editor);
-	    levelSelect.setVisible(true);
-    }
+	//     frame.remove(editor);
+	//     levelSelect.setVisible(true);
+    // }
     
-    public static void setPlayButton(boolean visible) {
-    	editor.playButton.setVisible(visible);
-    }
+    // public static void setPlayButton(boolean visible) {
+    // 	editor.playButton.setVisible(visible);
+    // }
 }

@@ -1,4 +1,7 @@
 import javax.swing.ImageIcon;
+
+import legacy.Debug;
+
 import java.awt.Image;
 
 public class Block {
