@@ -6,9 +6,14 @@ import java.util.stream.Stream;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JButton;
 
 public class CustomLevelSelect extends JPanel{
     JComboBox<String> select;
+
+    JButton cLevelSelectButton, 
+            exitButton, test;
+
     String[] saves;
     String currentMap;
     char[][] map;
@@ -18,12 +23,46 @@ public class CustomLevelSelect extends JPanel{
     int[] starBounds;
 
     public CustomLevelSelect() {
+
         super();
+
 		this.setBounds(0, 0, 800, 500);
 		this.setLayout(null);
         this.setVisible(false);
         this.setFocusable(true);
         this.requestFocus();
+
+        cLevelSelectButton = new JButton("Custom");
+            cLevelSelectButton.setBounds(1140, 60, 100, 40);
+            cLevelSelectButton.setFocusable(true);
+            cLevelSelectButton.addActionListener((e) -> {
+                // updateSaves();
+
+                this.setVisible(true);
+                GameFrame.levelSelect.setVisible(false);
+                Sound.playSfx(0);
+            });
+
+        exitButton = new JButton("exit");
+            exitButton.setBounds(1140, 60, 100, 40);
+            exitButton.setFocusable(true);
+            exitButton.addActionListener((e) -> {
+                this.setVisible(false);
+                GameFrame.levelSelect.setVisible(true);
+                Sound.playSfx(0);
+            });
+
+        test = new JButton("test");
+            test.setBounds(1140, 10, 100, 40);
+            test.setFocusable(true);
+            test.addActionListener((e) -> {
+                updateSaves();
+                Sound.playSfx(0);
+            });
+
+        GameFrame.levelSelect.add(cLevelSelectButton);
+        this.add(exitButton);
+        this.add(test);
 
         saves = Bson.getAllClassNames("Saves\\CustomLevels.txt");
         select = new JComboBox<>(saves);
@@ -43,7 +82,7 @@ public class CustomLevelSelect extends JPanel{
         Graphics2D g2D = (Graphics2D) g;
 
         
-        drawMap(g2D);
+        // drawMap(g2D);
 
 
 
@@ -79,33 +118,17 @@ public class CustomLevelSelect extends JPanel{
     public void updateSaves() {
         
         select.removeAllItems();
-        for (String map : Bson.getAllClassNames("Saves\\CustomLevels.txt")) {
+        String[] temp = Bson.getAllClassNames("Saves\\CustomLevels.txt");
+        for (String map : temp) {
             select.addItem(map);
         }
-
-        updateSelection();
     }
 
     public void updateSelection() {
-        String[] save = Bson.extractClassInfo(Bson.getClass("MapC" + String.valueOf(select.getSelectedIndex()), "Saves\\CustomLevels.txt"));
+        String[] saveInfo = Bson.extractClassInfo(Bson.getClass(Integer.toString(select.getSelectedIndex()), "Saves\\CustomLevels.txt"));
 
-        if(save.length > 0) {
-            int col = Integer.parseInt(save[4]);
-            int row = Integer.parseInt(save[5]);
-            String mapString = save[6];
-
-            map = new char[row][col];
-            for(int i = 0; i < col*row; i++)
-                map[i / col][i % col] = mapString.charAt(i);
-
-            map_move = new boolean[row][col];
-
-            starBounds = Stream.of(save[7].split(", ")).mapToInt(Integer::parseInt).toArray();
-
-            blockCount = Integer.parseInt(save[8]);
-
-            firstGame = save[2].contains("true");
-
+        for (String info : saveInfo) {
+            Debug.print(info);
         }
     }
 }

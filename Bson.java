@@ -21,13 +21,6 @@ public class Bson {
         "   starBounds : ",
         "   blockCount : "
     };
-
-    public static void main(String[] args) {
-        // System.out.println(getClass("1", "Saves\\Levels.txt"));
-        for (int i = 0; i < 2; i++) {
-            System.out.println(getAllClassNames("Saves\\Levels.txt")[i]);
-        }
-    }
     
     public static String[] writeContent(String id, String name, Boolean firstClear, int starsAchived, int col, int row, String map, int[] starBounds, int blockCount) {
         String[] content = TEMPLATE_CLASS;
@@ -43,17 +36,17 @@ public class Bson {
         content[7] += (temp = Arrays.toString(starBounds)).substring(1, temp.length() - 1) + ";\n";
         content[8] += Integer.toString(blockCount) + ";\n";
 
-        // for(String a : content) {
-        //     System.out.println(a);
-        // }
         return content;
     }
 
     public static void writeClass(String id, String[] content, String filePath) {
         File file = new File(filePath);
 
+        boolean isCustom = filePath.contains("CustomLevels.txt");
+        boolean isDel = false;
         String line;
         String __FileContentCache__ = "";
+        int c = 0;
 
         try {
             FileReader reader = new FileReader(file);
@@ -61,21 +54,38 @@ public class Bson {
             
             while ((line = bufferedReader.readLine()) != null) {
                 
-                if (id != null && line.contains(id) && line.contains("Map")) {
+                if (content == null && id != null && line.contains(id) && line.contains("Map")) {
+                    isDel = true;
+                    line = "";
+                    for (int i = 1; i < TEMPLATE_CLASS.length; i++) {
+                        bufferedReader.readLine();
+                    } 
+                } else if (id != null && line.contains(id) && line.contains("Map")) {
                     
-                    for (String lines : content) {
-                        __FileContentCache__ += lines;
-                        line = bufferedReader.readLine();
+                    for (int i = 0; i < CLASS_LENGTH; i++) {
+                        __FileContentCache__ += content[i];
+                        
+                        bufferedReader.readLine();
                     }
-
+                    c++;
                 }
 
-                if (line != null) __FileContentCache__ += line + "\n";
-                
+                if (line != null && line.contains("Map")) {
+                    
+                    // if (content == null) {
+                        __FileContentCache__ += line.substring(0, CLASS_INFO_POINTERS[0]) + (isCustom ? "C" : "") + c + ";\n";
+                        line = bufferedReader.readLine();
+                    // }
+                    c++;
+                } 
+
+                if (line != null && !isDel ) __FileContentCache__ += line + "\n";
+                else isDel = false;
             } 
+
             if (id == null) {
-                
-                for (int i = 0; i < CLASS_LENGTH; i++) {
+                __FileContentCache__ += content[0].substring(0, CLASS_INFO_POINTERS[0]) + (isCustom ? "C" : "") + c + ";\n";
+                for (int i = 1; i < CLASS_LENGTH; i++) {
                     __FileContentCache__ += content[i];
                 }
 
@@ -147,6 +157,7 @@ public class Bson {
             System.err.println("File Not Found");
         }
 
+        // Debug.print(("\""+__FileContentCache__)+"\"");
         return __FileContentCache__;
     }
 
@@ -155,7 +166,7 @@ public class Bson {
         String[] temp = classCompressed.split(";\n");
 
         for(int i = 0; i < CLASS_LENGTH; i++) {
-            // System.out.println(temp[i] + ", " + CLASS_INFO_POINTERS[i]);
+            System.out.println(temp[i] + ", " + CLASS_INFO_POINTERS[i]);
             classInfo[i] = temp[i].substring(CLASS_INFO_POINTERS[i]);
         }
 
@@ -166,7 +177,7 @@ public class Bson {
 
         String[] names = new String[numClasses(filePath)];
 
-        for (int i = 0; i < numClasses(filePath); i++) {
+        for (int i = 0; i < numClasses(filePath) - 1; i++) {
             names[i] = extractClassInfo(getClass(String.valueOf(i), filePath))[1];
         }
 

@@ -16,3 +16,4 @@ Map1;
    map :                                       p u                                    ;
    starBounds : 100, 100, 100;
    blockCount : 1;
+Map2;
