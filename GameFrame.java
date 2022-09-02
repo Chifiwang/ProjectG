@@ -102,10 +102,10 @@ public class GameFrame {
     	     * @param e
     	     */
     		public void mouseReleased(MouseEvent e) {
-                Debug.print((levelSelect.unlocked + 1 < Bson.numClasses("Saves\\Levels.txt") - 2) ? 1 : 0);
-                Debug.print(board.isWin);
-                Debug.print(levelSelect.map + " " + levelSelect.unlocked);
-                Debug.print("-----------------------");
+                // Debug.print((levelSelect.unlocked + 1 < Bson.numClasses("Saves\\Levels.txt") - 2) ? 1 : 0);
+                // Debug.print(board.isWin);
+                // Debug.print(levelSelect.map + " " + levelSelect.unlocked);
+                // Debug.print("-----------------------");
     			if (board.isWin || board.isLose) exitGame(level);
     			if (board.isWin && levelSelect.map == levelSelect.unlocked) {
                     // Debug.print(Bson.numClasses("Saves\\Levels.txt") - 2 + " " + levelSelect.unlocked + 1);

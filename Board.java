@@ -43,6 +43,7 @@ public class Board extends JPanel{
     int scalingFactor = GameFrame.scaleFactor;
     int moveCount = 0;
     int starCount = 3;
+    int offset;
     int level;
 
     /* Timer values and logs */
@@ -71,11 +72,12 @@ public class Board extends JPanel{
     }
     
     public void init() {
-        
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        offset = (int) (size.getWidth() - 1408)/2;
         this.setBackground(Color.BLACK);
 
     	menu.setLayout(null);
-        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        
         this.setBounds(0, 0, (int) size.getWidth(), (int) size.getHeight());
         menu.setVisible(false);
         
@@ -96,7 +98,7 @@ public class Board extends JPanel{
         
         settingsButton = new JButton();
         settingsButton.setIcon(icon);
-        settingsButton.setBounds(1250, 10, 40, 40);
+        settingsButton.setBounds((int) size.getWidth() - 100, 10, 40, 40);
         settingsButton.setFocusable(true);
         settingsButton.addActionListener((e) -> {
         	this.setVisible(false);
@@ -169,7 +171,7 @@ public class Board extends JPanel{
         ImageIcon end = new ImageIcon("Assets\\end.png");
         this.board = board.getImage().getScaledInstance(900, 500, Image.SCALE_DEFAULT);
         this.bg = background.getImage().getScaledInstance(1300, 900, Image.SCALE_DEFAULT);
-        this.end = end.getImage().getScaledInstance(1300, 900, Image.SCALE_DEFAULT);
+        this.end = end.getImage().getScaledInstance((int)size.getWidth(), (int)size.getHeight(), Image.SCALE_DEFAULT);
 
         player.putInputMap(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0, false), up);
         player.putInputMap(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, false), down);
@@ -237,13 +239,13 @@ public class Board extends JPanel{
         for (int r = 0; r < map.map.length; r++) {
             for (int c = 0; c < map.map[r].length; c++) {
                 if (!(r == 0 || c == 0 || r == map.map.length - 1 || c == map.map[0].length - 1))
-                    g2D.drawImage(map.tileImg, c*scalingFactor, r*scalingFactor, null);
+                    g2D.drawImage(map.tileImg, c*scalingFactor + offset, r*scalingFactor, null);
                 switch(map.map[r][c]) {
                     case 'p':
                         if (map.map_move[r][c])
-                            AnimationHandeler.queueAnimation(0, c*scalingFactor, r*scalingFactor);
+                            AnimationHandeler.queueAnimation(0, c*scalingFactor + offset, r*scalingFactor);
                         else
-                            g2D.drawImage(Player.getImage(), c*scalingFactor, r*scalingFactor, null);
+                            g2D.drawImage(Player.getImage(), c*scalingFactor + offset, r*scalingFactor, null);
                         break;
 
                     case ' ':
@@ -251,9 +253,9 @@ public class Board extends JPanel{
 
                     default:
                         if (map.map_move[r][c])
-                            AnimationHandeler.queueAnimation(0, c*scalingFactor, r*scalingFactor);
+                            AnimationHandeler.queueAnimation(0, c*scalingFactor + offset, r*scalingFactor);
                         else
-                            g2D.drawImage(Block.getImage(map.map[r][c]), c*scalingFactor, r*scalingFactor, null);
+                            g2D.drawImage(Block.getImage(map.map[r][c]), c*scalingFactor + offset, r*scalingFactor, null);
                         break;
                 }
             }           
@@ -305,8 +307,8 @@ public class Board extends JPanel{
             g2D.drawImage(end, 0, 0, null);
             
         } else if (!isCustom) {
-            g2D.drawString("Num moves: " + moveCount + " Num stars: " + starCount, 7 * GameFrame.scaleFactor, 13 * GameFrame.scaleFactor/2);
-            g2D.drawString("Num moves to keep " + starCount + " stars: " + (Map.starBounds[3 - starCount] - moveCount - 1), 7 * GameFrame.scaleFactor, GameFrame.scaleFactor/2);
+            g2D.drawString("Num moves: " + moveCount + " Num stars: " + starCount, 9 * GameFrame.scaleFactor, GameFrame.scaleFactor/2 - 35);
+            g2D.drawString("Num moves to keep " + starCount + " stars: " + (Map.starBounds[3 - starCount] - moveCount - 1), 9 * GameFrame.scaleFactor, GameFrame.scaleFactor/2 - 20);
         }
 
         /* initialization repaint to play tutorial */

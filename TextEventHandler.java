@@ -1,5 +1,7 @@
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import java.awt.*;
+import javax.swing.*;
 
 import legacy.Debug;
 
@@ -33,6 +35,8 @@ public class TextEventHandler {
      * @param g2D provides the class to display the images with
      */
     public static void gameTutorial(Integer[] key, Graphics2D g2D) {
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        int offset = (int) (size.getWidth() - 1408)/2;
         int x = 200, y = 660;
         g2D.drawImage(textBox1.getImage(), 200, 653, null);
 
@@ -41,10 +45,10 @@ public class TextEventHandler {
             case 1:
                 buff = tutorial1_text.substring(0, AnimationHandeler.frame).split("\n");
                 if (AnimationHandeler.frame >= tutorial1_text.indexOf("character")) {
-                    g2D.drawImage(Player.getImage(), 5*GameFrame.scaleFactor, 3*GameFrame.scaleFactor, null);
+                    g2D.drawImage(Player.getImage(), 5*GameFrame.scaleFactor + offset, 3*GameFrame.scaleFactor, null);
                 }
                 if (AnimationHandeler.frame >= tutorial1_text.indexOf("box?")) {
-                    g2D.drawImage(Block.getImage('u'), 7*GameFrame.scaleFactor, 3*GameFrame.scaleFactor, null);
+                    g2D.drawImage(Block.getImage('u'), 7*GameFrame.scaleFactor + offset, 3*GameFrame.scaleFactor, null);
                 }
                 for(int i = 0; i < buff.length; i++) {
                     g2D.drawString(buff[i], x, y += g2D.getFontMetrics().getHeight());
@@ -53,7 +57,7 @@ public class TextEventHandler {
             case 2:
                 buff = tutorial2_text.substring(0, AnimationHandeler.frame).split("\n");
                 if (AnimationHandeler.frame >= tutorial1_text.indexOf("block")) {
-                    g2D.drawImage(Block.getImage('x'), 7*GameFrame.scaleFactor, 3*GameFrame.scaleFactor, null);
+                    g2D.drawImage(Block.getImage('x'), 7*GameFrame.scaleFactor + offset, 3*GameFrame.scaleFactor, null);
                 }
                 for(int i = 0; i < buff.length; i++) {
                     g2D.drawString(buff[i], x, y += g2D.getFontMetrics().getHeight());
