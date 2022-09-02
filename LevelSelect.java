@@ -67,7 +67,7 @@ public class LevelSelect extends JPanel {
         this.map--;
         info.setText("Level " + map);
         info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass(Integer.toString(map), "Saves\\Levels.txt"))[3]+"stars.png"));
-        if (this.map == 1) backButton.setVisible(false);
+        if (this.map <= 1) backButton.setVisible(false);
           nextButton.setVisible(true);
           enterButton.setText(String.valueOf(this.map));
           Sound.playSfx(0);

@@ -1,7 +1,7 @@
 Map0;
    name : level 0;
-   firstClear : true;
-   starsAchived : 0;
+   firstClear : false;
+   starsAchived : 3;
    col : 11;
    row : 7;
    map :                                       p u                                    ;
