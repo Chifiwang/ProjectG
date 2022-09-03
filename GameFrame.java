@@ -65,23 +65,25 @@ public class GameFrame {
         // frame.getContentPane().add(cLevelSelect);
     }
     
-    public static void newGame(char[][] map) {
-    	board = new Board(map);
-    	newGame();
-    }
+    // public static void newGame(char[][] map) {
+    // 	board = new Board(map);
+    // 	newGame();
+    // }
     
-    public static void newGame(int map) {
-    	level = map;
-    	board = new Board(map);
-    	newGame();
-    }
+    // public static void newGame(int map) {
+    // 	level = map;
+    // 	board = new Board(map);
+    // 	newGame();
+    // }
     
     /** 
      * creates a new instance of board whenever the player enters a level.
      * 
      * @param map is the level selected
      */
-    public static void newGame() {
+    public static void newGame(int map) {
+        level = map;
+    	board = new Board(map);
     	Sound.playMusic(1);
 
     	isGame = true;
@@ -112,8 +114,8 @@ public class GameFrame {
     				levelSelect.unlocked += (levelSelect.unlocked + 1 < Bson.numClasses("Saves\\Levels.txt") - 1) ? 1 : 0;
     				levelSelect.map += (levelSelect.map + 1 < Bson.numClasses("Saves\\Levels.txt") - 1) ? 1 : 0;
 
-    				if (levelSelect.map > 0) levelSelect.backButton.setVisible(true);
-
+    				if (levelSelect.map > 1) levelSelect.backButton.setVisible(true);
+                    levelSelect.info.setText("Level " + levelSelect.map);
     				levelSelect.enterButton.setText(String.valueOf(levelSelect.map));
     				directory.add(levelSelect.unlocked);
     			}

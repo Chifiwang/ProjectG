@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.*;
+import javax.swing.*;
 
 public class AnimationHandeler {
 
@@ -99,11 +101,13 @@ public class AnimationHandeler {
      * @param key provides the coordinates of the animation
      */
     public static void drawGame(Graphics2D graphics, Integer[] key) {
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        int offset = (int) (size.getWidth() - 1408)/2;
         int c = key[1]; 
         int r = key[2]; 
         Image img;
         
-        char type = map.map[r/board.scalingFactor][c/board.scalingFactor];
+        char type = map.map[r/board.scalingFactor][(c - offset)/board.scalingFactor];
         
         switch (type) {
             case 'p':

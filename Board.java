@@ -1,7 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 
-import legacy.Debug;
+//import legacy.Debug;
 
 import java.awt.event.*;
 
@@ -64,12 +64,12 @@ public class Board extends JPanel{
         init();
     }
     
-    public Board(char[][] map) {
-    	this.level = -1;
-    	this.map = new Map(map);
-		isCustom = true;
-		init();
-    }
+    // public Board(char[][] map) {
+    // 	this.level = -1;
+    // 	this.map = new Map(map);
+	// 	isCustom = true;
+	// 	init();
+    // }
     
     public void init() {
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
@@ -79,14 +79,16 @@ public class Board extends JPanel{
     	menu.setLayout(null);
         
         this.setBounds(0, 0, (int) size.getWidth(), (int) size.getHeight());
-        menu.setVisible(false);
+//        menu.setVisible(false);
         
         menuButton = new JButton("Menu");
         menuButton.setBounds(10, 10, 80, 40);
         menuButton.setFocusable(true);
         menuButton.addActionListener((e) -> {
           this.setVisible(false);
-          menu.setVisible(true);
+//          menu.setVisible(true);
+// bruh
+          GameFrame.frame.getContentPane().add(menu);
           Sound.playSfx(0);
           menu.repaint();
         });
@@ -108,33 +110,39 @@ public class Board extends JPanel{
         
         returnButton = new JButton("Return");
         returnButton.setVisible(true);
-        returnButton.setBounds(600, 380, 100, 40);
+        returnButton.setBounds((int) (size.getWidth() - 100)/2, 380, 100, 40);
         returnButton.setFocusable(true);
         returnButton.addActionListener((e) -> {
-          menu.setVisible(false);
+//          menu.setVisible(false);
+//bruh
+            GameFrame.frame.getContentPane().remove(menu);
           this.setVisible(true);
           Sound.playSfx(0);
         });
         
         leaveButton = new JButton("Levels");
         leaveButton.setVisible(true);
-        leaveButton.setBounds(600, 430, 100, 40);
+        leaveButton.setBounds((int) (size.getWidth() - 100)/2, 430, 100, 40);
         leaveButton.setFocusable(true);
         leaveButton.addActionListener((e) -> {
-          menu.setVisible(false);
+//          menu.setVisible(false);
+        	//bruh
+        	GameFrame.frame.getContentPane().remove(menu);
           GameFrame.exitGame();
           Sound.playSfx(0);
         });
         
         restartButton = new JButton("Restart");
         restartButton.setVisible(true);
-        restartButton.setBounds(600, 480, 100, 40);
+        restartButton.setBounds((int) (size.getWidth() - 100)/2, 480, 100, 40);
         restartButton.setFocusable(true);
         restartButton.addActionListener((e) -> {
           GameFrame.frame.remove(this);
           menu.setVisible(false);
+        //bruh
+          GameFrame.frame.getContentPane().remove(menu);
           if (level != -1) GameFrame.newGame(level);
-          else GameFrame.newGame(this.map.map);
+          else GameFrame.newGame(level);
           Sound.playSfx(0);
         });
         
@@ -145,7 +153,7 @@ public class Board extends JPanel{
         menu.add(restartButton);
         
 //        this.add(menu);
-        GameFrame.frame.getContentPane().add(menu);
+//        GameFrame.frame.getContentPane().add(menu);
         this.add(menuButton);
         this.add(settingsButton);
         
