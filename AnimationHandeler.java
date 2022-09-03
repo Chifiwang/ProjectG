@@ -1,9 +1,10 @@
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
+
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Toolkit;
 
 public class AnimationHandeler {
 
@@ -22,6 +23,7 @@ public class AnimationHandeler {
     static Map map;
 
     static int canvas = -1;
+    static int offset = (int) (GameFrame.size.getWidth() - 1408)/2;
 
     /** 
      * queues an event into the event queue mechanism
@@ -101,8 +103,6 @@ public class AnimationHandeler {
      * @param key provides the coordinates of the animation
      */
     public static void drawGame(Graphics2D graphics, Integer[] key) {
-        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-        int offset = (int) (size.getWidth() - 1408)/2;
         int c = key[1]; 
         int r = key[2]; 
         Image img;

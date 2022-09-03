@@ -27,17 +27,17 @@ public class Map {
         
     }
     
-    public Map(char[][] map) {
-    	this.map = map;
-    	map_move = new boolean[7][11];
-    	firstGame = false;
-    	blockCount = 0;
-    	for (int i = 1; i < 6; i++) {
-    		for (int j = 1; j < 10; j++) {
-    			if (map[i][j] != ' ' && map[i][j] != 'p' && map[i][j] != 'x') blockCount++;
-    		}
-    	}
-    }
+//    public Map(char[][] map) {
+//    	this.map = map;
+//    	map_move = new boolean[7][11];
+//    	firstGame = false;
+//    	blockCount = 0;
+//    	for (int i = 1; i < 6; i++) {
+//    		for (int j = 1; j < 10; j++) {
+//    			if (map[i][j] != ' ' && map[i][j] != 'p' && map[i][j] != 'x') blockCount++;
+//    		}
+//    	}
+//    }
     
     /** 
      * finds the player coordinates for player initialization.
@@ -63,7 +63,7 @@ public class Map {
 
     public void loadSave(String id) {
 
-        String[] save = Bson.extractClassInfo(Bson.getClass(id, "Saves\\Levels.txt"));
+        String[] save = Bson.extractClassInfo(Bson.getClass("Map" + id, "Saves\\Levels.txt"));
 
         if(save.length > 0) {
             int col = Integer.parseInt(save[4]);
@@ -97,11 +97,13 @@ public class Map {
      */
     public static String[] rewriteMapData(boolean isWin, int starsAchived, String id) {
     	
-    	String[] save = Bson.extractClassInfo(Bson.getClass(id, "Saves\\Levels.txt"));
+    	String[] save = Bson.extractClassInfo(Bson.getClass("Map" + id, "Saves\\Levels.txt"));
 
         save[0] = id;
         save[1] = "level " + id;
-        save[2] = (isWin) ? "false" : "true";
+//        save[2] = (isWin) ? "false" : "true";
+        save[2] = String.valueOf(!isWin);
+//        save[2] = String.valueOf(isWin);
         save[3] = Integer.toString(starsAchived);
 
     	return Bson.formatContent(save);

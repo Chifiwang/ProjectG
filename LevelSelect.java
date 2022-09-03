@@ -1,7 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 
-import legacy.Debug;
+//import legacy.Debug;
 
 public class LevelSelect extends JPanel {
 	
@@ -66,8 +66,9 @@ public class LevelSelect extends JPanel {
       backButton.addActionListener((e) -> {
         this.map--;
         info.setText("Level " + map);
-        info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass(Integer.toString(map), "Saves\\Levels.txt"))[3]+"stars.png"));
-        if (this.map <= 1) backButton.setVisible(false);
+//        info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass(Integer.toString(map), "Saves\\Levels.txt"))[3]+"stars.png"));
+        info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass("Map" + map, "Saves\\Levels.txt"))[3]+"stars.png"));
+        if (this.map == 1) backButton.setVisible(false);
           nextButton.setVisible(true);
           enterButton.setText(String.valueOf(this.map));
           Sound.playSfx(0);
@@ -83,7 +84,8 @@ public class LevelSelect extends JPanel {
         this.map++;
         // Debug.print("Assets\\"+Bson.extractClassInfo(Bson.getClass(Integer.toString(map), "Saves\\Levels.txt"))[3]+"stars.png");
         info.setText("Level " + map);
-        info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass(Integer.toString(map), "Saves\\Levels.txt"))[3]+"stars.png"));
+//        info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass(Integer.toString(map), "Saves\\Levels.txt"))[3]+"stars.png"));
+        info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass("Map" + map, "Saves\\Levels.txt"))[3]+"stars.png"));
         if (this.map == this.unlocked) nextButton.setVisible(false);
           backButton.setVisible(true);
           enterButton.setText(String.valueOf(this.map));
@@ -100,7 +102,8 @@ public class LevelSelect extends JPanel {
       info = new JLabel("Level " + (map + 1), SwingConstants.CENTER);
       info.setBounds((int) (size.getWidth()-300)/2, 700, 300, 60);
       info.setFont(new Font("ocr a extended", Font.PLAIN, 15));
-      info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass(Integer.toString(map + 1), "Saves\\Levels.txt"))[3]+"stars.png"));
+//      info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass(Integer.toString(map + 1), "Saves\\Levels.txt"))[3]+"stars.png"));
+      info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass("Map" + Integer.toString(map + 1), "Saves\\Levels.txt"))[3]+"stars.png"));
       info.setForeground(Color.WHITE);
       info.setOpaque(true);
       info.setBackground(Color.BLACK);

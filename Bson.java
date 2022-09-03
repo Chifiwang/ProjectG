@@ -4,7 +4,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
-import legacy.Debug;
+//import legacy.Debug;
 
 public class Bson {
     public static final int CLASS_LENGTH = 9;
@@ -35,8 +35,8 @@ public class Bson {
     public static void writeClass(String id, String[] content, String filePath) {
         File file = new File(filePath);
 
-        boolean isCustom = filePath.contains("CustomLevels.txt");
-        boolean isDel = false;
+//        boolean isCustom = filePath.contains("CustomLevels.txt");
+//        boolean isDel = false;
         String line;
         String __FileContentCache__ = "";
         int c = 0;
@@ -46,43 +46,49 @@ public class Bson {
             BufferedReader bufferedReader = new BufferedReader(reader);
             
             while ((line = bufferedReader.readLine()) != null) {
+            	
+//            	System.out.println(id);
                 
-                if (content == null && id != null && line.contains(id) && line.contains("Map")) {
-                    isDel = true;
-                    line = "";
-                    for (int i = 1; i < TEMPLATE_CLASS.length; i++) {
-                        bufferedReader.readLine();
-                    } 
-                } else if (id != null && line.contains(id) && line.contains("Map")) {
+//                if (content == null && id != null && line.contains(id) && line.contains("Map")) {
+//                    isDel = true;
+//                    line = "";
+//                    for (int i = 1; i < TEMPLATE_CLASS.length; i++) {
+//                        bufferedReader.readLine();
+//                    } 
+//                /*} else*/ if (id != null && line.contains(id) && line.contains("Map")) {
+            	if (line.contains(id)) {
+                	
+//                	System.out.println("here");
                     
                     for (int i = 0; i < CLASS_LENGTH; i++) {
                         __FileContentCache__ += content[i];
                         
-                        bufferedReader.readLine();
+                        if (i > 0) bufferedReader.readLine();
                     }
                     c++;
                 }
 
-                if (line != null && line.contains("Map")) {
-                    
-                    // if (content == null) {
-                        __FileContentCache__ += line.substring(0, CLASS_INFO_POINTERS[0]) + (isCustom ? "C" : "") + c + ";\n";
-                        line = bufferedReader.readLine();
-                    // }
-                    c++;
-                } 
+//                if (line != null && line.contains("Map")) {
+//                    
+////                     if (content == null) {
+//                        __FileContentCache__ += line.substring(0, CLASS_INFO_POINTERS[0]) + c + ";\n";
+//                        line = bufferedReader.readLine();
+////                     }
+//                    c++;
+//                } 
 
-                if (line != null && !isDel ) __FileContentCache__ += line + "\n";
-                else isDel = false;
+                /*if (line != null && !isDel )*/
+                if (line != null && !line.contains(id)) __FileContentCache__ += line + "\n";
+//                else isDel = false;
             } 
 
-            if (id == null) {
-                __FileContentCache__ += content[0].substring(0, CLASS_INFO_POINTERS[0]) + (isCustom ? "C" : "") + c + ";\n";
-                for (int i = 1; i < CLASS_LENGTH; i++) {
-                    __FileContentCache__ += content[i];
-                }
-
-            }
+//            if (id == null) {
+//                __FileContentCache__ += content[0].substring(0, CLASS_INFO_POINTERS[0]) + c + ";\n";
+//                for (int i = 1; i < CLASS_LENGTH; i++) {
+//                    __FileContentCache__ += content[i];
+//                }
+//
+//            }
             FileWriter writer = new FileWriter(file);
             writer.write(__FileContentCache__);
 
@@ -132,7 +138,7 @@ public class Bson {
             
             while ((line = bufferedReader.readLine()) != null) {
 
-                if (id != null && line.contains(id) && line.contains("Map")) {
+                if (line.contains(id)) {
 
                     for (int i = 0; i < CLASS_LENGTH; i++) {
                         __FileContentCache__ += line + "\n";
@@ -159,7 +165,7 @@ public class Bson {
         String[] temp = classCompressed.split(";\n");
 
         for(int i = 0; i < CLASS_LENGTH; i++) {
-            // System.out.println(temp[i] + ", " + CLASS_INFO_POINTERS[i]);
+            System.out.println(temp[i] + ", " + CLASS_INFO_POINTERS[i]);
             classInfo[i] = temp[i].substring(CLASS_INFO_POINTERS[i]);
         }
 
@@ -189,7 +195,7 @@ public class Bson {
             BufferedReader bufferedReader = new BufferedReader(reader);
             while ((line = bufferedReader.readLine()) != null) {
                 
-            	if (line.indexOf("firstClear") != -1) unlocked += (unlocked < numClasses("Saves\\Levels.txt") - 2) ? 1 : 0;
+            	if (line.indexOf("firstClear") != -1) unlocked += (unlocked < numClasses("Saves\\Levels.txt") - 1) ? 1 : 0;
             	if (line.indexOf("true") != -1) break;
             }
 

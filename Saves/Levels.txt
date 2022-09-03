@@ -52,4 +52,3 @@ Map5;
    map :  xxxxxxxxx     x x        u u        p          xux                xxxxxxxxx ;
    starBounds : 17, 21, 25;
    blockCount : 3;
-Map6;

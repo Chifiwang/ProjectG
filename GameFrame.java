@@ -1,6 +1,7 @@
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import legacy.Debug;
+//import legacy.Debug;
 // import legacy.Editor;
 
 import java.awt.Color;
@@ -10,7 +11,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 public class GameFrame {
-    Debug debug = new Debug();
+//    Debug debug = new Debug();
 
     static JFrame frame;
     static Board board;
@@ -26,7 +27,7 @@ public class GameFrame {
     static Dimension size;
 
     GameFrame() throws Exception {
-    	Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+    	size = Toolkit.getDefaultToolkit().getScreenSize();
 
         frame = new JFrame("ProjectG");
         levelSelect = new LevelSelect(); 
@@ -65,16 +66,16 @@ public class GameFrame {
         // frame.getContentPane().add(cLevelSelect);
     }
     
-    // public static void newGame(char[][] map) {
-    // 	board = new Board(map);
-    // 	newGame();
-    // }
+//    public static void newGame(char[][] map) {
+//    	board = new Board(map);
+//    	newGame();
+//    }
     
-    // public static void newGame(int map) {
-    // 	level = map;
-    // 	board = new Board(map);
-    // 	newGame();
-    // }
+//    public static void newGame(int map) {
+//    	level = map;
+//    	board = new Board(map);
+//    	newGame();
+//    }
     
     /** 
      * creates a new instance of board whenever the player enters a level.
@@ -82,8 +83,9 @@ public class GameFrame {
      * @param map is the level selected
      */
     public static void newGame(int map) {
-        level = map;
+    	level = map;
     	board = new Board(map);
+    	
     	Sound.playMusic(1);
 
     	isGame = true;
@@ -109,13 +111,20 @@ public class GameFrame {
                 // Debug.print(levelSelect.map + " " + levelSelect.unlocked);
                 // Debug.print("-----------------------");
     			if (board.isWin || board.isLose) exitGame(level);
+//    			if (board.isWin) levelSelect.info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass("Map" + map, "Saves\\Levels.txt"))[3]+"stars.png"));
     			if (board.isWin && levelSelect.map == levelSelect.unlocked) {
                     // Debug.print(Bson.numClasses("Saves\\Levels.txt") - 2 + " " + levelSelect.unlocked + 1);
-    				levelSelect.unlocked += (levelSelect.unlocked + 1 < Bson.numClasses("Saves\\Levels.txt") - 1) ? 1 : 0;
-    				levelSelect.map += (levelSelect.map + 1 < Bson.numClasses("Saves\\Levels.txt") - 1) ? 1 : 0;
+//    				levelSelect.unlocked += (levelSelect.unlocked + 1 < Bson.numClasses("Saves\\Levels.txt") - 1) ? 1 : 0;
+//    				levelSelect.map += (levelSelect.map + 1 < Bson.numClasses("Saves\\Levels.txt") - 1) ? 1 : 0;
+
+    				levelSelect.unlocked += (levelSelect.unlocked + 1 < Bson.numClasses("Saves\\Levels.txt")) ? 1 : 0;
+    				levelSelect.map += (levelSelect.map + 1 < Bson.numClasses("Saves\\Levels.txt")) ? 1 : 0;
 
     				if (levelSelect.map > 1) levelSelect.backButton.setVisible(true);
-                    levelSelect.info.setText("Level " + levelSelect.map);
+    				
+    				levelSelect.info.setText("Level " + levelSelect.map);
+                    levelSelect.info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass("Map" + Integer.toString(map), "Saves\\Levels.txt"))[3]+"stars.png"));
+
     				levelSelect.enterButton.setText(String.valueOf(levelSelect.map));
     				directory.add(levelSelect.unlocked);
     			}
