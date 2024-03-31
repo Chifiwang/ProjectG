@@ -165,7 +165,7 @@ public class Bson {
         String[] temp = classCompressed.split(";\n");
 
         for(int i = 0; i < CLASS_LENGTH; i++) {
-            System.out.println(temp[i] + ", " + CLASS_INFO_POINTERS[i]);
+            // Debug.print(temp[i] + ", " + CLASS_INFO_POINTERS[i]);
             classInfo[i] = temp[i].substring(CLASS_INFO_POINTERS[i]);
         }
 

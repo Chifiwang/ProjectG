@@ -102,9 +102,9 @@ public class Map {
         save[0] = id;
         save[1] = "level " + id;
 //        save[2] = (isWin) ? "false" : "true";
-        save[2] = String.valueOf(!isWin);
+        save[2] = String.valueOf(!isWin && Boolean.valueOf(save[2]));
 //        save[2] = String.valueOf(isWin);
-        save[3] = Integer.toString(starsAchived);
+        save[3] = Integer.toString(Math.max(starsAchived, Integer.parseInt(save[3])));
 
     	return Bson.formatContent(save);
     }

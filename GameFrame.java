@@ -111,7 +111,7 @@ public class GameFrame {
                 // Debug.print(levelSelect.map + " " + levelSelect.unlocked);
                 // Debug.print("-----------------------");
     			if (board.isWin || board.isLose) exitGame(level);
-//    			if (board.isWin) levelSelect.info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass("Map" + map, "Saves\\Levels.txt"))[3]+"stars.png"));
+                if (board.isWin) levelSelect.info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass("Map" + map, "Saves\\Levels.txt"))[3]+"stars.png"));
     			if (board.isWin && levelSelect.map == levelSelect.unlocked) {
                     // Debug.print(Bson.numClasses("Saves\\Levels.txt") - 2 + " " + levelSelect.unlocked + 1);
 //    				levelSelect.unlocked += (levelSelect.unlocked + 1 < Bson.numClasses("Saves\\Levels.txt") - 1) ? 1 : 0;
@@ -123,7 +123,7 @@ public class GameFrame {
     				if (levelSelect.map > 1) levelSelect.backButton.setVisible(true);
     				
     				levelSelect.info.setText("Level " + levelSelect.map);
-                    levelSelect.info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass("Map" + Integer.toString(map), "Saves\\Levels.txt"))[3]+"stars.png"));
+                    levelSelect.info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass("Map" + levelSelect.map, "Saves\\Levels.txt"))[3]+"stars.png"));
 
     				levelSelect.enterButton.setText(String.valueOf(levelSelect.map));
     				directory.add(levelSelect.unlocked);

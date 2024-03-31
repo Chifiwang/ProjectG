@@ -1,0 +1,13 @@
+diff a/Bson.java b/Bson.java	(rejected hunks)
+@@ -187,10 +187,9 @@
+         try {
+             FileReader reader = new FileReader(file);
+             BufferedReader bufferedReader = new BufferedReader(reader);
+-
+             while ((line = bufferedReader.readLine()) != null) {
+                 
+-            	if (line.indexOf("firstClear") != -1) unlocked++;
++            	if (line.indexOf("firstClear") != -1) unlocked += (unlocked < numClasses("Saves\\Levels.txt") - 2) ? 1 : 0;
+             	if (line.indexOf("true") != -1) break;
+             }
+ 

@@ -16,7 +16,10 @@ public class AnimationHandeler {
     static ArrayList<Integer[]> queue = new ArrayList<Integer[]>();
     static ArrayList<ImageIcon[]> imageLookup = new ArrayList<ImageIcon[]>();
 
-    static int[] tutorialFrames = {TextEventHandler.tutorial1_text.length(), TextEventHandler.tutorial2_text.length()};
+    static int[] tutorialFrames = {TextEventHandler.tutorial1_text.length(), TextEventHandler.tutorial2_text.length(), 
+                                   TextEventHandler.tutorial3_text.length(), TextEventHandler.tutorial4_text.length(),
+                                   TextEventHandler.tutorial5_text.length(), TextEventHandler.tutorial6_text.length(),
+                                   TextEventHandler.tutorial7_text.length()};
 
     static Board board;
     static LevelSelect levelSelect;
@@ -53,7 +56,7 @@ public class AnimationHandeler {
                     drawGame(g2D, queue.get(i));
                     canvas = 0;
                     break;
-                case 1: case 2:
+                case 1: case 2: case 3: case 4: case 5: case 6: case 7:
                     numFrames = tutorialFrames[queue.get(i)[0] - 1];
                     // frame = 0;
                     drawTutorial(queue.get(i), g2D);

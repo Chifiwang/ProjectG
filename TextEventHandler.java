@@ -15,6 +15,11 @@ public class TextEventHandler {
     // Tutorial text strings
     static String tutorial1_text = "   Welcome to ProjectG. To move the character use the 'W', 'A', 'S', and 'D' keys to move the player\n   up, down, left, and right respectively. See that blue box? It's called a \"Universal Block\". Run into\n   it to push it in any direction. Your goal, as the player, is to push all the boxes off the map. Don't\n   worry, I will guide you through each of the block's mechanics as we go along.          ";
     static String tutorial2_text = "   Hello again player. You seem to be getting the hang of the controls now. Ok, this is your first new block.\n   This block is called the \"Immoveable Block.\" You cant move it; that's it. Try to work around\n   this obstacle when encountering it. Good Luck player!           ";
+    static String tutorial3_text = "              ";
+    static String tutorial4_text = "              ";
+    static String tutorial5_text = "              ";
+    static String tutorial6_text = "              ";
+    static String tutorial7_text = "              ";
 
     /** 
      * Queues a text event through the animator's event handeler
@@ -24,7 +29,7 @@ public class TextEventHandler {
      */
     public static void initiateEvent(int type, JPanel p) {
         panel = p;
-        AnimationHandeler.queueAnimation(type + 1, 100, 200);
+        AnimationHandeler.queueAnimation((type % 10 + type/10 + ((type > 11) ? 1 : 0) + 1), 100, 200);
     }
 
     
@@ -62,6 +67,17 @@ public class TextEventHandler {
                 for(int i = 0; i < buff.length; i++) {
                     g2D.drawString(buff[i], x, y += g2D.getFontMetrics().getHeight());
                 }
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
             default:
                 break;
         }   
