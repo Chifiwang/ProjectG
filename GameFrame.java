@@ -1,75 +1,178 @@
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
+//import legacy.Debug;
+// import legacy.Editor;
+
+import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
-import java.awt.*;
+public class GameFrame {
+//    Debug debug = new Debug();
 
-public class GameFrame implements MouseListener{
-    Debug debug = new Debug();
-    JFrame frame;
-    JLabel label;
-    Board board;
+    static JFrame frame;
+    static Board board;
+    static LevelSelect levelSelect;
+    static Settings settings;
+    static Directory directory;
+    // static Editor editor;
+    // static CustomLevelSelect cLevelSelect;
 
-    GameFrame() {
+    static int level = -1;
+    static int scaleFactor = 128;
+    static boolean isGame = false, isEdit = false, isName = false;
+    static Dimension size;
+
+    GameFrame() throws Exception {
+    	size = Toolkit.getDefaultToolkit().getScreenSize();
+
         frame = new JFrame("ProjectG");
-        board = new Board();
+        levelSelect = new LevelSelect(); 
+        settings = new Settings();
+        directory = new Directory();
+        // cLevelSelect = new CustomLevelSelect();
+        
+        frame.setBackground(Color.BLACK);
 
-        label = new JLabel();
-        label.setBounds(0, 0, 1300, 900);
-        label.setBackground(Color.red);
-        label.setOpaque(false);
-        label.setVisible(true);
-        label.addMouseListener(this);
+        Sound.init();
+        Sound.setMusicVolume(settings.musicVolumeLevel);
+        Sound.setSfxVolume(settings.sfxVolumeLevel);
+        
+        levelSelect.unlocked = Bson.getUnlocked();
+        
+        if (levelSelect.unlocked == 0) newGame(0);
+        else {
+            directory.loadSave(levelSelect.unlocked);
+        
+            levelSelect.map = 1;
+            levelSelect.enterButton.setText("1");
+        }
 
-        frame.add(label);
-        frame.add(board);
+    	if (levelSelect.unlocked > 1) levelSelect.nextButton.setVisible(true);
+
+        AnimationHandeler.setLevelSelect(levelSelect);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setSize((board.map.map[0].length + 2) * 100, (board.map.map.length + 2) * 100);
-        frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+        frame.setSize((int) size.getWidth(), (int) size.getHeight()); // apparently we need to make the frame bigger than the desired size
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-////        frame.setVisible(false); //you can't see me!
-//        frame.dispose(); //Destroy the JFrame object
+        
+        frame.getContentPane().add(settings);
+        frame.getContentPane().add(levelSelect);
+        frame.getContentPane().add(directory);
+        // frame.getContentPane().add(cLevelSelect);
     }
+    
+//    public static void newGame(char[][] map) {
+//    	board = new Board(map);
+//    	newGame();
+//    }
+    
+//    public static void newGame(int map) {
+//    	level = map;
+//    	board = new Board(map);
+//    	newGame();
+//    }
+    
+    /** 
+     * creates a new instance of board whenever the player enters a level.
+     * 
+     * @param map is the level selected
+     */
+    public static void newGame(int map) {
+    	level = map;
+    	board = new Board(map);
+    	
+    	Sound.playMusic(1);
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        debug.print("here");
+    	isGame = true;
 
-        if (board.isLose || board.isWin) {
+    	levelSelect.setVisible(false);
+        frame.getContentPane().add(board);
 
-            debug.print("remove?");
-            board.setVisible(false);
-            
-            board = new Board();
-            frame.add(board);
-        }
+    	board.addMouseListener(new MouseListener() {
+    		public void mouseClicked(MouseEvent e) { /* do nothing */ }
+    		public void mouseEntered(MouseEvent e) { /* do nothing */ }
+    		public void mousePressed(MouseEvent e) { /* do nothing */ }
+            public void mouseExited(MouseEvent e)  { /* do nothing */ }
+
+    		/** 
+    	     * once the game is over, removes instance of board from frame.
+    	     * if the player wins in the most recently unlocked level, unlocks the next level
+    	     * 
+    	     * @param e
+    	     */
+    		public void mouseReleased(MouseEvent e) {
+                // Debug.print((levelSelect.unlocked + 1 < Bson.numClasses("Saves\\Levels.txt") - 2) ? 1 : 0);
+                // Debug.print(board.isWin);
+                // Debug.print(levelSelect.map + " " + levelSelect.unlocked);
+                // Debug.print("-----------------------");
+    			if (board.isWin || board.isLose) exitGame(level);
+                if (board.isWin) levelSelect.info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass("Map" + map, "Saves\\Levels.txt"))[3]+"stars.png"));
+    			if (board.isWin && levelSelect.map == levelSelect.unlocked) {
+                    // Debug.print(Bson.numClasses("Saves\\Levels.txt") - 2 + " " + levelSelect.unlocked + 1);
+//    				levelSelect.unlocked += (levelSelect.unlocked + 1 < Bson.numClasses("Saves\\Levels.txt") - 1) ? 1 : 0;
+//    				levelSelect.map += (levelSelect.map + 1 < Bson.numClasses("Saves\\Levels.txt") - 1) ? 1 : 0;
+
+    				levelSelect.unlocked += (levelSelect.unlocked + 1 < Bson.numClasses("Saves\\Levels.txt")) ? 1 : 0;
+    				levelSelect.map += (levelSelect.map + 1 < Bson.numClasses("Saves\\Levels.txt")) ? 1 : 0;
+
+    				if (levelSelect.map > 1) levelSelect.backButton.setVisible(true);
+    				
+    				levelSelect.info.setText("Level " + levelSelect.map);
+                    levelSelect.info.setIcon(new ImageIcon("Assets\\"+Bson.extractClassInfo(Bson.getClass("Map" + levelSelect.map, "Saves\\Levels.txt"))[3]+"stars.png"));
+
+    				levelSelect.enterButton.setText(String.valueOf(levelSelect.map));
+    				directory.add(levelSelect.unlocked);
+    			}
+
+				if(board.isTutorial) {
+					AnimationHandeler.frame = AnimationHandeler.numFrames - 1;
+				}
+    		}
+    	});
     }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        debug.print("here2");
+    
+    /** 
+     * exits the current level due to technical difficulties
+     * 
+     */
+    public static void exitGame(int map) {
+	    if (map != -1) Bson.writeClass("Map"+Integer.toString(map), Map.rewriteMapData(board.isWin, board.starCount, Integer.toString(map)), "Saves\\Levels.txt");
+        exitGame();
     }
+    
+    /** 
+     * exits the current level
+     * 
+     */
+    public static void exitGame() {
+    	Sound.playMusic(0);
+    	level = -1;
+    	isGame = false;
 
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        debug.print("here3");
+	    frame.remove(board);
+	    levelSelect.setVisible(true);
     }
+    
+    // public static void newEditor() {
+    // 	isEdit = true;
 
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-        debug.print("here4");
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        debug.print("here5");
-    }
+    // 	editor = new Editor();
+    // 	frame.getContentPane().add(editor);
+    // }
+    
+    // public static void exitEditor() {
+    // 	isEdit = false;
+        
+	//     frame.remove(editor);
+	//     levelSelect.setVisible(true);
+    // }
+    
+    // public static void setPlayButton(boolean visible) {
+    // 	editor.playButton.setVisible(visible);
+    // }
 }

@@ -1,12 +1,19 @@
+import javax.swing.ImageIcon;
+import java.awt.Image;
+import java.util.stream.Stream;
+
 public class Map {
+    ImageIcon tile = new ImageIcon("Assets\\tileBlockNormal.png");
+    Image tileImg = tile.getImage().getScaledInstance(GameFrame.scaleFactor, GameFrame.scaleFactor, Image.SCALE_DEFAULT);
 
     static int[] dc = {0, -1, 0, 1, 0};
     static int[] dr = {-1, 0, 1, 0, 0};
     static int[] starBounds = new int[4];
+
     static int r = 2, c = 4;
     static int direct = 4;
-    static int __mvntCache__ = 4;
     static int blockCount;
+    static boolean firstGame;
 
     public char[][] map;
     public boolean[][] map_move;
@@ -15,19 +22,27 @@ public class Map {
 
     /* loads the active map into an instantiated Map for future use */
     public Map(int mapIndex) {
-        map = levelSelect[mapIndex];
-        map_move = moveSelect[mapIndex];
-        starBounds = starBoundSelect[mapIndex];
-        blockCount = blockCountSelect[mapIndex];
+        
+        loadSave(Integer.toString(mapIndex));
         
     }
-
+    
+//    public Map(char[][] map) {
+//    	this.map = map;
+//    	map_move = new boolean[7][11];
+//    	firstGame = false;
+//    	blockCount = 0;
+//    	for (int i = 1; i < 6; i++) {
+//    		for (int j = 1; j < 10; j++) {
+//    			if (map[i][j] != ' ' && map[i][j] != 'p' && map[i][j] != 'x') blockCount++;
+//    		}
+//    	}
+//    }
     
     /** 
      * finds the player coordinates for player initialization.
      * 
      * @param map provides the map that the player is being loaded into
-     * 
      * @return int[] returns {row, column} data
      */
     public int[] loadPlayer(char[][] map) {
@@ -46,54 +61,51 @@ public class Map {
         return pCoords;
     }
 
+    public void loadSave(String id) {
 
-    /* these are the internal maps */
+        String[] save = Bson.extractClassInfo(Bson.getClass("Map" + id, "Saves\\Levels.txt"));
 
+        if(save.length > 0) {
+            int col = Integer.parseInt(save[4]);
+            int row = Integer.parseInt(save[5]);
+            String mapString = save[6];
 
-    final public char[][] map00 = 
-        {
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', 'u', ' ', ' ', ' ', ' ', ' '}, 
-            {' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ', ' ', ' ', ' '}, 
-            {' ', ' ', ' ', ' ', ' ', 'p', 'C', 'C', 'C', ' ', ' '}, 
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
-        };
+            map = new char[row][col];
+            for(int i = 0; i < col*row; i++)
+                map[i / col][i % col] = mapString.charAt(i);
 
-    final public boolean[][] map00_move = new boolean[map00.length][map00[0].length];
-    final public int[] map00_starBounds = {30, 45, 50, 60};
-    final public int map00_blockCount = 5;
+            map_move = new boolean[row][col];
 
-    final public char[][] map01 = 
-        {
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', 'p', ' ', 'u', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-        };
+            starBounds = Stream.of(save[7].split(", ")).mapToInt(Integer::parseInt).toArray();
 
-    final public boolean[][] map01_move = new boolean[map01.length][map01[0].length];
-    final public int[] map01_starBounds = {10, 15, 20, 30};
-    final public int map01_blockCount = 1;
+            blockCount = Integer.parseInt(save[8]);
 
-    /* map select array */
-    final public char[][][] levelSelect = {
-        map00, map01
-    };
+            firstGame = save[2].contains("true");
 
-    final public boolean[][][] moveSelect = {
-        map00_move, map01_move
-    };
+        } else {
+            GameFrame.exitGame();
+        }
+    }
 
-    final public int[][] starBoundSelect = {
-        map00_starBounds, map01_starBounds
-    };
+    /** 
+     * rewrites the map class structure data based on the class that 
+     * is being updated
+     * 
+     * @param starsAchived provides the field "starsAchived"s data
+     * @param id provides the class structure that needs updating
+     * @return String returns the updated class structure
+     */
+    public static String[] rewriteMapData(boolean isWin, int starsAchived, String id) {
+    	
+    	String[] save = Bson.extractClassInfo(Bson.getClass("Map" + id, "Saves\\Levels.txt"));
 
-    final public int[] blockCountSelect = {
-        map00_blockCount, map01_blockCount
-    };
+        save[0] = id;
+        save[1] = "level " + id;
+//        save[2] = (isWin) ? "false" : "true";
+        save[2] = String.valueOf(!isWin && Boolean.valueOf(save[2]));
+//        save[2] = String.valueOf(isWin);
+        save[3] = Integer.toString(Math.max(starsAchived, Integer.parseInt(save[3])));
+
+    	return Bson.formatContent(save);
+    }
 }
