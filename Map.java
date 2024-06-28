@@ -1,11 +1,17 @@
-public class Map {
+import javax.swing.ImageIcon;
+import java.awt.Image;
+import java.util.stream.Stream;
+
+class Map {
+    ImageIcon tile = new ImageIcon("Assets\\tileBlockNormal.png");
+    Image tileImg = tile.getImage().getScaledInstance(GameFrame.scaleFactor, GameFrame.scaleFactor, Image.SCALE_DEFAULT);
 
     static int[] dc = {0, -1, 0, 1, 0};
     static int[] dr = {-1, 0, 1, 0, 0};
     static int[] starBounds = new int[4];
+
     static int r = 2, c = 4;
     static int direct = 4;
-    static int __mvntCache__ = 4;
     static int blockCount;
 
     public char[][] map;
@@ -15,13 +21,10 @@ public class Map {
 
     /* loads the active map into an instantiated Map for future use */
     public Map(int mapIndex) {
-        map = levelSelect[mapIndex];
-        map_move = moveSelect[mapIndex];
-        starBounds = starBoundSelect[mapIndex];
-        blockCount = blockCountSelect[mapIndex];
+        
+        loadSave(Integer.toString(mapIndex));
         
     }
-
     
     /** 
      * finds the player coordinates for player initialization.
@@ -46,54 +49,41 @@ public class Map {
         return pCoords;
     }
 
+    public void loadSave(String id) {
 
-    /* these are the internal maps */
+        String save = Bson.getClass(id);
 
+        if(save.length() > 0) {
+            int col = Integer.valueOf(save.substring(save.indexOf("col") + 7, save.indexOf("row") - 3));
+            int row = Integer.valueOf(save.substring(save.indexOf("row") + 7, save.indexOf("map") - 3));
+            String mapString = save.substring(save.indexOf("map") + 8, save.indexOf("starBounds") - 4);
 
-    final public char[][] map00 = 
-        {
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', 'u', ' ', ' ', ' ', ' ', ' '}, 
-            {' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ', ' ', ' ', ' '}, 
-            {' ', ' ', ' ', ' ', ' ', 'p', 'C', 'C', 'C', ' ', ' '}, 
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
-        };
+            map = new char[row][col];
+            for(int i = 0; i < col*row; i++)
+                map[i / col][i % col] = mapString.charAt(i);
 
-    final public boolean[][] map00_move = new boolean[map00.length][map00[0].length];
-    final public int[] map00_starBounds = {30, 45, 50, 60};
-    final public int map00_blockCount = 5;
+            map_move = new boolean[row][col];
 
-    final public char[][] map01 = 
-        {
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', 'p', ' ', 'u', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-        };
+            starBounds = Stream.of(save.substring(save.indexOf("starBounds") + 14, save.indexOf("blockCount") - 3).split(", ")).mapToInt(Integer::parseInt).toArray();
 
-    final public boolean[][] map01_move = new boolean[map01.length][map01[0].length];
-    final public int[] map01_starBounds = {10, 15, 20, 30};
-    final public int map01_blockCount = 1;
+            blockCount = Integer.valueOf(save.substring(save.indexOf("blockCount") + 14, save.indexOf("}") - 1));
 
-    /* map select array */
-    final public char[][][] levelSelect = {
-        map00, map01
-    };
+        } else {
+            GameFrame.exitGame();
+        }
+    }
 
-    final public boolean[][][] moveSelect = {
-        map00_move, map01_move
-    };
-
-    final public int[][] starBoundSelect = {
-        map00_starBounds, map01_starBounds
-    };
-
-    final public int[] blockCountSelect = {
-        map00_blockCount, map01_blockCount
-    };
+    public static String rewriteMapData(int starsAchived, String id) {
+        String newData = Bson.getClass(id);
+//        Debug.print(newData);
+        newData = newData.replaceAll("true", "false");
+//        Debug.print(newData);
+        newData = newData.replace(newData.substring(newData.indexOf("\n\t\"starsAchived\" : ") + "\n\t\"starsAchived\" : ".length() - 1, 
+                  newData.indexOf("\n\t\"col\"")), " " +Integer.toString(Math.max(starsAchived, 
+                  Integer.parseInt(newData.substring(newData.indexOf("\n\t\"starsAchived\" : ") + "\n\t\"starsAchived\" : ".length(), 
+                  newData.indexOf("\n\t\"col\""))))));
+                  
+//        Debug.print(newData);
+        return newData;
+    }
 }

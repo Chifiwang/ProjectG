@@ -6,19 +6,18 @@ import javax.swing.KeyStroke;
 
 import java.awt.Image;
 
-public class Player extends JLabel{
+class Player extends JLabel{
     private static final int ifFocused = JComponent.WHEN_IN_FOCUSED_WINDOW;
 
-    ImageIcon pDefault = new ImageIcon("Assets\\player_default.png");
-    Debug debug = new Debug();
+    static ImageIcon pDefault = new ImageIcon("Assets\\playerBlock.png");
 
     int row, col;
 
-    Image pIcon;
+    static Image pIcon;
     Map map;
 
     public Player(Map map, int[] coords) {
-        pIcon = pDefault.getImage();
+        pIcon = pDefault.getImage().getScaledInstance(GameFrame.scaleFactor, GameFrame.scaleFactor, Image.SCALE_DEFAULT);
         this.map = map;
         this.row = coords[0];
         this.col = coords[1];
@@ -49,7 +48,6 @@ public class Player extends JLabel{
             if (r < 1 || r > map.map.length - 2 || c < 1 || c > map.map[1].length - 2) {
                 map.map[r][c] = 'd';
                 Map.blockCount--;
-                // debug.printMap(map.map);
             }
             
             map.map_move[r][c] = true;
@@ -66,9 +64,9 @@ public class Player extends JLabel{
      * @param c takes column coordinate 'x coord'
      * @return boolean returns if a valid move is available
      */
-    public boolean canMove(int direct, int r, int c) { // checks all sides of map
-        return r + Map.dr[direct] > 0 && r + Map.dr[direct] < map.map.length - 1 && 
-               c + Map.dc[direct] > 0 && c + Map.dc[direct] < map.map[1].length - 1;
+    public boolean canMove(int r, int c) { // checks all sides of map
+        return r + Map.dr[Map.direct] > 0 && r + Map.dr[Map.direct] < map.map.length - 1 && 
+               c + Map.dc[Map.direct] > 0 && c + Map.dc[Map.direct] < map.map[1].length - 1;
     }
 
     
@@ -84,13 +82,13 @@ public class Player extends JLabel{
      * @param direct provides directional data
      * @return boolean outputs whether a valid move was made or not
      */
-    public boolean canMoveObj(int direct) {
+    public boolean canMoveObj() {
         boolean isValid = true;
-        if (direct == 4)
+        if (Map.direct == 4)
             return false;
         
         for(int r =  row, c = col; r > -1 && r < map.map.length && 
-            c > -1 && c < map.map[1].length; r += Map.dr[direct], c += Map.dc[direct]) {
+            c > -1 && c < map.map[1].length; r += Map.dr[Map.direct], c += Map.dc[Map.direct]) {
 
             if (map.map[r][c] == ' ') { 
                 Map.r = r;
@@ -99,20 +97,16 @@ public class Player extends JLabel{
             } 
 
             else if (map.map[r][c] == 'p') {
-                isValid = (canMove(direct, r, c)) ? isValid : false;
-                // map.map_move[r][c] = true;
+                isValid = (canMove(r, c)) ? isValid : false;
             }
 
             else {
-                isValid = (Block.canMoveObj(direct, r, c)) ? isValid : false;
-                // map.map_move[r][c] = true;
+                isValid = (Block.canMoveObj(r, c)) ? isValid : false;
             }
             
             Map.r = r;
             Map.c = c;
         }
-
-        // map.map_move = (isValid) ? map.map_move : new boolean[5][9];
 
         return isValid;
     }
@@ -125,5 +119,5 @@ public class Player extends JLabel{
         this.getActionMap().put(actionString, action);
     }
 
-    public Image getImage() {return pIcon;}
+    static public Image getImage() {return pIcon;}
 }

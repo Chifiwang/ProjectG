@@ -7,29 +7,29 @@
 
 public class Debug {
 
-    private long __chache__ = 0;
+    private static long __chache__ = 0;
 
 
-    public void print(String s) {
+    public static void print(String s) {
         System.out.println(s);
     }
-    public void print(char c) {
+    public static void print(char c) {
         System.out.println(c);
     }
-    public void print(int i) {
+    public static void print(int i) {
         System.out.println(i);
     }
-    public void print(double d) {
+    public static void print(double d) {
         System.out.println(d);
     }
-    public void print(float f) {
+    public static void print(float f) {
         System.out.println(f);
     }
-    public void print(boolean b) {
+    public static void print(boolean b) {
         System.out.println(b);
     }
 
-    public void printMap(char[][] map) {
+    public static void printMap(char[][] map) {
         for(int i = 0; i < map.length; i++) {
             for(int j = 0; j < map[1].length; j++)
                 System.out.print("\'" + map[i][j] + "\'");
@@ -38,11 +38,11 @@ public class Debug {
         System.out.println("");
     }
 
-    public void logTime(long s) {
+    public static void logTime(long s) {
         __chache__ = s;
     }
 
-    public long timeDifference(long s) {
+    public static long timeDifference(long s) {
         return s - __chache__;
     }
 }

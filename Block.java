@@ -1,16 +1,27 @@
 import javax.swing.ImageIcon;
 import java.awt.Image;
 
-public class Block {
+class Block {
 
-    ImageIcon bBasic = new ImageIcon("Assets\\basicBlock_default.png");
-    ImageIcon bImmovable = new ImageIcon("Assets\\Immovable.default.png");
-    ImageIcon bDead = new ImageIcon("Assets\\dead.png");
-    ImageIcon bChainE = new ImageIcon("Assets\\chainE.png");
-    ImageIcon bChainH = new ImageIcon("Assets\\chainH.png");
-    ImageIcon bDirectLR = new ImageIcon("Assets\\directLR.png");
-    ImageIcon bDirectUD = new ImageIcon("Assets\\directUD.png");
-    ImageIcon bMoveLim2 = new ImageIcon("Assets\\moveLim2.png");
+    static ImageIcon universalBlock = new ImageIcon("Assets\\universalBlock.png");
+    static ImageIcon immovableBlock = new ImageIcon("Assets\\immovableBlock.png");
+    static ImageIcon destroyedBlock = new ImageIcon("Assets\\dead.png");
+    static ImageIcon pushLimitBlock = new ImageIcon("Assets\\pushMaximum2Block.png");
+    static ImageIcon chainedBlock = new ImageIcon("Assets\\chainBlock.png");
+    static ImageIcon directLRBlock = new ImageIcon("Assets\\directionalBlockLeftRight.png");
+    static ImageIcon directUDBlock = new ImageIcon("Assets\\directionalBlockUpDown.png");
+    static ImageIcon pushMinimumBlock = new ImageIcon("Assets\\pushMiniumum2Block.png");
+
+    static Image pushMinimumBlockImage = pushMinimumBlock.getImage().getScaledInstance(GameFrame.scaleFactor, GameFrame.scaleFactor, Image.SCALE_DEFAULT);
+    static Image universalBlockImage = universalBlock.getImage().getScaledInstance(GameFrame.scaleFactor, GameFrame.scaleFactor, Image.SCALE_DEFAULT);
+    static Image immovableBlockImage = immovableBlock.getImage().getScaledInstance(GameFrame.scaleFactor, GameFrame.scaleFactor, Image.SCALE_DEFAULT);
+    static Image destroyedBlockImage = destroyedBlock.getImage().getScaledInstance(GameFrame.scaleFactor, GameFrame.scaleFactor, Image.SCALE_DEFAULT);
+    static Image pushLimitBlockImage = pushLimitBlock.getImage().getScaledInstance(GameFrame.scaleFactor, GameFrame.scaleFactor, Image.SCALE_DEFAULT);
+    static Image directLRBlockImage = directLRBlock.getImage().getScaledInstance(GameFrame.scaleFactor, GameFrame.scaleFactor, Image.SCALE_DEFAULT);
+    static Image directUDBlockImage = directUDBlock.getImage().getScaledInstance(GameFrame.scaleFactor, GameFrame.scaleFactor, Image.SCALE_DEFAULT);
+    static Image chainedBlockImage = chainedBlock.getImage().getScaledInstance(GameFrame.scaleFactor, GameFrame.scaleFactor, Image.SCALE_DEFAULT);
+
+
 
     static Map map;
 
@@ -30,34 +41,34 @@ public class Block {
      * 
      * @return boolean returns output from the movement condition validators
      */
-    public static boolean canMoveObj(int direct, int row, int col) {
+    public static boolean canMoveObj(int row, int col) {
         boolean isValid = false;
         char type = map.map[row][col];
 
         switch(type) {
             case 'u':
-                isValid = canMoveBasic(direct);
+                isValid = canMoveBasic();
                 break;
             case 'x':
-                isValid = canMoveImmovable(direct);
+                isValid = canMoveImmovable();
                 break;
             case 'd':
-                isValid = canMoveDead(direct);
+                isValid = canMoveDead();
                 break;
             case '>':
-                isValid = canMoveDirectLR(direct);
+                isValid = canMoveDirectLR();
                 break;
             case '^':
-                isValid = canMoveDirectUD(direct);
+                isValid = canMoveDirectUD();
                 break;
-            case '2':
-                isValid = canMovePushLim2(direct, row, col);
-                break;
-            case 'c':
-                isValid = canMoveChainE(direct, row, col);
+            case 'm':
+            	isValid = canMovePushMin2(row, col);
+            	break;
+            case 'l':
+                isValid = canMovePushLim2(row, col);
                 break;
             case 'C':
-                isValid = canMoveChainH(direct, row, col);
+                isValid = canMoveChain(row, col);
                 break;
             
         }
@@ -72,7 +83,7 @@ public class Block {
      * 
      * @return boolean returns movability of the block.
      */
-    public static boolean canMoveBasic(int direct) {
+    public static boolean canMoveBasic() {
         return true;
     }
   
@@ -83,52 +94,101 @@ public class Block {
      * 
      * @return boolean returns movability of the block.
      */
-    private static boolean canMoveImmovable(int direct) {
+    private static boolean canMoveImmovable() {
         return false;
     }
-
-    private static boolean canMoveDead(int direct) {
+    
+    /** 
+     * directional movement validator for the "dead" block.
+     * 
+     * @param direct uses directional data to return its movability state
+     * 
+     * @return boolean returns movability of the block.
+     */
+    private static boolean canMoveDead() {
         return true;
     }
 
-    private static boolean canMoveDirectLR(int direct) {
-        return direct == 1 || direct == 3;
+    /** 
+     * directional movement validator for the "left-right" block.
+     * 
+     * @param direct uses directional data to return its movability state
+     * 
+     * @return boolean returns movability of the block.
+     */
+    private static boolean canMoveDirectLR() {
+        return Map.direct == 1 || Map.direct == 3;
     }
 
-    private static boolean canMoveDirectUD(int direct) {
-        return direct == 0 || direct == 2;
+    /** 
+     * directional movement validator for the "up-down" block.
+     * 
+     * @param direct uses directional data to return its movability state
+     * 
+     * @return boolean returns movability of the block.
+     */
+    private static boolean canMoveDirectUD() {
+        return Map.direct == 0 || Map.direct == 2;
     }
 
-    private static boolean canMovePushLim2(int direct, int row, int col) {
+    /** 
+     * directional movement validator for the "push minimum 2" block.
+     * 
+     * @param direct uses directional data to return its movability state
+     * 
+     * @return boolean returns movability of the block.
+     */
+    private static boolean canMovePushMin2(int row, int col) {
         
         if (row + Map.dr[Map.direct] > -1 && row + Map.dr[Map.direct] < map.map.length && 
                 col + Map.dc[Map.direct] > -1 && col + Map.dc[Map.direct] < map.map[1].length) {
 
-            return  map.map[row + Map.dr[Map.direct]][col + Map.dc[Map.direct]] != ' ' || 
-                   (map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] != ' ' &&
-                    map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] != 'p');
+            return  map.map[row + Map.dr[Map.direct]][col + Map.dc[Map.direct]] != 'd' && 
+                    map.map[row + Map.dr[Map.direct]][col + Map.dc[Map.direct]] != ' ' || 
+                    map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] != 'p';
 
         } else {
             return false;
         }
     }
-
-    private static boolean canMoveChainE(int direct, int row, int col) {
-        
-        if (row + Map.dr[Map.direct] > -1 && row + Map.dr[Map.direct] < map.map.length && 
+    
+    /** 
+     * directional movement validator for the "push limit 2" block.
+     * 
+     * @param direct uses directional data to return its movability state
+     * 
+     * @return boolean returns movability of the block.
+     */
+    private static boolean canMovePushLim2(int row, int col) {
+    	if (row + Map.dr[Map.direct] > -1 && row + Map.dr[Map.direct] < map.map.length && 
                 col + Map.dc[Map.direct] > -1 && col + Map.dc[Map.direct] < map.map[1].length) {
 
-            return  map.map[row + Map.dr[Map.direct]][col + Map.dc[Map.direct]] == 'c'|| 
-                    map.map[row + Map.dr[Map.direct]][col + Map.dc[Map.direct]] == 'd'|| 
-                    map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] == 'c'|| 
-                    map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] == 'd';
-                    
+            return  (map.map[row + Map.dr[Map.direct]][col + Map.dc[Map.direct]] == 'd' || 
+            		 map.map[row + Map.dr[Map.direct]][col + Map.dc[Map.direct]] == ' ') &&
+                    (map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] != 'p' && 
+                     map.map[row - 2 * Map.dr[Map.direct]][col - 2 * Map.dc[Map.direct]] == 'p' ||
+                     map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] == 'p') || 
+                    (row + 2 * Map.dr[Map.direct] == 0 || row + 2 * Map.dr[Map.direct] == map.map.length - 1 || 
+                     col + 2 * Map.dc[Map.direct] == 0 || col + 2 * Map.dc[Map.direct] == map.map[1].length - 1 ||
+                     row + 2 * Map.dr[Map.direct] > -1 && row + 2 * Map.dr[Map.direct] < map.map.length && 
+                     col + 2 * Map.dc[Map.direct] > -1 && col + 2 * Map.dc[Map.direct] < map.map[1].length && 
+                    map.map[row + 2 * Map.dr[Map.direct]][col + 2 * Map.dc[Map.direct]] == ' ') &&
+                    map.map[row + Map.dr[Map.direct]][col + Map.dc[Map.direct]] != ' ' &&
+                    map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] == 'p';
+
         } else {
             return false;
         }
     }
-
-    private static boolean canMoveChainH(int direct, int row, int col) {
+    
+    /** 
+     * directional movement validator for the "chain" block.
+     * 
+     * @param direct uses directional data to return its movability state
+     * 
+     * @return boolean returns movability of the block.
+     */
+    private static boolean canMoveChain(int row, int col) {
         
         if (row + Map.dr[Map.direct] > -1 && row + Map.dr[Map.direct] < map.map.length && 
                 col + Map.dc[Map.direct] > -1 && col + Map.dc[Map.direct] < map.map[1].length) {
@@ -137,25 +197,7 @@ public class Block {
                      map.map[row + Map.dr[Map.direct]][col + Map.dc[Map.direct]] == 'd'|| 
                      map.map[row + Map.dr[Map.direct]][col + Map.dc[Map.direct]] == ' ') && 
                     (map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] == 'C'|| 
-                     map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] == 'd') 
-                                                     ||
-                    (map.map[row + Map.dr[Map.direct]][col + Map.dc[Map.direct]] == 'C'|| 
-                     map.map[row + Map.dr[Map.direct]][col + Map.dc[Map.direct]] == 'd') && 
-                    (map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] == 'C'|| 
-                     map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] == 'd'||
-                     map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] == 'p')
-                                                     ||
-                    (map.map[row + Map.dr[Map.direct]][col + Map.dc[Map.direct]] == 'C'|| 
-                     map.map[row + Map.dr[Map.direct]][col + Map.dc[Map.direct]] == 'd') && 
-                    (map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] == 'C'|| 
-                     map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] == 'd'|| 
-                     map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] == ' ')
-                                                     ||
-                    (map.map[row + Map.dr[Map.direct]][col + Map.dc[Map.direct]] == 'C'|| 
-                     map.map[row + Map.dr[Map.direct]][col + Map.dc[Map.direct]] == 'd'|| 
-                     map.map[row + Map.dr[Map.direct]][col + Map.dc[Map.direct]] == 'p') && 
-                    (map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] == 'C'|| 
-                     map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] == 'd');
+                     map.map[row - Map.dr[Map.direct]][col - Map.dc[Map.direct]] == 'p');
                     
         } else {
             return false;
@@ -169,24 +211,24 @@ public class Block {
      * 
      * @return Image returns correct sprites for the block type.
      */
-    public Image getImage(char type) {
+    static public Image getImage(char type) {
         switch(type) {
             case 'u':
-                return bBasic.getImage();
+                return universalBlockImage;
             case 'x':
-                return bImmovable.getImage();
+                return immovableBlockImage;
             case 'd':
-                return bDead.getImage();
+                return destroyedBlockImage;
             case '>':
-                return bDirectLR.getImage();
+                return directLRBlockImage;
             case '^':
-                return bDirectUD.getImage();
-            case '2':
-                return bMoveLim2.getImage();
-            case 'c':
-                return bChainE.getImage();
+                return directUDBlockImage;
+            case 'm':
+                return pushMinimumBlockImage;
+            case 'l':
+                return pushLimitBlockImage;
             case 'C':
-                return bChainH.getImage();
+                return chainedBlockImage;
             default:
                 return null;
         }
